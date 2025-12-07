@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <slot name="header"></slot>
+      <Header />
     </header>
     <main>
       <slot></slot>
@@ -13,6 +13,7 @@
 </template>
 
 <script setup>
+import Header from '../components/layout/Header.vue'
 // Layout mặc định
 </script>
 

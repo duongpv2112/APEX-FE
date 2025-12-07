@@ -1,0 +1,13 @@
+@use "@/styles/icons.scss" as *;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family-base !important;
+  background: $background-color;
+  color: $text-color;
+}

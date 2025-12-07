@@ -1,11 +1,12 @@
 <template>
-  <router-view />
+  <DefaultLayout>
+    <router-view />
+  </DefaultLayout>
 </template>
 
-<script>
-export default {
-  name: 'App'
-}
+<script setup>
+import DefaultLayout from './layouts/DefaultLayout.vue'
+import './styles/main.scss'
 </script>
 
 <style>

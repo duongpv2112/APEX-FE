@@ -1,16 +1,16 @@
 // Định nghĩa các routes
-// import Home from '../views/Home.vue';
+import Home from '../views/Home.vue';
 // import Login from '../views/Login.vue';
 // import Dashboard from '../views/Dashboard.vue';
 // import Profile from '../views/Profile.vue';
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home,
-  //   meta: { requiresAuth: false },
-  // },
+  {
+    path: '/',
+    name: 'Home',
+    component: Home,
+    meta: { requiresAuth: false },
+  },
   // {
   //   path: '/login',
   //   name: 'Login',

@@ -1,0 +1,29 @@
+/**
+ * Tạo class icon với background image hoặc mask SVG, hỗ trợ đổi màu.
+ * @param {String} $name   Tên class icon (không có dấu chấm, ví dụ: apex-mma-icon-bell)
+ * @param {String} $url    Đường dẫn tới file SVG hoặc PNG
+ * @param {Length} $width  Chiều rộng icon (mặc định: 24px)
+ * @param {Length} $height Chiều cao icon (mặc định: 24px)
+ * @param {Color|null} $color  Màu icon (nếu null sẽ dùng background-image, nếu có sẽ dùng mask + background-color)
+ *
+ * Ví dụ sử dụng:
+ * @include icon-gen('apex-mma-icon-bell', '/assets/icons/bell.svg', 20px, 20px, #2176ff);
+ */
+@mixin icon-gen($name, $url, $width: 24px, $height: 24px, $color: null) {
+  .#{$name} {
+    display: inline-block;
+    width: $width;
+    height: $height;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    @if $color != null {
+      -webkit-mask-image: url(#{$url});
+      mask-image: url(#{$url});
+      background-color: $color;
+      background-image: none;
+    } @else {
+      background-image: url(#{$url});
+    }
+  }
+}
