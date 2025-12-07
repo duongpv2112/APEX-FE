@@ -18,6 +18,13 @@ import Header from '../components/layout/Header.vue'
 </script>
 
 <style scoped lang="scss">
+// header {
+//   position: sticky;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+// }
+
 main {
   max-width: 1216px;
   margin: 0 auto;
