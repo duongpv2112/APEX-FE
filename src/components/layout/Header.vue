@@ -3,17 +3,17 @@
     <div class="apex-mma-header__left">
       <div class="apex-mma-header__logo apex-mma-logo-brand"></div>
       <div class="apex-mma-header__brand">APEX</div>
-      <n-input
+      <!-- <n-input
         class="apex-mma-header__search"
         secondary
         type="text"
         placeholder="Tìm sản phẩm công nghệ, cộng đồng, bạn bè..."
         round
-      />
+      /> -->
     </div>
     <div class="apex-mma-header__right">
       <!-- Nút chính (ví dụ: Viết bài chia sẻ) -->
-      <template v-for="(btn, idx) in actionButtons" :key="idx">
+      <!-- <template v-for="(btn, idx) in actionButtons" :key="idx">
         <n-button
           v-if="btn.show === 'main'"
           :class="btn.class"
@@ -24,7 +24,7 @@
         >
           {{ btn.label }}
         </n-button>
-      </template>
+      </template> -->
       <div class="apex-mma-header__icon-group">
         <template
           v-for="(btn, idx) in actionButtons.filter((b) => b.show === 'icon')"
@@ -60,17 +60,17 @@ import { ref } from "vue";
 
 // Danh sách nút chức năng cho Header
 const actionButtons = [
-  {
-    label: "Viết bài chia sẻ",
-    type: "info",
-    color: "#2176ff",
-    class: "apex-mma-header__post-btn",
-    action: () => {
-      // TODO: Thay thế bằng logic thực tế (emit, router, ...)
-      console.log("Viết bài chia sẻ");
-    },
-    show: "main",
-  },
+  // {
+  //   label: "Viết bài chia sẻ",
+  //   type: "info",
+  //   color: "#2176ff",
+  //   class: "apex-mma-header__post-btn",
+  //   action: () => {
+  //     // TODO: Thay thế bằng logic thực tế (emit, router, ...)
+  //     console.log("Viết bài chia sẻ");
+  //   },
+  //   show: "main",
+  // },
   // 3 nút icon, có thể thay icon bằng số hoặc icon thực tế nếu cần
   {
     icon: "1",

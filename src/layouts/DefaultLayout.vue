@@ -19,6 +19,7 @@ import Header from '../components/layout/Header.vue'
 
 <style scoped lang="scss">
 main {
-  min-height: 60vh;
+  max-width: 1216px;
+  margin: 0 auto;
 }
 </style>
