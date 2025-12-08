@@ -1,26 +1,41 @@
-Tiến độ migrate sang Nuxt 3 (tóm tắt cập nhật)
+Tiến độ Migration sang Nuxt 3
 
-Hiện trạng: đã soạn kế hoạch chính và phần mở rộng; đã tạo nhánh `nuxt-migrate`; đã khởi tạo skeleton Nuxt 3 trong thư mục `nuxt-app`; đã scaffold một số file cơ bản (plugin, composables, middleware); đã cài các module đề xuất và cập nhật nuxt.config.ts; đã commit và push nhánh `nuxt-migrate`.
+Ngày cập nhật: 2025-12-08
 
-- [x] Soạn kế hoạch chi tiết Nuxt 3
-- [x] Tạo file plans/nuxt3-migration-seo-plan.md với nội dung kế hoạch
-- [x] Xác nhận người dùng mở/duyệt file và phản hồi nếu cần chỉnh sửa
-- [x] Phân tích cấu trúc /app, plugins, middleware, types và đề xuất thích ứng cho Nuxt 3
-- [x] Thêm phần mở rộng vào plans/nuxt3-migration-seo-plan-extended.md
-- [x] Người dùng duyệt phần mở rộng
-- [x] Tạo nhánh nuxt-migrate
-- [x] Khởi tạo skeleton Nuxt 3 (npm init nuxt@latest) — hoàn tất (thư mục: nuxt-app)
-- [x] Scaffold folder cơ bản: plugins/, middleware/, composables/, types/, layouts/, pages/ — (đã tạo plugin `plugins/app-provider.client.ts`, middleware `middleware/auth.ts`, composables `useToast.ts`, `useTheme.ts`)
-- [x] Cài modules: @pinia/nuxt, @nuxt/content, @nuxt/image-edge, @nuxtjs/robots, @nuxtjs/sitemap, nuxt-schema-org, @vueuse/nuxt
-- [x] Cập nhật nuxt.config.ts (modules, routeRules, runtimeConfig)
-- [ ] Scaffold plugin providers bổ sung
-- [ ] Di chuyển components/layouts cơ bản (Header, Footer, Sidebar) và tạo layouts/default.vue
-- [ ] Migrate router guards -> middleware (map `src/router/guards.js`)
-- [ ] Migrate Pinia store / tích hợp `@pinia/nuxt`
-- [ ] Kiểm tra build cục bộ, fix lỗi SSR/hydration
-- [ ] Commit scaffold & push nhánh nuxt-migrate (đã push cơ bản)
+Tóm tắt những việc đã thực hiện (theo context & yêu cầu):
 
-Các hành động tiếp theo tôi sẽ thực hiện nếu bạn đồng ý:
-- Scaffold thêm providers (toast, dialog) và client-only plugin; migrate router guards; port Header/Footer vào layouts/default.vue; tích hợp Pinia stores; chạy `npm run dev` trong `nuxt-app` để kiểm tra.
+- Đã tạo nhánh: `nuxt-migrate`.
+- Đã khởi tạo skeleton Nuxt 3 trong `nuxt-app/`.
+- Đã cài các modules cơ bản và cập nhật `nuxt-app/nuxt.config.ts`.
+- Đã scaffold một số plugin/composables/middleware ban đầu: `app-provider.client.ts`, `useToast.ts`, `useTheme.ts`, `middleware/auth.ts`.
+- Đã port Header từ `src/components/layout/Header.vue` vào `nuxt-app/components/layout/Header.vue`.
+- Đã tạo `nuxt-app/layouts/default.vue` và import Header.
+- Đã scaffold provider dialog (client-only): `nuxt-app/plugins/dialog.client.ts`.
+- Đã migrate store auth sang Pinia composition store: `nuxt-app/stores/auth.ts`.
+- Đã scaffold API endpoints tối thiểu cho auth: `nuxt-app/server/api/auth.ts` (login/logout/session).
+- Đã migrate store user sang nuxt-app/stores/user.ts.
+- Đã scaffold provider toast (client-only): `nuxt-app/plugins/toast.client.ts`.
+- Đã scaffold SEO composable: `nuxt-app/composables/useSiteMeta.ts`.
+- Đã commit & push nhánh `nuxt-migrate` (theo conversation trước đó).
 
-Bạn muốn tôi tiếp tục tự động thực hiện các bước trên không? (có thể tốn thêm vài phút để cài và chạy)
+Vấn đề/ghi chú kỹ thuật:
+
+- Editor/TypeScript có thể báo nhiều cảnh báo như "Cannot find module '#app'" hay "Cannot find name 'useBody'", "ref"... Đây là vấn đề types/tsconfig — cần thêm "types": ["@types/node","nuxt/schema"] trong `nuxt-app/tsconfig.json` hoặc cài devDeps `@types/node`.
+- Auth endpoint hiện là scaffold mẫu (dùng fake token). Cần implement validation thật, bảo mật cookie (httpOnly, secure), CSRF, và kiểm tra server-side.
+- Một số file scaffold là .ts/.vue — khi chạy dev Nuxt/Nitro sẽ cung cấp runtime helper; editor cần types.
+
+Các việc còn lại (đã lên kế hoạch):
+
+- [ ] Scaffold Footer.vue / Sidebar.vue (nếu có) từ `src/components/layout/` vào `nuxt-app/components/layout/`.
+- [ ] Migrate các Pinia stores còn lại (`src/store/*`) vào `nuxt-app/stores/` (đã migrate auth + user).
+- [ ] Hoàn thiện auth SSR: validate credentials, sử dụng JWT/session thật, set secure HTTPOnly cookie, endpoints server-side an toàn.
+- [ ] Tối ưu SEO: cấu hình `nuxt-schema-org`, sitemap/robots chi tiết, thiết lập canonical/hreflang khi cần.
+- [ ] Chạy `npm run dev` trong `nuxt-app`, fix SSR/hydration warnings và lỗi build.
+- [ ] Viết test tối thiểu: unit cho composables (useToast/useTheme), E2E cho luồng đọc blog và luồng auth/giỏ hàng.
+- [ ] Cập nhật memory bank (`memory-bank/activeContext.md`, `progress.md`) và các plans liên quan.
+- [ ] Khi bạn approve: commit & push các thay đổi còn lại lên `nuxt-migrate` và tạo Pull Request.
+
+Hướng tiếp theo đề xuất (chọn và báo lại để tôi scaffold tiếp theo yêu cầu):
+- A: Tôi scaffold thêm (Footer/Sidebar nếu có, migrate các store còn lại, tinh chỉnh SEO). (Không commit/push — theo yêu cầu bạn)
+- B: Dừng tại đây để bạn review các file đã tạo.
+- C: Hướng dẫn chi tiết để bạn chạy local và xử lý các lỗi TS / chạy dev.
