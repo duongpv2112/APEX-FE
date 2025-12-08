@@ -22,5 +22,5 @@ export default defineNuxtConfig({
     '/product/**': { ssr: true, swr: 60 },
     '/': { ssr: true }
   },
-  css: ['@/styles/main.scss']
+  css: ['~/styles/main.scss']
 })
