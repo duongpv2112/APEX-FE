@@ -1,0 +1,5 @@
+@use "@/assets/scss/_mixins.scss" as *;
+
+$logo-brand: "@/assets/images/logo-brand.svg";
+
+@include icon-gen("apex-mma-logo-brand", $logo-brand, 20px, 20px);

@@ -1,0 +1,18 @@
+import { fileURLToPath } from "node:url"
+
+export default defineNuxtConfig({
+  ssr: true,
+  
+  alias: {
+    "@": fileURLToPath(new URL("./app", import.meta.url)),
+  },
+
+  devtools: { enabled: true },
+
+  css: ["@/assets/scss/main.scss"],
+
+  modules: ["@vueuse/nuxt"],
+  
+  runtimeConfig: {},
+  
+});

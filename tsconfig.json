@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "types": ["node"]
+  }
+}
