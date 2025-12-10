@@ -14,27 +14,27 @@
         >
           <template v-for="(item, idx) in factList" :key="idx">
             <n-carousel-item style="width: 30%">
-            <div
-              class="apex-mma-fact-item"
-              :class="{ 'apex-mma-fact-create': item.isCreate }"
-            >
-              <template v-if="item.isCreate">
-                <div class="apex-mma-fact-create-icon">
-                  <img src="https://i.imgur.com/0y8Ftya.png" alt="Tạo Fact" />
-                </div>
-                <div class="apex-mma-fact-create-label">Tạo Fact mới</div>
-              </template>
-              <template v-else>
-                <div class="apex-mma-fact-avatar-wrap">
-                  <img class="apex-mma-fact-avatar" :src="item.avatar" />
-                </div>
-                <img class="apex-mma-fact-img" :src="item.image" />
-                <div class="apex-mma-fact-username">{{ item.username }}</div>
-              </template>
-            </div>
-          </n-carousel-item>
-        </template>
-      </n-carousel>
+              <div
+                class="apex-mma-fact-item"
+                :class="{ 'apex-mma-fact-create': item.isCreate }"
+              >
+                <template v-if="item.isCreate">
+                  <div class="apex-mma-fact-create-icon">
+                    <img src="https://i.imgur.com/0y8Ftya.png" alt="Tạo Fact" />
+                  </div>
+                  <div class="apex-mma-fact-create-label">Tạo Fact mới</div>
+                </template>
+                <template v-else>
+                  <div class="apex-mma-fact-avatar-wrap">
+                    <img class="apex-mma-fact-avatar" :src="item.avatar" />
+                  </div>
+                  <img class="apex-mma-fact-img" :src="item.image" />
+                  <div class="apex-mma-fact-username">{{ item.username }}</div>
+                </template>
+              </div>
+            </n-carousel-item>
+          </template>
+        </n-carousel>
       </ClientOnly>
     </section>
     <!-- BẮT ĐẦU: apex-mma-news-section -->
@@ -50,7 +50,9 @@
               </div>
               <div class="apex-mma-news-main-content">
                 <div class="apex-mma-news-main-title">{{ mainNews.title }}</div>
-                <div class="apex-mma-news-main-author">{{ mainNews.author }}</div>
+                <div class="apex-mma-news-main-author">
+                  {{ mainNews.author }}
+                </div>
               </div>
             </div>
             <!-- Khối phải: Tin phụ đầu tiên -->
@@ -174,7 +176,9 @@
                 </div>
               </div>
               <div>
-                <div class="apex-mma-featured-user-stat-label">Lượt theo dõi</div>
+                <div class="apex-mma-featured-user-stat-label">
+                  Lượt theo dõi
+                </div>
                 <div class="apex-mma-featured-user-stat-value">
                   {{ userInfo.follows }}
                 </div>
@@ -189,8 +193,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
-import { NCarousel, NCarouselItem } from "naive-ui"
+import { ref } from "vue";
+import { NCarousel, NCarouselItem } from "naive-ui";
 
 // Dữ liệu cho fact section (giữ nguyên)
 const factList = ref([
@@ -235,7 +239,7 @@ const factList = ref([
     image: "https://i.imgur.com/3Q1Z1Zm.jpg",
     username: "xecata",
   },
-])
+]);
 
 // Dữ liệu cho news section
 const mainNews = ref({
@@ -243,7 +247,7 @@ const mainNews = ref({
   title:
     "TinhteDIY : Dạo triển lãm SECC trên tay nhanh bộ ba máy pin ETOP giá hợp lý cho anh em DIY",
   author: "Bảo Long.",
-})
+});
 
 const subNews = ref([
   {
@@ -265,7 +269,7 @@ const subNews = ref([
     author: "Anh Tú.",
     desc: "",
   },
-])
+]);
 
 const quickList = ref([
   {
@@ -293,7 +297,7 @@ const quickList = ref([
     title: "Thương hiệu RAM yêu thích của mình, anh em thì sao?",
     image: "https://i.imgur.com/3Q1Z1Zm.jpg",
   },
-])
+]);
 
 const featuredList = ref([
   {
@@ -322,7 +326,7 @@ const featuredList = ref([
     title: "Máy giặt sấy 2 trong 1 và riêng lẻ cái nào tốt hơn?",
     author: "Bảo Long.",
   },
-])
+]);
 
 // Dữ liệu user
 const userInfo = ref({
@@ -334,7 +338,7 @@ const userInfo = ref({
   posts: 0,
   likes: 0,
   follows: 0,
-})
+});
 </script>
 
 <style lang="scss" scoped>

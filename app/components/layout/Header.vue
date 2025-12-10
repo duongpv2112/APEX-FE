@@ -3,12 +3,47 @@
     <div class="apex-mma-header__left">
       <div class="apex-mma-header__logo apex-mma-logo-brand"></div>
       <div class="apex-mma-header__brand">APEX</div>
+      <!-- <n-input
+        class="apex-mma-header__search"
+        secondary
+        type="text"
+        placeholder="Tìm sản phẩm công nghệ, cộng đồng, bạn bè..."
+        round
+      /> -->
     </div>
     <div class="apex-mma-header__right">
+      <!-- Nút chính (ví dụ: Viết bài chia sẻ) -->
+      <!-- <template v-for="(btn, idx) in actionButtons" :key="idx">
+        <ClientOnly>
+          <n-button
+            v-if="btn.show === 'main'"
+            :class="btn.class"
+            :type="btn.type"
+            :color="btn.color"
+            round
+            @click="btn.action"
+          >
+            {{ btn.label }}
+          </n-button>
+        </ClientOnly>
+      </template> -->
       <div class="apex-mma-header__icon-group">
-        <button class="apex-mma-header__icon-btn">1</button>
-        <button class="apex-mma-header__icon-btn">1</button>
-        <button class="apex-mma-header__icon-btn">1</button>
+        <template
+          v-for="(btn, idx) in actionButtons.filter((b) => b.show === 'icon')"
+          :key="'icon-' + idx"
+        >
+          <ClientOnly>
+            <n-button
+              :class="btn.class"
+              :type="btn.type"
+              secondary
+              circle
+              @click="btn.action"
+            >
+              {{ btn.icon }}
+            </n-button>
+          </ClientOnly>
+        </template>
       </div>
       <div class="apex-mma-header__avatar">
         <svg width="36" height="36" fill="none" viewBox="0 0 36 36">
@@ -23,7 +58,52 @@
   </header>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import { NButton } from "naive-ui";
+import { ref } from "vue";
+
+// Danh sách nút chức năng cho Header
+const actionButtons = [
+  // {
+  //   label: "Viết bài chia sẻ",
+  //   type: "info",
+  //   color: "#2176ff",
+  //   class: "apex-mma-header__post-btn",
+  //   action: () => {
+  //     // TODO: Thay thế bằng logic thực tế (emit, router, ...)
+  //     console.log("Viết bài chia sẻ");
+  //   },
+  //   show: "main",
+  // },
+  // 3 nút icon, có thể thay icon bằng số hoặc icon thực tế nếu cần
+  {
+    icon: "1",
+    type: "default",
+    class: "apex-mma-header__icon-btn",
+    action: () => {
+      console.log("Icon 1");
+    },
+    show: "icon",
+  },
+  {
+    icon: "1",
+    type: "default",
+    class: "apex-mma-header__icon-btn",
+    action: () => {
+      console.log("Icon 2");
+    },
+    show: "icon",
+  },
+  {
+    icon: "1",
+    type: "default",
+    class: "apex-mma-header__icon-btn",
+    action: () => {
+      console.log("Icon 3");
+    },
+    show: "icon",
+  },
+];
 </script>
 
 <style scoped lang="scss">
