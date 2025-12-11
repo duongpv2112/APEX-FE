@@ -1,34 +1,38 @@
 # progress.md
 
-## Tiến độ dự án & trạng thái hiện tại (cập nhật tự động)
+## Tiến độ dự án & trạng thái cập nhật (tính đến 10/12/2025 22:06 GMT+7)
 
-- Đã hoàn thành:
-  - Scaffold Nuxt 4 (SSR) với cấu trúc app/ (layouts, components, composables, stores).
-  - Thêm server/api/auth.ts với endpoints giả lập (login, logout, session).
-  - Cấu hình nuxt.config.ts với alias @, main.scss và module @vueuse/nuxt.
-  - Tạo composables: useSeoMeta, useSiteMeta, useTheme; useToast đang comment.
-  - Tạo components/layout/Header.vue và layout mặc định.
-  - Cài đặt dependencies cơ bản trong package.json (Naive UI, Pinia, schema-org, robots, sitemap).
+- Tổng quan: Đã triển khai Pinia vào dự án Nuxt 4, chuẩn hoá một số stores (auth, user, ui), thêm actions login/logout trong auth store, cập nhật middleware và một số component để sử dụng store. Dev server đã được khởi động lại và đang chạy (Nuxt dev).
 
-- Còn lại (todo):
-  - Hoàn thiện flow auth thực tế (thay cookie giả bằng backend thực hoặc xác thực an toàn).
-  - Chuẩn hoá runtime public config (siteUrl, API_BASE) trong nuxt.config.ts hoặc .env.example.
-  - Hoàn thiện useToast và tích hợp hệ thống toast global.
-  - Thêm README project-specific và hướng dẫn dev/build chi tiết.
-  - Thiết lập CI/CD và tests cơ bản.
+## Đã hoàn thành
+- Scaffold & kế hoạch:
+  - Tạo file kế hoạch: plans/pinia-state-management-plan.md
+- Cài đặt & cấu hình:
+  - Cài pinia & @pinia/nuxt
+  - Cập nhật nuxt.config.ts để tích hợp @pinia/nuxt
+- Stores & composables:
+  - Chuẩn hoá stores: stores/auth.ts (defineStore, thêm isLoggedIn, login, logout, initFromCookie), stores/user.ts (thêm helper), stores/ui.ts (theme store)
+  - Cập nhật composable useTheme để dùng store ui
+- Ứng dụng và middleware:
+  - Cập nhật app/middleware/auth.ts để đồng bộ cookie -> auth store
+  - Cập nhật app/components/layout/Header.vue để gọi auth.login/logout (demo)
+- API server-side:
+  - Thêm route server/api/auth/[...all].ts để xử lý các đường dẫn /api/auth/* (login/logout/session)
+- Khác:
+  - Đổi tên composable useSeoMeta -> useAppSeo để tránh xung đột với auto-import của Nuxt
+  - Khởi động lại dev server (Nuxt dev) và nhận HMR update
 
-- Trạng thái hiện tại:
-  - Dự án ở trạng thái starter/thử nghiệm, sẵn sàng để phát triển các feature UI và tích hợp API thực.
+## Việc cần làm (todo)
+- [ ] Kiểm thử manual: flow đăng nhập/đăng xuất (login -> cookie set -> store.initFromCookie -> middleware & UI phản hồi)
+- [ ] Hoàn thiện phản hồi UI: thêm nút Login/Logout rõ ràng trên Header để demo
+- [ ] (Tùy chọn) Thêm pinia-plugin-persistedstate với filter cho token nếu muốn persist
+- [ ] Viết hướng dẫn sử dụng và test cases ngắn (plans/ và memory-bank)
+- [ ] Tạo commit/branch/PR với các thay đổi để review
 
-- Vấn đề tồn đọng:
-  - Auth hiện là giả lập.
-  - Thiếu file env.example và cấu hình runtime public.
-  - Một số composable chưa hoàn thiện (ví dụ useToast comment).
+## Ghi chú kỹ thuật & cảnh báo
+- Sau khi đổi tên useSeoMeta, Nuxt cần regen auto-imports — tôi đã restart dev server để áp dụng.
+- Dev server hiện đang chạy, tuy nhiên khi kiểm thử curl có thể gặp vấn đề về đường dẫn nếu file api chưa được nhận bởi Nitro (đã thêm server/api/auth/[...all].ts và HMR đã kích hoạt).
+- Tránh persist token không mã hoá trong localStorage nếu không có chiến lược bảo mật rõ ràng; ưu tiên cookie HTTPOnly như scaffold hiện tại.
 
-- Lịch sử quyết định:
-  - Chọn Nuxt 4 + SSR cho SEO.
-  - Sử dụng tiền tố CSS apex-mma- (tham chiếu từ .clinerules).
-
-## Ghi chú
-
-- Tài liệu này được sinh tự động từ phân tích source. Nếu bạn muốn tôi mở PR sửa file này hoặc tiếp tục cập nhật memory-bank với thông tin chi tiết hơn, cho tôi biết.
+## Yêu cầu từ bạn
+- Bạn muốn tôi tiếp tục với bước nào: (1) kiểm thử manual login/logout, (2) thêm persisted plugin, (3) tạo PR để bạn review, hoặc (4) khác?

@@ -1,6 +1,6 @@
 import { useSiteMeta } from './useSiteMeta'
 
-export function useSeoMeta(overrides: Record<string, any> = {}) {
+export function useAppSeo(overrides: Record<string, any> = {}) {
   const { defaultMeta } = useSiteMeta()
   const meta = defaultMeta(overrides)
 

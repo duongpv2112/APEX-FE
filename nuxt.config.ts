@@ -1,8 +1,8 @@
-import { fileURLToPath } from "node:url"
+import { fileURLToPath } from "node:url";
 
 export default defineNuxtConfig({
   ssr: true,
-  
+
   alias: {
     "@": fileURLToPath(new URL("./app", import.meta.url)),
   },
@@ -11,8 +11,16 @@ export default defineNuxtConfig({
 
   css: ["@/assets/scss/main.scss"],
 
-  modules: ["@vueuse/nuxt"],
-  
-  runtimeConfig: {},
-  
-});
+  modules: ["@vueuse/nuxt", "@pinia/nuxt"],
+
+  pinia: {
+    autoImports: ["defineStore", "storeToRefs"],
+  },
+
+  runtimeConfig: {
+    public: {
+      wixApiBase: "",
+    },
+    private: {},
+  },
+} as any);

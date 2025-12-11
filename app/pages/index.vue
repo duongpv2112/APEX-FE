@@ -11,9 +11,10 @@
           slides-per-view="auto"
           :space-between="12"
           :loop="false"
+          :draggable="true"
         >
           <template v-for="(item, idx) in factList" :key="idx">
-            <n-carousel-item style="width: 30%">
+            <n-carousel-item :style="styleCarouselItem">
               <div
                 class="apex-mma-fact-item"
                 :class="{ 'apex-mma-fact-create': item.isCreate }"
@@ -45,9 +46,11 @@
           <div class="apex-mma-news-main-top">
             <!-- Khối trái: Tin chính -->
             <div class="apex-mma-news-main-top-left">
-              <div class="apex-mma-news-main-img">
-                <img class="apex-mma-news-main" :src="mainNews.image" alt="" />
-              </div>
+              <img
+                class="apex-mma-news-main-img"
+                :src="mainNews.image"
+                alt=""
+              />
               <div class="apex-mma-news-main-content">
                 <div class="apex-mma-news-main-title">{{ mainNews.title }}</div>
                 <div class="apex-mma-news-main-author">
@@ -56,7 +59,10 @@
               </div>
             </div>
             <!-- Khối phải: Tin phụ đầu tiên -->
-            <div class="apex-mma-news-main-top-right" v-if="subNews.length > 0">
+            <div
+              class="apex-mma-news-main-top-right"
+              v-if="isDesktop && subNews.length > 0"
+            >
               <img
                 class="apex-mma-news-main-top-right-img"
                 :src="subNews[0].image"
@@ -77,7 +83,7 @@
           </div>
           <div class="apex-mma-news-main-bottom">
             <div
-              v-for="(item, idx) in subNews"
+              v-for="(item, idx) in bottomList"
               :key="idx"
               class="apex-mma-news-sub-item"
             >
@@ -193,7 +199,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useIsDesktop } from "~/composables/useIsDesktop";
 import { NCarousel, NCarouselItem } from "naive-ui";
 
 // Dữ liệu cho fact section (giữ nguyên)
@@ -269,6 +276,13 @@ const subNews = ref([
     author: "Anh Tú.",
     desc: "",
   },
+  {
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    title:
+      "TinhteLookBack: Sự cố Y2K và thế giới ứng phó với tận thế công nghệ như thế nào",
+    author: "Nam Air",
+    desc: "",
+  },
 ]);
 
 const quickList = ref([
@@ -339,6 +353,19 @@ const userInfo = ref({
   likes: 0,
   follows: 0,
 });
+
+const { isDesktop } = useIsDesktop(1024);
+
+const styleCarouselItem = computed(() => {
+  return {
+    width: isDesktop.value ? "10%" : "30%",
+  };
+});
+
+const bottomList = computed(() => {
+  if (!subNews.value) return [];
+  return isDesktop.value ? subNews.value.slice(1) : subNews.value.slice(0, 4);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -351,111 +378,119 @@ const userInfo = ref({
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
-  }
 
-  .apex-mma-fact-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #222;
-  }
+    .apex-mma-fact-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #222;
+    }
 
-  .apex-mma-fact-viewall {
-    color: #1976d2;
-    font-size: 16px;
-    text-decoration: none;
-    font-weight: 500;
+    .apex-mma-fact-viewall {
+      color: #1976d2;
+      font-size: 16px;
+      text-decoration: none;
+      font-weight: 500;
+    }
   }
 
   .apex-mma-fact-carousel {
     width: 100%;
-  }
 
-  .apex-mma-fact-item {
-    height: 180px;
-    background: #222;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  }
+    .apex-mma-fact-item {
+      height: 180px;
+      background: #222;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
 
-  .apex-mma-fact-create {
-    background: linear-gradient(135deg, #1ec8c8 0%, #1e90e8 100%);
-    justify-content: center;
-  }
+      .apex-mma-fact-avatar-wrap {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 2;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
 
-  .apex-mma-fact-create-icon {
-    margin-top: 28px;
-    margin-bottom: 12px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+      .apex-mma-fact-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
 
-  .apex-mma-fact-create-icon img {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-  }
+      .apex-mma-fact-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        margin-top: 0;
+        opacity: 0.8;
+        transition: scale ease-in 0.25s;
 
-  .apex-mma-fact-create-label {
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    text-align: center;
-    margin-top: 8px;
-  }
+        &:hover {
+          scale: 1.1;
+        }
+      }
 
-  .apex-mma-fact-avatar-wrap {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    z-index: 2;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
+      .apex-mma-fact-username {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 0 9px 8px;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
 
-  .apex-mma-fact-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+    .apex-mma-fact-create {
+      background: linear-gradient(135deg, #1ec8c8 0%, #1e90e8 100%);
+      justify-content: center;
 
-  .apex-mma-fact-img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 16px 16px 0 0;
-    margin-top: 0;
-  }
+      .apex-mma-fact-create-icon {
+        margin-top: 28px;
+        margin-bottom: 12px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-  .apex-mma-fact-username {
-    color: #fff;
-    font-size: 15px;
-    font-weight: 500;
-    text-align: center;
-    margin-top: auto;
-    margin-bottom: 12px;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+      .apex-mma-fact-create-icon img {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+      }
+
+      .apex-mma-fact-create-label {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        margin-top: 8px;
+      }
+    }
   }
 }
 
@@ -491,33 +526,27 @@ const userInfo = ref({
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-  }
 
-  .apex-mma-news-main-img {
-    width: 100%;
-    height: 310px;
-
-    & img {
-      height: 100%;
-      aspect-ratio: 1/1;
-      object-fit: cover;
+    .apex-mma-news-main-img {
+      width: 100%;
+      aspect-ratio: 18/9;
       border-radius: 8px;
     }
-  }
 
-  .apex-mma-news-main-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #222;
-    margin-bottom: 8px;
-    line-height: 1.3;
-    padding-top: 12px;
-  }
+    .apex-mma-news-main-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 8px;
+      line-height: 1.3;
+      padding-top: 12px;
+    }
 
-  .apex-mma-news-main-author {
-    font-size: 15px;
-    color: #666;
-    font-weight: 400;
+    .apex-mma-news-main-author {
+      font-size: 15px;
+      color: #666;
+      font-weight: 400;
+    }
   }
 
   .apex-mma-news-main-top-right {
@@ -535,88 +564,85 @@ const userInfo = ref({
     max-width: 260px;
     overflow: hidden;
     border-radius: 8px 8px 0 0;
-  }
 
-  .apex-mma-news-main-top-right-img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    margin-bottom: 8px;
-  }
+    .apex-mma-news-main-top-right-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      margin-bottom: 8px;
+    }
 
-  .apex-mma-news-main-top-right-content {
-    padding: 8px 12px 12px 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-  }
+    .apex-mma-news-main-top-right-content {
+      padding: 8px 12px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
 
-  .apex-mma-news-main-top-right-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #222;
-    margin-bottom: 4px;
-    line-height: 1.3;
-  }
+      .apex-mma-news-main-top-right-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #222;
+        margin-bottom: 4px;
+        line-height: 1.3;
+      }
 
-  .apex-mma-news-main-top-right-author {
-    font-size: 14px;
-    color: #666;
-    font-weight: 500;
-    margin-bottom: 4px;
-  }
+      .apex-mma-news-main-top-right-author {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
 
-  .apex-mma-news-main-top-right-desc {
-    font-size: 14px;
-    color: #222;
-    font-weight: 400;
-    line-height: 1.4;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    max-height: 60px;
+      .apex-mma-news-main-top-right-desc {
+        font-size: 14px;
+        color: #222;
+        font-weight: 400;
+        line-height: 1.4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        max-height: 60px;
+      }
+    }
   }
 
   .apex-mma-news-main-bottom {
     display: flex;
     gap: 12px;
     width: 100%;
-  }
 
-  .apex-mma-news-sub-item {
-    flex: 1;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
+    .apex-mma-news-sub-item {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
 
-  .apex-mma-news-sub-img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
+      .apex-mma-news-sub-img {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 5px;
+      }
 
-  .apex-mma-news-sub-content {
-    padding: 12px 0;
-  }
+      .apex-mma-news-sub-content {
+        padding: 12px 0;
 
-  .apex-mma-news-sub-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #222;
-    margin-bottom: 4px;
-    line-height: 1.3;
-  }
+        .apex-mma-news-sub-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: #222;
+          margin-bottom: 4px;
+          line-height: 1.3;
+        }
 
-  .apex-mma-news-sub-author {
-    font-size: 14px;
-    color: #666;
-    font-weight: 400;
+        .apex-mma-news-sub-author {
+          font-size: 14px;
+          color: #666;
+          font-weight: 400;
+        }
+      }
+    }
   }
 
   .apex-mma-news-quick {
@@ -627,93 +653,91 @@ const userInfo = ref({
     display: flex;
     flex-direction: column;
     gap: 8px;
-  }
 
-  .apex-mma-news-quick-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
+    .apex-mma-news-quick-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
 
-  .apex-mma-news-quick-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1976d2;
-  }
+      .apex-mma-news-quick-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1976d2;
+      }
 
-  .apex-mma-news-quick-viewall {
-    color: #1976d2;
-    font-size: 15px;
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .apex-mma-news-quick-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 12px 16px 32px;
-    border-left: 1px dashed #1570ef;
-    border-bottom: 1px dashed #1570ef;
-    border-bottom-left-radius: 30px;
-  }
-
-  .apex-mma-news-quick-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    position: relative;
-    min-height: 38px;
-
-    &::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background-color: #1570ef;
-      position: absolute;
-      left: -23px;
-      transform: translateX(50%);
+      .apex-mma-news-quick-viewall {
+        color: #1976d2;
+        font-size: 15px;
+        text-decoration: none;
+        font-weight: 500;
+      }
     }
-  }
 
-  .apex-mma-news-quick-info {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-  }
+    .apex-mma-news-quick-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 12px 16px 32px;
+      border-left: 1px dashed #1570ef;
+      border-bottom: 1px dashed #1570ef;
+      border-bottom-left-radius: 30px;
 
-  .apex-mma-news-quick-title2 {
-    font-size: 15px;
-    color: #222;
-    font-weight: 500;
-    line-height: 1.3;
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+      .apex-mma-news-quick-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        position: relative;
+        min-height: 38px;
 
-  .apex-mma-news-quick-thumb {
-    width: 120px;
-    height: 100%;
-    max-height: 68px;
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+        &::before {
+          content: "";
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background-color: #1570ef;
+          position: absolute;
+          left: -23px;
+          transform: translateX(50%);
+        }
 
-  .apex-mma-news-quick-thumb img {
-    height: 100%;
-    aspect-ratio: 1/1;
-    object-fit: contain;
-    border-radius: 8px;
+        .apex-mma-news-quick-info {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 8px;
+          width: 100%;
+
+          .apex-mma-news-quick-title2 {
+            font-size: 15px;
+            color: #222;
+            font-weight: 500;
+            line-height: 1.3;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .apex-mma-news-quick-thumb {
+            width: 120px;
+            height: 100%;
+            max-height: 68px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .apex-mma-news-quick-thumb img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -924,18 +948,51 @@ const userInfo = ref({
   }
 }
 
-/* Điện thoại nhỏ */
-@media (max-width: 375px) {
-}
-/* Điện thoại phổ thông */
-@media (max-width: 480px) {
-}
-/* Phablet */
-@media (max-width: 600px) {
-}
-/* Tablet */
+/* Mobile */
 @media (max-width: 768px) {
+  .apex-mma-news-section {
+    .apex-mma-news-main-top-left {
+      .apex-mma-news-main-img {
+        aspect-ratio: 16/9;
+      }
+    }
+
+    .apex-mma-news-main-top-right {
+      display: none;
+    }
+
+    /* Sub items: 2 columns x 2 rows grid on mobile (4 items visible as 2x2) */
+    .apex-mma-news-main-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+
+      .apex-mma-news-sub-item {
+        flex-basis: calc(50% - 8px);
+        overflow: hidden;
+      }
+
+      .apex-mma-news-sub-item .apex-mma-news-sub-content {
+        padding: 8px 4px 12px 4px;
+
+        .apex-mma-news-sub-title {
+          font-size: 15px;
+          font-weight: 700;
+          line-height: 1.25;
+          margin-bottom: 6px;
+          overflow: hidden;
+        }
+
+        .apex-mma-news-sub-author {
+          font-size: 13px;
+          color: #666;
+          font-weight: 400;
+        }
+      }
+    }
+  }
 }
+
 /* Tablet lớn hoặc laptop nhỏ */
 @media (max-width: 992px) {
   .apex-mma-news-section .apex-mma-news-container {
