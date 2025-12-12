@@ -61,7 +61,7 @@
             <!-- Khối phải: Tin phụ đầu tiên -->
             <div
               class="apex-mma-news-main-top-right"
-              v-if="isDesktop && subNews.length > 0"
+              v-if="!isMobile && subNews.length > 0"
             >
               <img
                 class="apex-mma-news-main-top-right-img"
@@ -200,7 +200,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useIsDesktop } from "~/composables/useIsDesktop";
+import { useDisplay } from "~/composables/useDisplay";
 import { NCarousel, NCarouselItem } from "naive-ui";
 
 // Dữ liệu cho fact section (giữ nguyên)
@@ -240,6 +240,56 @@ const factList = ref([
     avatar: "https://i.imgur.com/0y8Ftya.png",
     image: "https://i.imgur.com/2nCt3Sbl.jpg",
     username: "TRUNGKIEN...",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
+  },
+  {
+    avatar: "https://i.imgur.com/0y8Ftya.png",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    username: "xecata",
   },
   {
     avatar: "https://i.imgur.com/0y8Ftya.png",
@@ -354,7 +404,7 @@ const userInfo = ref({
   follows: 0,
 });
 
-const { isDesktop } = useIsDesktop(1024);
+const { _, isMobile, isTablet, isDesktop } = useDisplay();
 
 const styleCarouselItem = computed(() => {
   return {
@@ -364,7 +414,7 @@ const styleCarouselItem = computed(() => {
 
 const bottomList = computed(() => {
   if (!subNews.value) return [];
-  return isDesktop.value ? subNews.value.slice(1) : subNews.value.slice(0, 4);
+  return isMobile.value ? subNews.value.slice(0, 4) : subNews.value.slice(1);
 });
 </script>
 
@@ -748,208 +798,206 @@ const bottomList = computed(() => {
 
   .apex-mma-featured-container {
     display: flex;
-    gap: 32px;
+    gap: 24px;
     width: 100%;
     align-items: flex-start;
-  }
 
-  .apex-mma-featured-left {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+    .apex-mma-featured-left {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
 
-  .apex-mma-featured-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #222;
-    margin-bottom: 12px;
-  }
+      .apex-mma-featured-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #222;
+      }
 
-  .apex-mma-featured-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px 32px;
-  }
+      .apex-mma-featured-list {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -12px;
 
-  .apex-mma-featured-item {
-    display: flex;
-    align-items: flex-start;
-    min-width: 320px;
-    flex: 1 1 45%;
-  }
+        .apex-mma-featured-item {
+          display: flex;
+          align-items: flex-start;
+          flex: 0 0 50%;
+          padding: 16px 12px 0;
 
-  .apex-mma-featured-rank {
-    font-size: 38px;
-    font-weight: 800;
-    color: #8a94a6;
-    margin-right: 16px;
-    min-width: 56px;
-    text-align: right;
-    line-height: 1;
-    font-family: "Montserrat", Arial, sans-serif;
-  }
+          .apex-mma-featured-rank {
+            font-size: 38px;
+            font-weight: 800;
+            color: #8a94a6;
+            margin-right: 16px;
+            min-width: 56px;
+            line-height: 1;
+            font-family: "Montserrat", Arial, sans-serif;
+          }
 
-  .apex-mma-featured-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+          .apex-mma-featured-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
 
-  .apex-mma-featured-headline {
-    font-size: 18px;
-    font-weight: 700;
-    color: #222;
-    margin-bottom: 2px;
-    line-height: 1.3;
-  }
+            .apex-mma-featured-headline {
+              font-size: 18px;
+              font-weight: 700;
+              color: #222;
+              margin-bottom: 2px;
+              line-height: 1.3;
+            }
 
-  .apex-mma-featured-author {
-    font-size: 15px;
-    color: #666;
-    font-weight: 400;
-  }
-
-  .apex-mma-featured-right {
-    flex: 1;
-    min-width: 260px;
-    max-width: 340px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .apex-mma-featured-user-card {
-    width: 100%;
-    background: #fff;
-    border: 1px solid #e5e6ed;
-    border-radius: 12px;
-    padding: 24px 20px 20px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-  }
-
-  .apex-mma-featured-user-avatar {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 8px;
-    background: #e5e6ed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .apex-mma-featured-user-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-
-  .apex-mma-featured-user-name {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1976d2;
-    margin-bottom: 2px;
-    text-align: center;
-  }
-
-  .apex-mma-featured-user-label {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 2px;
-    text-align: center;
-  }
-
-  .apex-mma-featured-user-age {
-    font-size: 15px;
-    color: #222;
-    font-weight: 500;
-    margin-bottom: 8px;
-    text-align: center;
-  }
-
-  .apex-mma-featured-user-progress {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .apex-mma-featured-user-rank {
-    font-size: 15px;
-    color: #bdbdbd;
-    font-weight: 600;
-    &.apex-mma-featured-user-rank--active {
-      color: #1976d2;
+            .apex-mma-featured-author {
+              font-size: 15px;
+              color: #666;
+              font-weight: 400;
+            }
+          }
+        }
+      }
     }
-  }
 
-  .apex-mma-featured-user-point {
-    font-size: 15px;
-    color: #1976d2;
-    font-weight: 700;
-    background: #f1f2f4;
-    border-radius: 8px;
-    padding: 2px 10px;
-    margin: 0 4px;
-  }
+    .apex-mma-featured-right {
+      flex: 1;
+      min-width: 260px;
+      max-width: 340px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
 
-  .apex-mma-featured-user-progress-bar {
-    width: 100%;
-    height: 6px;
-    background: #e5e6ed;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    overflow: hidden;
-  }
+      .apex-mma-featured-user-card {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #e5e6ed;
+        border-radius: 12px;
+        padding: 24px 20px 20px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 
-  .apex-mma-featured-user-progress-bar-inner {
-    height: 100%;
-    background: linear-gradient(90deg, #1ec8c8 0%, #1e90e8 100%);
-    border-radius: 4px;
-    transition: width 0.3s;
-    width: 0%;
-  }
+        .apex-mma-featured-user-avatar {
+          width: 72px;
+          height: 72px;
+          border-radius: 50%;
+          overflow: hidden;
+          margin-bottom: 8px;
+          background: #e5e6ed;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
-  .apex-mma-featured-user-desc {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 12px;
-    text-align: center;
-  }
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+        }
 
-  .apex-mma-featured-user-stats {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    gap: 8px;
-    margin-top: 8px;
-  }
+        .apex-mma-featured-user-name {
+          font-size: 18px;
+          font-weight: 700;
+          color: #1976d2;
+          margin-bottom: 2px;
+          text-align: center;
+        }
 
-  .apex-mma-featured-user-stat-label {
-    font-size: 13px;
-    color: #888;
-    text-align: center;
-  }
+        .apex-mma-featured-user-label {
+          font-size: 14px;
+          color: #888;
+          margin-bottom: 2px;
+          text-align: center;
+        }
 
-  .apex-mma-featured-user-stat-value {
-    font-size: 16px;
-    color: #1976d2;
-    font-weight: 700;
-    text-align: center;
+        .apex-mma-featured-user-age {
+          font-size: 15px;
+          color: #222;
+          font-weight: 500;
+          margin-bottom: 8px;
+          text-align: center;
+        }
+      }
+
+      .apex-mma-featured-user-progress {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+        width: 100%;
+        justify-content: center;
+
+        .apex-mma-featured-user-rank {
+          font-size: 15px;
+          color: #bdbdbd;
+          font-weight: 600;
+
+          &.apex-mma-featured-user-rank--active {
+            color: #1976d2;
+          }
+        }
+
+        .apex-mma-featured-user-point {
+          font-size: 15px;
+          color: #1976d2;
+          font-weight: 700;
+          background: #f1f2f4;
+          border-radius: 8px;
+          padding: 2px 10px;
+          margin: 0 4px;
+        }
+
+        .apex-mma-featured-user-progress-bar {
+          width: 100%;
+          height: 6px;
+          background: #e5e6ed;
+          border-radius: 4px;
+          margin-bottom: 8px;
+          overflow: hidden;
+
+          .apex-mma-featured-user-progress-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #1ec8c8 0%, #1e90e8 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+            width: 0%;
+          }
+        }
+
+        .apex-mma-featured-user-desc {
+          font-size: 14px;
+          color: #888;
+          margin-bottom: 12px;
+          text-align: center;
+        }
+
+        .apex-mma-featured-user-stats {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          gap: 8px;
+          margin-top: 8px;
+
+          .apex-mma-featured-user-stat-label {
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+          }
+
+          .apex-mma-featured-user-stat-value {
+            font-size: 16px;
+            color: #1976d2;
+            font-weight: 700;
+            text-align: center;
+          }
+        }
+      }
+    }
   }
 }
 
 /* Mobile */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .apex-mma-news-section {
     .apex-mma-news-main-top-left {
       .apex-mma-news-main-img {
@@ -993,42 +1041,48 @@ const bottomList = computed(() => {
   }
 }
 
-/* Tablet lớn hoặc laptop nhỏ */
-@media (max-width: 992px) {
-  .apex-mma-news-section .apex-mma-news-container {
-    flex-direction: column;
-    gap: 16px;
-  }
-  .apex-mma-news-section .apex-mma-news-main,
-  .apex-mma-news-section .apex-mma-news-quick {
-    max-width: 100%;
-    width: 100%;
-  }
-  .apex-mma-news-section .apex-mma-news-quick {
-    margin-top: 0;
-  }
+/* Tablet */
+@media (max-width: 991px) {
+  .apex-mma-news-section {
+    .apex-mma-news-main {
+      .apex-mma-news-main-top-left {
+        .apex-mma-news-main-img {
+        }
+      }
 
-  .apex-mma-featured-section .apex-mma-featured-container {
-    flex-direction: column;
-    gap: 16px;
-  }
-  .apex-mma-featured-section .apex-mma-featured-left,
-  .apex-mma-featured-section .apex-mma-featured-right {
-    max-width: 100%;
-    width: 100%;
-  }
-  .apex-mma-featured-section .apex-mma-featured-right {
-    margin-top: 0;
-  }
-  .apex-mma-featured-section .apex-mma-featured-list {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .apex-mma-featured-section .apex-mma-featured-item {
-    min-width: unset;
+      .apex-mma-news-main-top-right {
+        display: block;
+      }
+
+      /* Sub items: 2 columns x 2 rows grid on mobile (4 items visible as 2x2) */
+      .apex-mma-news-main-bottom {
+        .apex-mma-news-sub-item {
+        }
+
+        .apex-mma-news-sub-item .apex-mma-news-sub-content {
+          .apex-mma-news-sub-title {
+          }
+
+          .apex-mma-news-sub-author {
+          }
+        }
+      }
+    }
+
+    .apex-mma-news-quick {
+      display: none;
+    }
   }
 }
-/* Laptop/máy tính */
-@media (max-width: 1200px) {
+
+/* Tablet lớn hoặc laptop nhỏ */
+@media (min-width: 992px) {
+  .apex-mma-featured-section {
+    .apex-mma-featured-container {
+      .apex-mma-featured-right {
+        display: flex;
+      }
+    }
+  }
 }
 </style>
