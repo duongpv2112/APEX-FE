@@ -195,6 +195,94 @@
       </div>
     </section>
     <!-- KẾT THÚC: apex-mma-featured-section -->
+
+    <!-- BẮT ĐẦU: apex-mma-compact-section (mới) -->
+    <section class="apex-mma-compact-section">
+      <div class="apex-mma-compact-container">
+        <!-- Bên phải: Thông tin user -->
+        <div class="apex-mma-compact-left">
+          <div class="apex-mma-compact-title">Tin mới nhất</div>
+          <div class="apex-mma-compact-list">
+            <div
+              v-for="(item, idx) in compactList"
+              :key="idx"
+              class="apex-mma-compact-item"
+            >
+              <div class="apex-mma-compact-thumb">
+                <img :src="item.image" alt="" />
+              </div>
+              <div class="apex-mma-compact-body">
+                <div class="apex-mma-compact-title">{{ item.title }}</div>
+                <div class="apex-mma-compact-excerpt" v-if="!isMobile">
+                  {{ item.excerpt }}
+                </div>
+                <div class="apex-mma-compact-author">
+                  <div class="apex-mma-compact-author-avatar">
+                    <img :src="item.authorAvatar" alt="" />
+                  </div>
+                  <div class="apex-mma-compact-author-name">
+                    {{ item.author }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Bên phải: Thông tin user -->
+        <div class="apex-mma-compact-right">
+          <div class="apex-mma-featured-user-card">
+            <div class="apex-mma-featured-user-avatar">
+              <img :src="userInfo.avatar" alt="avatar" />
+            </div>
+            <div class="apex-mma-featured-user-name">{{ userInfo.name }}</div>
+            <div class="apex-mma-featured-user-label">Tuổi tinhte</div>
+            <div class="apex-mma-featured-user-age">{{ userInfo.age }}</div>
+            <div class="apex-mma-featured-user-progress">
+              <span
+                class="apex-mma-featured-user-rank apex-mma-featured-user-rank--active"
+                >Trứng</span
+              >
+              <span class="apex-mma-featured-user-point"
+                >{{ userInfo.point }} điểm</span
+              >
+              <span class="apex-mma-featured-user-rank">GÀ</span>
+            </div>
+            <div class="apex-mma-featured-user-progress-bar">
+              <div
+                class="apex-mma-featured-user-progress-bar-inner"
+                :style="{ width: userInfo.progress + '%' }"
+              ></div>
+            </div>
+            <div class="apex-mma-featured-user-desc">
+              Bạn cần hoạt động nhiều để lên hạng
+            </div>
+            <div class="apex-mma-featured-user-stats">
+              <div>
+                <div class="apex-mma-featured-user-stat-label">Bài đã đăng</div>
+                <div class="apex-mma-featured-user-stat-value">
+                  {{ userInfo.posts }}
+                </div>
+              </div>
+              <div>
+                <div class="apex-mma-featured-user-stat-label">Lượt thích</div>
+                <div class="apex-mma-featured-user-stat-value">
+                  {{ userInfo.likes }}
+                </div>
+              </div>
+              <div>
+                <div class="apex-mma-featured-user-stat-label">
+                  Lượt theo dõi
+                </div>
+                <div class="apex-mma-featured-user-stat-value">
+                  {{ userInfo.follows }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- KẾT THÚC: apex-mma-compact-list-section -->
   </div>
 </template>
 
@@ -240,11 +328,6 @@ const factList = ref([
     avatar: "https://i.imgur.com/0y8Ftya.png",
     image: "https://i.imgur.com/2nCt3Sbl.jpg",
     username: "TRUNGKIEN...",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
   },
   {
     avatar: "https://i.imgur.com/0y8Ftya.png",
@@ -403,6 +486,44 @@ const userInfo = ref({
   likes: 0,
   follows: 0,
 });
+
+// Dữ liệu cho section mới: compact list (mobile-first)
+const compactList = ref([
+  {
+    image: "https://i.imgur.com/8Q1Z1Zm.jpg",
+    title:
+      "Roborock giới thiệu Qrevo Curv 2 Flow: Giẻ lau con lăn, nhận diện hơn 200 vật thể",
+    excerpt:
+      "Roborock vừa công bố những thông tin chi tiết về mẫu robot hút bụi lau nhà flagship sắp ra mắt của mình, mang tên Qrevo Curv 2 Flow. Đây là một sản phẩm đánh dấu hướng đi mới của hãng khi lần đầu tiên trang bị công nghệ giẻ lau dạng con lăn...",
+    author: "Anh Tú.",
+    authorAvatar: "https://i.imgur.com/0y8Ftya.png",
+  },
+  {
+    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
+    title: "Sự thật là uống nước cam ép và canxi ban đêm không gây ra sỏi thận",
+    excerpt:
+      "Nếu anh em hoặc người thân thích uống nước cam (nước ép cam tươi) và đang uống viên bổ sung canxi thì 2 loại này đều an toàn cho sức khỏe*, miễn là uống đúng liều lượng**, thậm chí là uống canxi hoặc uống nước cam...",
+    author: "Nam Air",
+    authorAvatar: "https://i.imgur.com/0y8Ftya.png",
+  },
+  {
+    image: "https://i.imgur.com/2nCt3Sbl.jpg",
+    title:
+      "Global 8000: máy bay tư nhân nhanh nhất thế giới của Canada, giá hơn 2 ngàn tỷ đồng",
+    excerpt:
+      "Từ khi các máy bay Concorde lui vào dĩ vãng thì trong thế giới máy bay dân dụng, mà đặc biệt là máy bay tư nhân thì hiếm có chiếc nào đạt tới tốc độ âm thanh (Mach 1, hay 1234 km/giờ) nữa. Một số chiếc nổi bật như Falcon 7X hay Gulfstream G650 đều...",
+    author: "Frozen Cat",
+    authorAvatar: "https://i.imgur.com/3Q1Z1Zm.jpg",
+  },
+  {
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    title: "SpaceX có thể IPO trong năm 2026 và thành cty 1.000 tỷ đô",
+    excerpt:
+      "Tỷ phú Elon Musk hé lộ trên X rằng SpaceX có thể sẽ được IPO trong năm 2026, bằng cách bình luận câu “cơ bản thì Eric thường nói đúng” về bài báo của Eric Berger đăng trên Ars Technica rằng SpaceX sẽ sớm được cổ phần hóa.",
+    author: "Nam Air",
+    authorAvatar: "https://i.imgur.com/0y8Ftya.png",
+  },
+]);
 
 const { _, isMobile, isTablet, isDesktop } = useDisplay();
 
@@ -700,7 +821,7 @@ const bottomList = computed(() => {
     padding: 16px 0 0;
     min-width: 260px;
     max-width: 340px;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 8px;
 
@@ -996,7 +1117,258 @@ const bottomList = computed(() => {
   }
 }
 
-/* Mobile */
+/* Compact list section - mobile first */
+.apex-mma-compact-section {
+  margin: 16px 0 40px;
+  padding: 0 12px;
+  width: 100%;
+
+  .apex-mma-compact-container {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    align-items: flex-start;
+
+    .apex-mma-compact-left {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+
+      .apex-mma-compact-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #222;
+        margin-bottom: 12px;
+      }
+
+      .apex-mma-compact-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .apex-mma-compact-item {
+          display: flex;
+          gap: 12px;
+          align-items: flex-start;
+          padding: 12px 0;
+
+          .apex-mma-compact-thumb {
+            width: 240px;
+            aspect-ratio: 16/9;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+
+            img {
+              width: 100%;
+              aspect-ratio: 16/9;
+            }
+          }
+
+          .apex-mma-compact-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .apex-mma-compact-title {
+              font-size: 18px;
+              font-weight: 700;
+              color: #222;
+              line-height: 1.25;
+            }
+
+            .apex-mma-compact-excerpt {
+              font-size: 14px;
+              color: #666;
+              line-height: 1.4;
+              display: -webkit-box;
+              -webkit-line-clamp: 4;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+
+            .apex-mma-compact-author {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+
+              .apex-mma-compact-author-avatar {
+                width: 32px;
+                aspect-ratio: 1/1;
+                border-radius: 50%;
+                overflow: hidden;
+
+                img {
+                  width: 100%;
+                  aspect-ratio: 1/1;
+                }
+              }
+
+              .apex-mma-compact-author-name {
+                font-size: 14px;
+                font-weight: 600;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .apex-mma-compact-right {
+      flex: 1;
+      min-width: 260px;
+      max-width: 340px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+
+      .apex-mma-featured-user-card {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #e5e6ed;
+        border-radius: 12px;
+        padding: 24px 20px 20px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+
+        .apex-mma-featured-user-avatar {
+          width: 72px;
+          height: 72px;
+          border-radius: 50%;
+          overflow: hidden;
+          margin-bottom: 8px;
+          background: #e5e6ed;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+        }
+
+        .apex-mma-featured-user-name {
+          font-size: 18px;
+          font-weight: 700;
+          color: #1976d2;
+          margin-bottom: 2px;
+          text-align: center;
+        }
+
+        .apex-mma-featured-user-label {
+          font-size: 14px;
+          color: #888;
+          margin-bottom: 2px;
+          text-align: center;
+        }
+
+        .apex-mma-featured-user-age {
+          font-size: 15px;
+          color: #222;
+          font-weight: 500;
+          margin-bottom: 8px;
+          text-align: center;
+        }
+      }
+
+      .apex-mma-featured-user-progress {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+        width: 100%;
+        justify-content: center;
+
+        .apex-mma-featured-user-rank {
+          font-size: 15px;
+          color: #bdbdbd;
+          font-weight: 600;
+
+          &.apex-mma-featured-user-rank--active {
+            color: #1976d2;
+          }
+        }
+
+        .apex-mma-featured-user-point {
+          font-size: 15px;
+          color: #1976d2;
+          font-weight: 700;
+          background: #f1f2f4;
+          border-radius: 8px;
+          padding: 2px 10px;
+          margin: 0 4px;
+        }
+
+        .apex-mma-featured-user-progress-bar {
+          width: 100%;
+          height: 6px;
+          background: #e5e6ed;
+          border-radius: 4px;
+          margin-bottom: 8px;
+          overflow: hidden;
+
+          .apex-mma-featured-user-progress-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #1ec8c8 0%, #1e90e8 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+            width: 0%;
+          }
+        }
+
+        .apex-mma-featured-user-desc {
+          font-size: 14px;
+          color: #888;
+          margin-bottom: 12px;
+          text-align: center;
+        }
+
+        .apex-mma-featured-user-stats {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          gap: 8px;
+          margin-top: 8px;
+
+          .apex-mma-featured-user-stat-label {
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+          }
+
+          .apex-mma-featured-user-stat-value {
+            font-size: 16px;
+            color: #1976d2;
+            font-weight: 700;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .apex-mma-featured-section {
+    .apex-mma-featured-container {
+      .apex-mma-featured-left {
+        .apex-mma-featured-list {
+          .apex-mma-featured-item {
+            flex: 0 0 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Mobile overrides already exist in file - keep consistency */
 @media (max-width: 767px) {
   .apex-mma-news-section {
     .apex-mma-news-main-top-left {
@@ -1039,10 +1411,25 @@ const bottomList = computed(() => {
       }
     }
   }
+
+  .apex-mma-compact-section {
+    .apex-mma-compact-container {
+      .apex-mma-compact-left {
+        .apex-mma-compact-list {
+          .apex-mma-compact-item {
+            .apex-mma-compact-thumb {
+              width: 30%;
+              min-width: 140px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 /* Tablet */
-@media (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 991px) {
   .apex-mma-news-section {
     .apex-mma-news-main {
       .apex-mma-news-main-top-left {
@@ -1068,18 +1455,66 @@ const bottomList = computed(() => {
         }
       }
     }
+  }
 
-    .apex-mma-news-quick {
-      display: none;
+  .apex-mma-compact-section {
+    .apex-mma-compact-container {
+      .apex-mma-compact-left {
+        .apex-mma-compact-list {
+          .apex-mma-compact-item {
+            .apex-mma-compact-title {
+              font-size: 20px;
+            }
+
+            .apex-mma-compact-excerpt {
+              -webkit-line-clamp: 3;
+            }
+          }
+        }
+      }
     }
   }
 }
 
-/* Tablet lớn hoặc laptop nhỏ */
+/* Tablet lớn -> Desktop */
 @media (min-width: 992px) {
+  .apex-mma-news-section {
+    .apex-mma-news-quick {
+      display: flex;
+    }
+  }
+
   .apex-mma-featured-section {
     .apex-mma-featured-container {
       .apex-mma-featured-right {
+        display: flex;
+      }
+    }
+  }
+
+  .apex-mma-compact-section {
+    .apex-mma-compact-container {
+      .apex-mma-compact-left {
+        .apex-mma-compact-list {
+          .apex-mma-compact-item {
+            gap: 24px;
+
+            .apex-mma-compact-title {
+              font-size: 22px;
+            }
+
+            .apex-mma-compact-excerpt {
+              font-size: 15px;
+            }
+
+            .apex-mma-compact-author-name {
+              font-size: 15px;
+            }
+          }
+        }
+      }
+
+      .apex-mma-compact-right {
         display: flex;
       }
     }
