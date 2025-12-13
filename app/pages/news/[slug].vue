@@ -180,7 +180,7 @@ useSeoMeta({
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 20px;
-  cursor: zoom-in;
+  cursor: pointer;
 }
 
 .apex-mma-news-detail-cover {
