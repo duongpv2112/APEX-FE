@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 
   css: ["@/assets/scss/main.scss"],
 
-  modules: ["@vueuse/nuxt", "@pinia/nuxt"],
+  modules: ["@vueuse/nuxt", "@pinia/nuxt", "@nuxt/image"],
 
   pinia: {
     autoImports: ["defineStore", "storeToRefs"],

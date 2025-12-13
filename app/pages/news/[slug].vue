@@ -37,7 +37,7 @@
         </div>
 
         <div v-if="newsDetail.image" class="apex-mma-news-detail-cover-wrap">
-          <img
+          <NuxtImg
             :src="newsDetail.image"
             :alt="newsDetail.title"
             class="apex-mma-news-detail-cover"
@@ -60,6 +60,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import { NuxtImg } from "#components";
 import type { ApexNewsDetail } from "../../../shared/newsMock";
 
 const route = useRoute();

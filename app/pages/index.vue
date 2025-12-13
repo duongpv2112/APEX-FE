@@ -22,15 +22,15 @@
               >
                 <template v-if="item.isCreate">
                   <div class="apex-mma-fact-create-icon">
-                    <img src="https://i.imgur.com/0y8Ftya.png" alt="Tạo Fact" />
+                    <NuxtImg src="https://i.imgur.com/0y8Ftya.png" alt="Tạo Fact" />
                   </div>
                   <div class="apex-mma-fact-create-label">Tạo Fact mới</div>
                 </template>
                 <template v-else>
                   <div class="apex-mma-fact-avatar-wrap">
-                    <img class="apex-mma-fact-avatar" :src="item.avatar" />
+                    <NuxtImg class="apex-mma-fact-avatar" :src="item.avatar" alt="" />
                   </div>
-                  <img class="apex-mma-fact-img" :src="item.image" />
+                  <NuxtImg class="apex-mma-fact-img" :src="item.image" alt="" />
                   <div class="apex-mma-fact-username">{{ item.username }}</div>
                 </template>
               </div>
@@ -54,7 +54,7 @@
                 class="apex-mma-news-main-img-link"
                 :to="{ name: 'news-slug', params: { slug: mainNews.slug } }"
               >
-                <img
+                <NuxtImg
                   class="apex-mma-news-main-img"
                   :src="mainNews.image"
                   alt=""
@@ -85,7 +85,7 @@
                 class="apex-mma-news-main-top-right-img-link"
                 :to="{ name: 'news-slug', params: { slug: subNews[0].slug } }"
               >
-                <img
+                <NuxtImg
                   class="apex-mma-news-main-top-right-img"
                   :src="subNews[0].image"
                   alt=""
@@ -123,7 +123,7 @@
                 class="apex-mma-news-sub-img-link"
                 :to="{ name: 'news-slug', params: { slug: item.slug } }"
               >
-                <img class="apex-mma-news-sub-img" :src="item.image" alt="" />
+                <NuxtImg class="apex-mma-news-sub-img" :src="item.image" alt="" />
               </NuxtLink>
               <div class="apex-mma-news-sub-content">
                 <NuxtLink
@@ -155,7 +155,7 @@
               <div class="apex-mma-news-quick-info">
                 <div class="apex-mma-news-quick-title2">{{ item.title }}</div>
                 <div v-if="item.image" class="apex-mma-news-quick-thumb">
-                  <img :src="item.image" alt="" />
+                  <NuxtImg :src="item.image" alt="" />
                 </div>
               </div>
             </div>
@@ -193,7 +193,7 @@
           <div class="apex-mma-featured-user-card">
             <div class="apex-mma-featured-user-header">
               <div class="apex-mma-featured-user-avatar">
-                <img :src="userInfo.avatar" alt="avatar" />
+                <NuxtImg :src="userInfo.avatar" alt="avatar" />
               </div>
               <div class="apex-mma-featured-user-meta">
                 <div class="apex-mma-featured-user-name">
@@ -282,7 +282,7 @@
               class="apex-mma-compact-item"
             >
               <div class="apex-mma-compact-thumb">
-                <img :src="item.image" alt="" />
+                <NuxtImg :src="item.image" alt="" />
               </div>
               <div class="apex-mma-compact-body">
                 <div class="apex-mma-compact-title">{{ item.title }}</div>
@@ -291,7 +291,7 @@
                 </div>
                 <div class="apex-mma-compact-author">
                   <div class="apex-mma-compact-author-avatar">
-                    <img :src="item.authorAvatar" alt="" />
+                    <NuxtImg :src="item.authorAvatar" alt="" />
                   </div>
                   <div class="apex-mma-compact-author-name">
                     {{ item.author }}
@@ -316,7 +316,7 @@
                 :href="item.href"
               >
                 <div class="apex-mma-community-thumb">
-                  <img :src="item.image" :alt="item.title" />
+                  <NuxtImg :src="item.image" :alt="item.title" />
                 </div>
                 <div class="apex-mma-community-name">{{ item.title }}</div>
               </a>
@@ -344,6 +344,7 @@ import { useCompactList } from "~/composables/useCompactList";
 import { useCommunity } from "~/composables/useCommunity";
 import { useUserInfo } from "~/composables/useUserInfo";
 import { NCarousel, NCarouselItem } from "naive-ui";
+import { NuxtImg } from "#components";
 
 const { factList } = useFacts();
 const { mainNews, subNews } = useNews();
@@ -378,6 +379,16 @@ const styleCarouselItem = computed(() => {
 const bottomList = computed(() => {
   if (!subNews.value) return [];
   return isMobile.value ? subNews.value.slice(0, 4) : subNews.value.slice(1);
+});
+
+useSeoMeta({
+  title: "Trang chủ | APEX MMA",
+  ogTitle: "Trang chủ | APEX MMA",
+  description:
+    "Trang chủ APEX MMA - Tin tức, cộng đồng, bài viết nổi bật và nội dung mới nhất.",
+  ogDescription:
+    "Trang chủ APEX MMA - Cập nhật tin tức, bài viết nổi bật và hoạt động cộng đồng.",
+  ogImage: computed(() => mainNews.value?.image || ""),
 });
 </script>
 
