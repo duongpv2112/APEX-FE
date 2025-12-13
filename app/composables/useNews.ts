@@ -1,5 +1,5 @@
 import { computed } from "vue";
-import { mockNewsList } from "../../shared/newsMock";
+import { mockNewsList } from "~~/shared/newsMock";
 
 export interface ApexMainNews {
   image: string;

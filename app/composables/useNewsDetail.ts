@@ -1,5 +1,5 @@
 import { computed, unref, type MaybeRef } from "vue";
-import type { ApexNewsDetail } from "../../shared/newsMock";
+import type { ApexNewsDetail } from "~~/shared/newsMock";
 
 export const useNewsDetail = (slug: MaybeRef<string>) => {
   const slugRef = computed(() => unref(slug));

@@ -1,5 +1,5 @@
 import { defineEventHandler, getRouterParam, createError } from "h3";
-import { mockNewsList } from "../../../shared/newsMock";
+import { mockNewsList } from "~~/shared/newsMock";
 
 export default defineEventHandler((event) => {
   const slug = getRouterParam(event, "slug");

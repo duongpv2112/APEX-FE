@@ -1,18 +1,151 @@
 @use "@/assets/scss/_variables.scss" as *;
+@use "@/assets/scss/_mixins.scss" as *;
 @use "@/assets/scss/icons.scss" as *;
 
+// =============================
+// Reset & base
+// =============================
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
+html,
 body {
-  font-family: $font-family-base !important;
-  background: $background-color;
-  color: $text-color;
+  height: 100%;
 }
 
+body {
+  font-family: $font-family-base !important;
+  font-size: $font-size-base;
+  line-height: 1.5;
+  background: $background-color;
+  color: $text-color;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul,
+ol {
+  margin-left: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+p {
+  margin-bottom: $spacing-md;
+}
+
+button {
+  font-family: inherit;
+}
+
+// =============================
+// Link style chung
+// =============================
 a {
+  color: $primary-color;
   text-decoration: none;
+  cursor: pointer;
+}
+
+// =============================
+// Layout helpers
+// =============================
+.apex-mma-container {
+  width: 100%;
+  max-width: 1216px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.apex-mma-flex {
+  display: flex;
+}
+
+.apex-mma-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.apex-mma-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.apex-mma-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.apex-mma-page__main {
+  flex: 1 1 auto;
+}
+
+// =============================
+// Typography helpers
+// =============================
+.apex-mma-text-sm {
+  font-size: $font-size-sm;
+}
+
+.apex-mma-text-base {
+  font-size: $font-size-base;
+}
+
+.apex-mma-text-lg {
+  font-size: $font-size-lg;
+}
+
+.apex-mma-text-muted {
+  color: $text-color-light;
+}
+
+.apex-mma-text-center {
+  text-align: center;
+}
+
+.apex-mma-text-right {
+  text-align: right;
+}
+
+// =============================
+// Card / surface chung
+// =============================
+.apex-mma-card {
+  background-color: $surface-color;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  padding: $spacing-lg;
+}
+
+// =============================
+// Spacing utilities (generated từ mixin)
+// =============================
+@include apex-mma-generate-space(margin, "apex-mma-m");
+@include apex-mma-generate-space(padding, "apex-mma-p");
+
+// =============================
+// Accessibility helpers
+// =============================
+.apex-mma-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

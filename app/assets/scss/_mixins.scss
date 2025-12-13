@@ -1,3 +1,5 @@
+@use "@/assets/scss/_variables.scss" as *;
+
 /**
  * Tạo class icon với background image hoặc mask SVG, hỗ trợ đổi màu.
  * @param {String} $name   Tên class icon (không có dấu chấm, ví dụ: apex-mma-icon-bell)
@@ -24,6 +26,63 @@
       background-image: none;
     } @else {
       background-image: url(#{$url});
+    }
+  }
+}
+
+// =============================
+// Spacing utilities mixins
+// =============================
+// Map scale dùng chung cho margin/padding utilities
+$apex-mma-spacing-scale: (
+  xs: $spacing-xs,
+  sm: $spacing-sm,
+  md: $spacing-md,
+  lg: $spacing-lg,
+  xl: $spacing-xl,
+);
+
+/**
+ * Sinh hệ thống spacing utilities theo một cấu trúc thống nhất.
+ * Ví dụ (với $class-prefix: "apex-mma-m"):
+ *  - .apex-mma-m-md  { margin: 16px; }
+ *  - .apex-mma-mt-md { margin-top: 16px; }
+ *  - .apex-mma-mx-lg { margin-left/right: 24px; }
+ * Tương tự cho padding nếu truyền $property: padding.
+ */
+@mixin apex-mma-generate-space($property, $class-prefix, $scale: $apex-mma-spacing-scale) {
+  @each $name, $value in $scale {
+    // all sides
+    .#{$class-prefix}-#{$name} {
+      #{$property}: $value;
+    }
+
+    // top / right / bottom / left
+    .#{$class-prefix}t-#{$name} {
+      #{$property}-top: $value;
+    }
+
+    .#{$class-prefix}r-#{$name} {
+      #{$property}-right: $value;
+    }
+
+    .#{$class-prefix}b-#{$name} {
+      #{$property}-bottom: $value;
+    }
+
+    .#{$class-prefix}l-#{$name} {
+      #{$property}-left: $value;
+    }
+
+    // x (left + right) / y (top + bottom)
+    .#{$class-prefix}x-#{$name} {
+      #{$property}-left: $value;
+      #{$property}-right: $value;
+    }
+
+    .#{$class-prefix}y-#{$name} {
+      #{$property}-top: $value;
+      #{$property}-bottom: $value;
     }
   }
 }
