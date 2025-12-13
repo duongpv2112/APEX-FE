@@ -140,48 +140,70 @@
             </div>
           </div>
         </div>
-        <!-- Bên phải: Thông tin user -->
+        <!-- Bên phải: Thông tin user (cập nhật giao diện giống mockup) -->
         <div class="apex-mma-featured-right">
           <div class="apex-mma-featured-user-card">
-            <div class="apex-mma-featured-user-avatar">
-              <img :src="userInfo.avatar" alt="avatar" />
+            <div class="apex-mma-featured-user-header">
+              <div class="apex-mma-featured-user-avatar">
+                <img :src="userInfo.avatar" alt="avatar" />
+              </div>
+              <div class="apex-mma-featured-user-meta">
+                <div class="apex-mma-featured-user-name">
+                  {{ userInfo.name }}
+                </div>
+                <div class="apex-mma-featured-user-label">Tuổi tinhte</div>
+                <div class="apex-mma-featured-user-age">{{ userInfo.age }}</div>
+              </div>
             </div>
-            <div class="apex-mma-featured-user-name">{{ userInfo.name }}</div>
-            <div class="apex-mma-featured-user-label">Tuổi tinhte</div>
-            <div class="apex-mma-featured-user-age">{{ userInfo.age }}</div>
-            <div class="apex-mma-featured-user-progress">
-              <span
-                class="apex-mma-featured-user-rank apex-mma-featured-user-rank--active"
-                >Trứng</span
-              >
-              <span class="apex-mma-featured-user-point"
-                >{{ userInfo.point }} điểm</span
-              >
-              <span class="apex-mma-featured-user-rank">GÀ</span>
+
+            <div class="apex-mma-featured-divider" />
+
+            <div class="apex-mma-featured-level-row">
+              <div class="apex-mma-level-icon">
+                <div class="apex-mma-level-icon-inner"></div>
+              </div>
+
+              <div class="apex-mma-level-center">
+                <div class="apex-mma-level-chip">{{ userInfo.point }} điểm</div>
+              </div>
+
+              <div class="apex-mma-level-icon">
+                <div class="apex-mma-level-icon-inner"></div>
+              </div>
             </div>
-            <div class="apex-mma-featured-user-progress-bar">
+
+            <div
+              class="apex-mma-featured-user-progress-bar apex-mma-featured-progress-large"
+            >
               <div
                 class="apex-mma-featured-user-progress-bar-inner"
                 :style="{ width: userInfo.progress + '%' }"
               ></div>
             </div>
+
+            <div class="apex-mma-featured-level-labels">
+              <span class="apex-mma-level-left">Trứng</span>
+              <span class="apex-mma-level-right">GÀ</span>
+            </div>
+
             <div class="apex-mma-featured-user-desc">
               Bạn cần hoạt động nhiều để lên hạng
             </div>
-            <div class="apex-mma-featured-user-stats">
-              <div>
+
+            <div class="apex-mma-featured-user-stats apex-mma-stats-card">
+              <div class="apex-mma-stats-col">
                 <div class="apex-mma-featured-user-stat-label">Bài đã đăng</div>
                 <div class="apex-mma-featured-user-stat-value">
                   {{ userInfo.posts }}
                 </div>
               </div>
-              <div>
+              <div class="apex-mma-stats-col">
                 <div class="apex-mma-featured-user-stat-label">Lượt thích</div>
                 <div class="apex-mma-featured-user-stat-value">
                   {{ userInfo.likes }}
                 </div>
               </div>
-              <div>
+              <div class="apex-mma-stats-col">
                 <div class="apex-mma-featured-user-stat-label">
                   Lượt theo dõi
                 </div>
@@ -230,55 +252,7 @@
         </div>
         <!-- Bên phải: Thông tin user -->
         <div class="apex-mma-compact-right">
-          <div class="apex-mma-featured-user-card">
-            <div class="apex-mma-featured-user-avatar">
-              <img :src="userInfo.avatar" alt="avatar" />
-            </div>
-            <div class="apex-mma-featured-user-name">{{ userInfo.name }}</div>
-            <div class="apex-mma-featured-user-label">Tuổi tinhte</div>
-            <div class="apex-mma-featured-user-age">{{ userInfo.age }}</div>
-            <div class="apex-mma-featured-user-progress">
-              <span
-                class="apex-mma-featured-user-rank apex-mma-featured-user-rank--active"
-                >Trứng</span
-              >
-              <span class="apex-mma-featured-user-point"
-                >{{ userInfo.point }} điểm</span
-              >
-              <span class="apex-mma-featured-user-rank">GÀ</span>
-            </div>
-            <div class="apex-mma-featured-user-progress-bar">
-              <div
-                class="apex-mma-featured-user-progress-bar-inner"
-                :style="{ width: userInfo.progress + '%' }"
-              ></div>
-            </div>
-            <div class="apex-mma-featured-user-desc">
-              Bạn cần hoạt động nhiều để lên hạng
-            </div>
-            <div class="apex-mma-featured-user-stats">
-              <div>
-                <div class="apex-mma-featured-user-stat-label">Bài đã đăng</div>
-                <div class="apex-mma-featured-user-stat-value">
-                  {{ userInfo.posts }}
-                </div>
-              </div>
-              <div>
-                <div class="apex-mma-featured-user-stat-label">Lượt thích</div>
-                <div class="apex-mma-featured-user-stat-value">
-                  {{ userInfo.likes }}
-                </div>
-              </div>
-              <div>
-                <div class="apex-mma-featured-user-stat-label">
-                  Lượt theo dõi
-                </div>
-                <div class="apex-mma-featured-user-stat-value">
-                  {{ userInfo.follows }}
-                </div>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
     </section>
@@ -989,129 +963,179 @@ const bottomList = computed(() => {
       .apex-mma-featured-user-card {
         width: 100%;
         background: #fff;
-        border: 1px solid #e5e6ed;
+        border: 1px solid #eef1f6;
         border-radius: 12px;
-        padding: 24px 20px 20px 20px;
+        padding: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-
-        .apex-mma-featured-user-avatar {
-          width: 72px;
-          height: 72px;
-          border-radius: 50%;
-          overflow: hidden;
-          margin-bottom: 8px;
-          background: #e5e6ed;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-          }
-        }
-
-        .apex-mma-featured-user-name {
-          font-size: 18px;
-          font-weight: 700;
-          color: #1976d2;
-          margin-bottom: 2px;
-          text-align: center;
-        }
-
-        .apex-mma-featured-user-label {
-          font-size: 14px;
-          color: #888;
-          margin-bottom: 2px;
-          text-align: center;
-        }
-
-        .apex-mma-featured-user-age {
-          font-size: 15px;
-          color: #222;
-          font-weight: 500;
-          margin-bottom: 8px;
-          text-align: center;
-        }
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
       }
 
-      .apex-mma-featured-user-progress {
+      .apex-mma-featured-user-header {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
+        gap: 12px;
         width: 100%;
+      }
+
+      .apex-mma-featured-user-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: linear-gradient(180deg, #23d7d7 0%, #1e90e8 100%);
+        display: flex;
+        align-items: center;
         justify-content: center;
+        border: 4px solid #fff;
+        box-shadow: 0 2px 6px rgba(30, 144, 232, 0.12);
+      }
 
-        .apex-mma-featured-user-rank {
-          font-size: 15px;
-          color: #bdbdbd;
-          font-weight: 600;
+      .apex-mma-featured-user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
 
-          &.apex-mma-featured-user-rank--active {
-            color: #1976d2;
-          }
-        }
+      .apex-mma-featured-user-meta {
+        display: flex;
+        flex-direction: column;
+      }
 
-        .apex-mma-featured-user-point {
-          font-size: 15px;
-          color: #1976d2;
-          font-weight: 700;
-          background: #f1f2f4;
-          border-radius: 8px;
-          padding: 2px 10px;
-          margin: 0 4px;
-        }
+      .apex-mma-featured-user-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e7ad9;
+        letter-spacing: 0.2px;
+      }
 
-        .apex-mma-featured-user-progress-bar {
-          width: 100%;
-          height: 6px;
-          background: #e5e6ed;
-          border-radius: 4px;
-          margin-bottom: 8px;
-          overflow: hidden;
+      .apex-mma-featured-user-label {
+        font-size: 13px;
+        color: #8b95a6;
+        margin-top: 2px;
+      }
 
-          .apex-mma-featured-user-progress-bar-inner {
-            height: 100%;
-            background: linear-gradient(90deg, #1ec8c8 0%, #1e90e8 100%);
-            border-radius: 4px;
-            transition: width 0.3s;
-            width: 0%;
-          }
-        }
+      .apex-mma-featured-user-age {
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 2px;
+      }
 
-        .apex-mma-featured-user-desc {
-          font-size: 14px;
-          color: #888;
-          margin-bottom: 12px;
-          text-align: center;
-        }
+      .apex-mma-featured-divider {
+        width: 100%;
+        height: 1px;
+        background: #f4f6f8;
+        margin: 14px 0;
+        border-radius: 1px;
+      }
 
-        .apex-mma-featured-user-stats {
-          display: flex;
-          width: 100%;
-          justify-content: space-between;
-          gap: 8px;
-          margin-top: 8px;
+      .apex-mma-featured-level-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 12px;
+      }
 
-          .apex-mma-featured-user-stat-label {
-            font-size: 13px;
-            color: #888;
-            text-align: center;
-          }
+      .apex-mma-level-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #eaf8ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(30, 144, 232, 0.06);
+      }
 
-          .apex-mma-featured-user-stat-value {
-            font-size: 16px;
-            color: #1976d2;
-            font-weight: 700;
-            text-align: center;
-          }
-        }
+      .apex-mma-level-icon-inner {
+        width: 22px;
+        height: 22px;
+        background: #fff;
+        border-radius: 50%;
+      }
+
+      .apex-mma-level-center {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+
+      .apex-mma-level-chip {
+        background: #f1f4f9;
+        color: #1e7ad9;
+        padding: 6px 14px;
+        border-radius: 18px;
+        font-weight: 700;
+        box-shadow: inset 0 0 0 1px rgba(30, 122, 217, 0.06);
+      }
+
+      .apex-mma-featured-user-progress-bar.apex-mma-featured-progress-large {
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, #dfeffa 0%, #f1f6fb 100%);
+        border-radius: 6px;
+        overflow: hidden;
+        margin-top: 12px;
+      }
+
+      .apex-mma-featured-user-progress-bar-inner {
+        height: 100%;
+        background: linear-gradient(90deg, #1ec8c8 0%, #1e90e8 100%);
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      .apex-mma-featured-level-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        color: #8b95a6;
+        font-weight: 700;
+        margin-top: 8px;
+        font-size: 13px;
+      }
+
+      .apex-mma-featured-user-desc {
+        font-size: 14px;
+        color: #222;
+        margin-top: 12px;
+        text-align: center;
+        font-weight: 700;
+      }
+
+      .apex-mma-stats-card {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+        margin-top: 14px;
+        justify-content: space-between;
+        border-top: 1px solid #f0f3f6;
+        padding-top: 14px;
+      }
+
+      .apex-mma-stats-col {
+        flex: 1;
+        text-align: center;
+        border-left: 1px solid transparent;
+      }
+
+      .apex-mma-stats-col + .apex-mma-stats-col {
+        border-left: 1px solid #eef4fb;
+      }
+
+      .apex-mma-featured-user-stat-label {
+        font-size: 13px;
+        color: #98a0ad;
+      }
+
+      .apex-mma-featured-user-stat-value {
+        font-size: 18px;
+        color: #1976d2;
+        font-weight: 700;
+        margin-top: 6px;
       }
     }
   }
@@ -1223,133 +1247,7 @@ const bottomList = computed(() => {
       flex-direction: column;
       align-items: center;
 
-      .apex-mma-featured-user-card {
-        width: 100%;
-        background: #fff;
-        border: 1px solid #e5e6ed;
-        border-radius: 12px;
-        padding: 24px 20px 20px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-
-        .apex-mma-featured-user-avatar {
-          width: 72px;
-          height: 72px;
-          border-radius: 50%;
-          overflow: hidden;
-          margin-bottom: 8px;
-          background: #e5e6ed;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-          }
-        }
-
-        .apex-mma-featured-user-name {
-          font-size: 18px;
-          font-weight: 700;
-          color: #1976d2;
-          margin-bottom: 2px;
-          text-align: center;
-        }
-
-        .apex-mma-featured-user-label {
-          font-size: 14px;
-          color: #888;
-          margin-bottom: 2px;
-          text-align: center;
-        }
-
-        .apex-mma-featured-user-age {
-          font-size: 15px;
-          color: #222;
-          font-weight: 500;
-          margin-bottom: 8px;
-          text-align: center;
-        }
-      }
-
-      .apex-mma-featured-user-progress {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
-        width: 100%;
-        justify-content: center;
-
-        .apex-mma-featured-user-rank {
-          font-size: 15px;
-          color: #bdbdbd;
-          font-weight: 600;
-
-          &.apex-mma-featured-user-rank--active {
-            color: #1976d2;
-          }
-        }
-
-        .apex-mma-featured-user-point {
-          font-size: 15px;
-          color: #1976d2;
-          font-weight: 700;
-          background: #f1f2f4;
-          border-radius: 8px;
-          padding: 2px 10px;
-          margin: 0 4px;
-        }
-
-        .apex-mma-featured-user-progress-bar {
-          width: 100%;
-          height: 6px;
-          background: #e5e6ed;
-          border-radius: 4px;
-          margin-bottom: 8px;
-          overflow: hidden;
-
-          .apex-mma-featured-user-progress-bar-inner {
-            height: 100%;
-            background: linear-gradient(90deg, #1ec8c8 0%, #1e90e8 100%);
-            border-radius: 4px;
-            transition: width 0.3s;
-            width: 0%;
-          }
-        }
-
-        .apex-mma-featured-user-desc {
-          font-size: 14px;
-          color: #888;
-          margin-bottom: 12px;
-          text-align: center;
-        }
-
-        .apex-mma-featured-user-stats {
-          display: flex;
-          width: 100%;
-          justify-content: space-between;
-          gap: 8px;
-          margin-top: 8px;
-
-          .apex-mma-featured-user-stat-label {
-            font-size: 13px;
-            color: #888;
-            text-align: center;
-          }
-
-          .apex-mma-featured-user-stat-value {
-            font-size: 16px;
-            color: #1976d2;
-            font-weight: 700;
-            text-align: center;
-          }
-        }
-      }
+      
     }
   }
 }
