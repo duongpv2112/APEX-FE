@@ -36,7 +36,11 @@
           </template>
         </div>
 
-        <div v-if="newsDetail.image" class="apex-mma-news-detail-cover-wrap">
+        <div
+          v-if="newsDetail.image"
+          class="apex-mma-news-detail-cover-wrap"
+          @click="openCoverPreview"
+        >
           <NuxtImg
             :src="newsDetail.image"
             :alt="newsDetail.title"
@@ -53,14 +57,22 @@
             {{ para }}
           </p>
         </article>
+
+        <ApexMmaImagePreview
+          v-if="newsDetail?.image"
+          v-model:visible="isCoverPreviewVisible"
+          :image-src="newsDetail.image"
+          :image-alt="newsDetail.title"
+        />
       </template>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { NuxtImg } from "#components";
+import ApexMmaImagePreview from "@/components/common/ApexMmaImagePreview.vue";
 
 const route = useRoute();
 
@@ -72,6 +84,14 @@ const paragraphs = computed(() => {
   if (!newsDetail.value?.content) return [];
   return newsDetail.value.content.split("\n\n").filter(Boolean);
 });
+
+const isCoverPreviewVisible = ref(false);
+
+const openCoverPreview = () => {
+  if (newsDetail.value?.image) {
+    isCoverPreviewVisible.value = true;
+  }
+};
 
 useSeoMeta({
   title: computed(
@@ -160,6 +180,7 @@ useSeoMeta({
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 20px;
+  cursor: zoom-in;
 }
 
 .apex-mma-news-detail-cover {
