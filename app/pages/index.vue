@@ -12,6 +12,7 @@
           :space-between="12"
           :loop="false"
           :draggable="true"
+          :show-dots="false"
         >
           <template v-for="(item, idx) in factList" :key="idx">
             <n-carousel-item :style="styleCarouselItem">
@@ -125,7 +126,10 @@
       <div class="apex-mma-featured-container">
         <!-- Bên trái: Bài nổi bật -->
         <div class="apex-mma-featured-left">
-          <div class="apex-mma-featured-title">Bài nổi bật</div>
+          <div class="apex-mma-featured-header">
+            <span class="apex-mma-featured-title">Bài nổi bật</span>
+            <a class="apex-mma-featured-viewall" href="#">Xem tất cả</a>
+          </div>
           <div class="apex-mma-featured-list">
             <div
               v-for="(item, idx) in featuredList"
@@ -223,7 +227,10 @@
       <div class="apex-mma-compact-container">
         <!-- Bên phải: Thông tin user -->
         <div class="apex-mma-compact-left">
-          <div class="apex-mma-compact-title">Tin mới nhất</div>
+          <div class="apex-mma-compact-header">
+            <span class="apex-mma-compact-title">Tin mới nhất</span>
+            <a class="apex-mma-compact-viewall" href="#">Xem tất cả</a>
+          </div>
           <div class="apex-mma-compact-list">
             <div
               v-for="(item, idx) in compactList"
@@ -549,8 +556,25 @@ const communityList = ref([
 const { _, isMobile, isTablet, isDesktop } = useDisplay();
 
 const styleCarouselItem = computed(() => {
+  let widthCarousel = "30%";
+
+  switch (true) {
+    case isDesktop.value:
+      widthCarousel = "15%";
+      break;
+    case isTablet.value:
+      widthCarousel = "20%";
+      break;
+    case isMobile.value:
+      widthCarousel = "30%";
+      break;
+    default:
+      break;
+  }
+  console.log(widthCarousel);
+
   return {
-    width: isDesktop.value ? "10%" : "30%",
+    width: widthCarousel,
   };
 });
 
@@ -579,7 +603,7 @@ const bottomList = computed(() => {
 
     .apex-mma-fact-viewall {
       color: #1976d2;
-      font-size: 16px;
+      font-size: 14px;
       text-decoration: none;
       font-weight: 500;
     }
@@ -723,6 +747,7 @@ const bottomList = computed(() => {
       width: 100%;
       aspect-ratio: 18/9;
       border-radius: 8px;
+      cursor: pointer;
     }
 
     .apex-mma-news-main-title {
@@ -732,6 +757,11 @@ const bottomList = computed(() => {
       margin-bottom: 8px;
       line-height: 1.3;
       padding-top: 12px;
+      cursor: pointer;
+
+      &:hover {
+        color: #3986ee;
+      }
     }
 
     .apex-mma-news-main-author {
@@ -761,6 +791,7 @@ const bottomList = computed(() => {
       width: 100%;
       aspect-ratio: 16/9;
       margin-bottom: 8px;
+      cursor: pointer;
     }
 
     .apex-mma-news-main-top-right-content {
@@ -776,6 +807,11 @@ const bottomList = computed(() => {
         color: #222;
         margin-bottom: 4px;
         line-height: 1.3;
+        cursor: pointer;
+
+        &:hover {
+          color: #3986ee;
+        }
       }
 
       .apex-mma-news-main-top-right-author {
@@ -815,6 +851,7 @@ const bottomList = computed(() => {
         width: 100%;
         aspect-ratio: 16/9;
         border-radius: 5px;
+        cursor: pointer;
       }
 
       .apex-mma-news-sub-content {
@@ -826,6 +863,11 @@ const bottomList = computed(() => {
           color: #222;
           margin-bottom: 4px;
           line-height: 1.3;
+          cursor: pointer;
+
+          &:hover {
+            color: #3986ee;
+          }
         }
 
         .apex-mma-news-sub-author {
@@ -855,12 +897,11 @@ const bottomList = computed(() => {
       .apex-mma-news-quick-title {
         font-size: 18px;
         font-weight: 700;
-        color: #1976d2;
       }
 
       .apex-mma-news-quick-viewall {
         color: #1976d2;
-        font-size: 15px;
+        font-size: 14px;
         text-decoration: none;
         font-weight: 500;
       }
@@ -908,6 +949,11 @@ const bottomList = computed(() => {
             flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
+            cursor: pointer;
+
+            &:hover {
+              color: #3986ee;
+            }
           }
 
           .apex-mma-news-quick-thumb {
@@ -920,6 +966,7 @@ const bottomList = computed(() => {
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
           }
 
           .apex-mma-news-quick-thumb img {
@@ -949,10 +996,23 @@ const bottomList = computed(() => {
       display: flex;
       flex-direction: column;
 
-      .apex-mma-featured-title {
-        font-size: 22px;
-        font-weight: 700;
-        color: #222;
+      .apex-mma-featured-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .apex-mma-featured-title {
+          font-size: 20px;
+          font-weight: 700;
+          color: #222;
+        }
+
+        .apex-mma-featured-viewall {
+          color: #1976d2;
+          font-size: 14px;
+          text-decoration: none;
+          font-weight: 500;
+        }
       }
 
       .apex-mma-featured-list {
@@ -987,6 +1047,11 @@ const bottomList = computed(() => {
               color: #222;
               margin-bottom: 2px;
               line-height: 1.3;
+              cursor: pointer;
+
+              &:hover {
+                color: #3986ee;
+              }
             }
 
             .apex-mma-featured-author {
@@ -1205,11 +1270,23 @@ const bottomList = computed(() => {
       display: flex;
       flex-direction: column;
 
-      .apex-mma-compact-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #222;
-        margin-bottom: 12px;
+      .apex-mma-compact-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .apex-mma-compact-title {
+          font-size: 20px;
+          font-weight: 700;
+          color: #222;
+        }
+
+        .apex-mma-compact-viewall {
+          color: #1976d2;
+          font-size: 14px;
+          text-decoration: none;
+          font-weight: 500;
+        }
       }
 
       .apex-mma-compact-list {
@@ -1229,6 +1306,7 @@ const bottomList = computed(() => {
             border-radius: 8px;
             overflow: hidden;
             flex-shrink: 0;
+            cursor: pointer;
 
             img {
               width: 100%;
@@ -1241,12 +1319,17 @@ const bottomList = computed(() => {
             display: flex;
             flex-direction: column;
             gap: 8px;
+            cursor: pointer;
 
             .apex-mma-compact-title {
               font-size: 18px;
               font-weight: 700;
               color: #222;
               line-height: 1.25;
+
+              &:hover {
+                color: #3986ee;
+              }
             }
 
             .apex-mma-compact-excerpt {
@@ -1328,7 +1411,9 @@ const bottomList = computed(() => {
         flex-direction: column;
         text-decoration: none;
         color: inherit;
-        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease;
 
         &:hover {
           transform: translateY(-2px);
@@ -1379,7 +1464,9 @@ const bottomList = computed(() => {
         color: #0f172a;
         font-weight: 700;
         text-decoration: none;
-        transition: background 0.2s ease, border-color 0.2s ease;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease;
 
         &:hover {
           background: #dde3ec;
