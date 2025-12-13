@@ -2,37 +2,51 @@
 
 ## Bối cảnh hoạt động hiện tại
 
-- Trạng thái hiện tại: Đã có một scaffold frontend Nuxt 4 (SSR=true) với cấu trúc cơ bản: layouts, components, composables, stores, assets, và một vài API endpoint tối thiểu trong server/api (ví dụ auth). Dự án sẵn sàng để phát triển tính năng UI và tích hợp API thực.
+### Trạng thái hiện tại
+- Project APEX-FE là Nuxt 4 SSR (Vue 3 + TypeScript), tổ chức theo `app/` (pages/components/composables/assets) và `server/api/` (Nitro endpoints).
+- Hiện đã bắt đầu chuẩn hoá luồng dữ liệu **User Profile** theo hướng “data source -> store -> composable -> UI” thay vì mock cứng trong page.
 
-- Thay đổi gần nhất:
-  - Thêm endpoint server/api/auth.ts cung cấp các route giả lập: /api/auth/login, /api/auth/logout, /api/auth/session.
-  - Cấu hình nuxt.config.ts: bật SSR, alias @ -> ./app, thêm css chính và module @vueuse/nuxt.
-  - Thư mục composables chứa useSeoMeta, useSiteMeta, useTheme, useToast (commented) để quản lý metadata, theme và toasts.
-  - Component Header.vue với tên class tuân thủ quy tắc đặt tên apex-mma- (đã có ví dụ naming convention).
-  - Cấu trúc SCSS cơ bản đặt tại app/assets/scss với biến, mixins và main.scss.
+### Thay đổi gần nhất (tính đến 13/12/2025)
+- **User Profile flow (mock API + Pinia + composable, SSR-safe):**
+  - Thêm Nitro endpoint: `server/api/user.get.ts` trả về mock user profile tại `GET /api/user`.
+  - Thêm Pinia store: `stores/user.ts`
+    - State: `profile`, `pending`, `error`
+    - Getter/computed: `hasProfile`, `safeProfile`
+    - Action: `fetchProfile(force?: boolean)` dùng `$fetch('/api/user')`
+  - Thêm composable UI: `app/composables/useUserInfo.ts`
+    - Dùng `onServerPrefetch` để fetch trên SSR nếu thiếu dữ liệu
+    - Dùng `onMounted` làm fallback trên client
+    - Trả về `userInfo`, `pending`, `error`, `refresh()`
+  - Cập nhật `app/pages/index.vue`:
+    - Bỏ object `userInfo` mock tại page
+    - Dùng `const { userInfo } = useUserInfo()` để render card user
 
-- Kế hoạch tiếp theo (ngắn hạn):
-  1. Xác định & chuẩn hoá runtime public config (siteUrl, theme defaults) trong nuxt runtimeConfig hoặc .env.
-  2. Triển khai flow xác thực thực tế: kết nối với backend thực hoặc hoàn thiện logic lưu/đọc token (hiện đang dùng cookie giả lập).
-  3. Hoàn thiện các composable (useToast cung cấp API rõ ràng), và tích hợp Naive UI cho các thành phần tương tác nếu cần.
-  4. Viết tài liệu nhỏ về cách chạy dev/build, patterns CSS (áp dụng tiền tố apex-mma-), và cách thêm route/APIs mới.
-  5. Thêm tests cơ bản / smoke tests nếu cần.
+### Focus hiện tại
+- Tiếp tục chuẩn hoá pattern lấy dữ liệu cho các khối nội dung ở trang chủ (facts/news/featured/quicklist/community/...) theo hướng:
+  1) server/api (mock hoặc thật) -> 2) store (Pinia) -> 3) composable cấp UI -> 4) page/component.
+- Rà soát lại các composable hiện có (`useFacts`, `useNews`, `useFeaturedList`, `useQuickList`, `useCommunity`, `useDisplay`, v.v.) để đảm bảo chúng phù hợp với SSR và có thể dần hội tụ về cùng pattern với `useUserInfo` (ít nhất là về cách xử lý pending/error và nơi đặt logic fetch).
+- Đảm bảo các composable/stores **SSR-compatible** (không dùng trực tiếp `window`, dùng `onServerPrefetch` khi phù hợp, hoặc `process.client` khi cần phân nhánh).
 
-- Kế hoạch tiếp theo (dài hạn):
-  - Xây dựng dashboard quản trị (nếu có), pages cho quản lý người dùng, và hệ thống roles/permissions.
-  - Tối ưu hoá SEO: schema.org (nuxt-schema-org đã cài), sitemap, robots (gói đã có trong devDependencies).
-  - Chuẩn hoá CI/CD để deploy (build, lint, test).
+### Quyết định & cân nhắc quan trọng
+- SSR ưu tiên SEO: mọi luồng fetch cần cân nhắc chạy được cả server & client.
+- Tên class CSS/SCSS tiếp tục tuân thủ rule prefix `apex-mma-` (xem `.clinerules/css-naming-conventions.md`).
+- Store `user` hiện fetch từ endpoint mock `/api/user`; khi tích hợp backend thật cần:
+  - đổi base URL / thêm auth header nếu cần
+  - xử lý lỗi (401/403) và trạng thái chưa đăng nhập
+- Cần thống nhất convention import store/composable để tránh relative path phức tạp, ưu tiên:
+  - alias chuẩn của Nuxt (`~/stores/user`), hoặc
+  - cơ chế auto-import stores/composables nếu được bật.
 
-- Quyết định & cân nhắc quan trọng:
-  - SSR được bật (ssr: true) để ưu tiên SEO và performance; mọi composable cần đảm bảo hoạt động trong môi trường SSR (sử dụng useState, useRuntimeConfig, v.v.).
-  - Sử dụng cookie HTTPOnly cho auth token (server API hiện tạo cookie giả lập). Nếu cần SPA token, cân nhắc bảo mật XSS vs CSRF.
-  - Quy tắc đặt tên CSS: mọi class phải bắt đầu bằng "apex-mma-" (xem .clinerules/css-naming-conventions.md). Khi thêm CSS/SCSS mới phải tuân thủ.
+### Next steps (ngắn hạn)
+1. Viết/chuẩn hoá thêm các endpoint mock cần thiết cho homepage (facts, news, featured list, quick list, community, ...) nếu có, tương ứng với stores/composables.
+2. Kiểm thử manual SSR/hydration cho `useUserInfo` (refresh page, hard reload, kiểm tra console) để xác nhận user card hiển thị ổn định, không lỗi.
+3. (Tuỳ chọn) Chuẩn hoá lại import path của `stores/user` trong `useUserInfo.ts` theo convention Nuxt (alias `~/stores/user` hoặc auto-import), tránh dùng relative sâu như `../../stores/user`.
+4. Ghi nhận pattern chuẩn ("server/api -> store -> composable -> UI") thành tài liệu ngắn trong thư mục `plans/` hoặc cập nhật thêm vào `systemPatterns.md` nếu pattern này được áp dụng rộng rãi cho các luồng dữ liệu khác.
 
-- Bài học & insight:
-  - Repository là một starter Nuxt tối giản nhưng đã bố trí các thành phần cần thiết để mở rộng: composables, stores, server/api.
-  - Nhiều file là scaffold/placeholder (ví dụ useToast bị comment); cần hoàn thiện để phục vụ UX.
-  - Cần thêm README project-specific, cấu hình env.example và checklist deploy.
-
-## Ghi chú
-
-Tài liệu này được tạo tự động từ phân tích mã nguồn hiện tại. Nếu bạn muốn tôi viết các thay đổi trực tiếp vào file tiến độ (progress.md) hoặc áp dụng cập nhật khác trong memory-bank, hãy cho biết tiếp theo.
+### Ghi chú
+- Memory Bank trước đó có nhắc tới auth endpoints; hiện trong repo (theo trạng thái đang thấy) chỉ có `server/api/user.get.ts`.
+  - Nếu auth flow tồn tại ở branch/commit khác, cần đồng bộ lại tài liệu khi merge/rebase.
+- Luồng User Profile hiện vẫn đang mock; chưa có quyết định cuối cùng về việc:
+  - tiếp tục mock để demo,
+  - hay tích hợp backend thật,
+  - hay triển khai full auth flow trước rồi mới fetch profile.

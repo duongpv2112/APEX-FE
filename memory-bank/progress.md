@@ -1,38 +1,50 @@
 # progress.md
 
-## Tiến độ dự án & trạng thái cập nhật (tính đến 10/12/2025 22:06 GMT+7)
+## Tiến độ dự án & trạng thái cập nhật (tính đến 13/12/2025 20:28 GMT+7)
 
-- Tổng quan: Đã triển khai Pinia vào dự án Nuxt 4, chuẩn hoá một số stores (auth, user, ui), thêm actions login/logout trong auth store, cập nhật middleware và một số component để sử dụng store. Dev server đã được khởi động lại và đang chạy (Nuxt dev).
+- Tổng quan: Dự án Nuxt 4 SSR đang được phát triển theo hướng chuẩn hoá luồng dữ liệu: **Nitro endpoint (server/api) -> Pinia store (stores/) -> composable UI (app/composables) -> page/component**.
+- Trong giai đoạn hiện tại, đã bổ sung luồng **User Profile** (mock) và áp dụng vào `app/pages/index.vue`, đồng thời cập nhật Memory Bank để phản ánh pattern này và các bước tiếp theo.
 
 ## Đã hoàn thành
-- Scaffold & kế hoạch:
-  - Tạo file kế hoạch: plans/pinia-state-management-plan.md
-- Cài đặt & cấu hình:
-  - Cài pinia & @pinia/nuxt
-  - Cập nhật nuxt.config.ts để tích hợp @pinia/nuxt
-- Stores & composables:
-  - Chuẩn hoá stores: stores/auth.ts (defineStore, thêm isLoggedIn, login, logout, initFromCookie), stores/user.ts (thêm helper), stores/ui.ts (theme store)
-  - Cập nhật composable useTheme để dùng store ui
-- Ứng dụng và middleware:
-  - Cập nhật app/middleware/auth.ts để đồng bộ cookie -> auth store
-  - Cập nhật app/components/layout/Header.vue để gọi auth.login/logout (demo)
-- API server-side:
-  - Thêm route server/api/auth/[...all].ts để xử lý các đường dẫn /api/auth/* (login/logout/session)
-- Khác:
-  - Đổi tên composable useSeoMeta -> useAppSeo để tránh xung đột với auto-import của Nuxt
-  - Khởi động lại dev server (Nuxt dev) và nhận HMR update
+- API (Nitro):
+  - Thêm endpoint `server/api/user.get.ts` trả về mock user profile tại `GET /api/user`.
+- Store (Pinia):
+  - Thêm `stores/user.ts` để quản lý user profile.
+    - `profile`, `pending`, `error`
+    - `hasProfile`, `safeProfile`
+    - `fetchProfile(force?: boolean)` dùng `$fetch('/api/user')`
+- Composable:
+  - Thêm `app/composables/useUserInfo.ts` để UI dùng user profile theo kiểu SSR-safe.
+    - `onServerPrefetch` để fetch khi render SSR
+    - `onMounted` fallback khi hydrate
+    - API trả về: `userInfo`, `pending`, `error`, `refresh()`
+- UI / Page:
+  - Cập nhật `app/pages/index.vue`:
+    - bỏ mock userInfo cứng tại page
+    - dùng `useUserInfo()` để render card user.
+- Tài liệu / Memory Bank:
+  - Cập nhật `activeContext.md` để mô tả rõ pattern dữ liệu User Profile và focus mở rộng pattern này cho các khối nội dung khác.
+  - Cập nhật `progress.md` (file hiện tại) để ghi nhận trạng thái mới nhất và các todo liên quan.
 
 ## Việc cần làm (todo)
-- [ ] Kiểm thử manual: flow đăng nhập/đăng xuất (login -> cookie set -> store.initFromCookie -> middleware & UI phản hồi)
-- [ ] Hoàn thiện phản hồi UI: thêm nút Login/Logout rõ ràng trên Header để demo
-- [ ] (Tùy chọn) Thêm pinia-plugin-persistedstate với filter cho token nếu muốn persist
-- [ ] Viết hướng dẫn sử dụng và test cases ngắn (plans/ và memory-bank)
-- [ ] Tạo commit/branch/PR với các thay đổi để review
+- [ ] Kiểm thử manual trang chủ (SSR/hydration): hard reload nhiều lần để xác nhận user card hiển thị ổn định, không lỗi console.
+- [ ] Chuẩn hoá import path trong `useUserInfo.ts` (hiện đang import store bằng relative `../../stores/user`) theo convention của project/Nuxt (ví dụ alias `~/stores/user` hoặc auto-import store nếu được bật).
+- [ ] Quyết định strategy dữ liệu: tiếp tục mock endpoints khác hay kết nối backend thật cho User Profile và các khối nội dung trên homepage.
+- [ ] (Nếu có auth) rà soát lại `server/api` và `stores` để đồng bộ tài liệu (Memory Bank trước đó có nhắc auth nhưng hiện chưa thấy trong trạng thái working tree).
+- [ ] Tạo commit/PR cho thay đổi user profile flow (endpoint + store + composable + cập nhật index.vue).
+- [ ] Chuẩn hoá luồng dữ liệu cho các khối homepage khác (`useFacts`, `useNews`, `useFeaturedList`, `useQuickList`, `useCommunity`, ...) theo pattern: server/api -> store -> composable -> UI (nếu phù hợp với yêu cầu sản phẩm).
 
-## Ghi chú kỹ thuật & cảnh báo
-- Sau khi đổi tên useSeoMeta, Nuxt cần regen auto-imports — tôi đã restart dev server để áp dụng.
-- Dev server hiện đang chạy, tuy nhiên khi kiểm thử curl có thể gặp vấn đề về đường dẫn nếu file api chưa được nhận bởi Nitro (đã thêm server/api/auth/[...all].ts và HMR đã kích hoạt).
-- Tránh persist token không mã hoá trong localStorage nếu không có chiến lược bảo mật rõ ràng; ưu tiên cookie HTTPOnly như scaffold hiện tại.
+## Ghi chú kỹ thuật
+- `git status` (ở lần quét trước) cho thấy working tree có:
+  - `M app/pages/index.vue`
+  - `?? app/composables/useUserInfo.ts`
+  - `?? stores/user.ts`
+  - `?? server/api/user.get.ts`
+- Thay đổi chính trong `index.vue` là chuyển từ mock data sang dùng composable `useUserInfo()`.
+- Khi hoàn tất test manual và thống nhất strategy (mock vs backend thật vs auth-first), cần cập nhật lại Memory Bank (đặc biệt là `activeContext.md` và `systemPatterns.md`) để phản ánh quyết định cuối cùng.
 
 ## Yêu cầu từ bạn
-- Bạn muốn tôi tiếp tục với bước nào: (1) kiểm thử manual login/logout, (2) thêm persisted plugin, (3) tạo PR để bạn review, hoặc (4) khác?
+- Bạn muốn luồng user profile này tiếp tục theo hướng nào?
+  1) Chỉ mock để demo UI
+  2) Tích hợp API thật (cần base URL + auth)
+  3) Hoàn thiện auth trước rồi mới fetch profile

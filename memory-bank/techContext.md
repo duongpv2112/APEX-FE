@@ -39,7 +39,7 @@
 
 - SSR: composables/stores phải tương thích với SSR (tránh dùng window trực tiếp trong code chạy trên server).
 - CSS naming rule (apex-mma- prefix) phải được tuân thủ để tránh xung đột.
-- Auth hiện tại là scaffold giả lập (cookie 'auth_token') — cần thay thế bằng flow bảo mật thực tế.
+- User profile hiện đang là mock qua `GET /api/user` + Pinia store `stores/user.ts` + composable `useUserInfo` (SSR-safe). Khi tích hợp backend thật cần bổ sung base URL / auth.
 
 ### Phụ thuộc & cách quản lý
 

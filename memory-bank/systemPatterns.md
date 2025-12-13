@@ -5,7 +5,7 @@
 ### Kiến trúc tổng quan
 
 - Frontend SSR: Nuxt 4 (Nitro) chạy SSR để phục vụ HTML cho client, tối ưu SEO.
-- Module server-side tối giản (server/api) cho các endpoints nhẹ: auth, session. Nitro/h3 dùng để xử lý request.
+- Module server-side tối giản (server/api) cho các endpoints nhẹ (hiện có `GET /api/user` mock profile). Nitro/h3 dùng để xử lý request.
 - Frontend code đặt trong thư mục /app: components, layouts, pages (Nuxt Page Router), composables, stores.
 - Assets bao gồm SCSS (app/assets/scss) và hình ảnh tĩnh (public, app/assets/images).
 
@@ -14,14 +14,14 @@
 - Composables: logic tái sử dụng (useSeoMeta, useSiteMeta, useTheme, useToast).
 - Store (Pinia style via @pinia/nuxt): stores/auth.ts, stores/user.ts (scaffold có sẵn).
 - Component-based UI: components/layout/Header.vue tuân thủ naming convention apex-mma-.
-- Server API: Ngắn gọn, xử lý auth bằng cookie (HTTPOnly) cho security.
+- Server API: Ngắn gọn, hiện mock user profile qua `server/api/user.get.ts` (GET `/api/user`). Nếu bổ sung auth sau, cân nhắc cookie HTTPOnly cho security.
 
 ### Quan hệ thành phần
 
 - Pages -> Layouts -> Components (Header, shared components)
 - Pages sử dụng composables để thiết lập meta và trạng thái (useSeoMeta, useSiteMeta)
-- Stores chứa auth/user state, được component và composable sử dụng
-- server/api cung cấp các route backend nhỏ để test auth và session
+- Stores chứa state (ví dụ `stores/user.ts` quản lý profile), được component và composable sử dụng
+- server/api cung cấp các route backend nhỏ (ví dụ `GET /api/user`) để mock dữ liệu phục vụ UI/SSR
 
 ### Quyết định kỹ thuật then chốt
 

@@ -298,6 +298,7 @@ import { useQuickList } from "~/composables/useQuickList";
 import { useFeaturedList } from "~/composables/useFeaturedList";
 import { useCompactList } from "~/composables/useCompactList";
 import { useCommunity } from "~/composables/useCommunity";
+import { useUserInfo } from "~/composables/useUserInfo";
 import { NCarousel, NCarouselItem } from "naive-ui";
 
 const { factList } = useFacts();
@@ -306,19 +307,8 @@ const { quickList } = useQuickList();
 const { featuredList } = useFeaturedList();
 const { compactList } = useCompactList();
 const { communityTotal, communityList } = useCommunity();
+const { userInfo } = useUserInfo();
 const { _, isMobile, isTablet, isDesktop } = useDisplay();
-
-// Dữ liệu user
-const userInfo = ref({
-  avatar: "https://i.imgur.com/0y8Ftya.png",
-  name: "Dương Phạm 2112",
-  age: "6h",
-  point: 0,
-  progress: 0,
-  posts: 0,
-  likes: 0,
-  follows: 0,
-});
 
 const styleCarouselItem = computed(() => {
   let widthCarousel = "30%";
