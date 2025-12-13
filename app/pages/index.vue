@@ -252,7 +252,29 @@
         </div>
         <!-- Bên phải: Thông tin user -->
         <div class="apex-mma-compact-right">
-          
+          <div class="apex-mma-community-card">
+            <div class="apex-mma-community-header">
+              <div class="apex-mma-community-title">Cộng đồng</div>
+            </div>
+
+            <div class="apex-mma-community-grid">
+              <a
+                v-for="(item, idx) in communityList"
+                :key="idx"
+                class="apex-mma-community-item"
+                :href="item.href"
+              >
+                <div class="apex-mma-community-thumb">
+                  <img :src="item.image" :alt="item.title" />
+                </div>
+                <div class="apex-mma-community-name">{{ item.title }}</div>
+              </a>
+            </div>
+
+            <a class="apex-mma-community-viewall" href="#">
+              Xem tất cả ({{ communityTotal }})
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -496,6 +518,31 @@ const compactList = ref([
       "Tỷ phú Elon Musk hé lộ trên X rằng SpaceX có thể sẽ được IPO trong năm 2026, bằng cách bình luận câu “cơ bản thì Eric thường nói đúng” về bài báo của Eric Berger đăng trên Ars Technica rằng SpaceX sẽ sớm được cổ phần hóa.",
     author: "Nam Air",
     authorAvatar: "https://i.imgur.com/0y8Ftya.png",
+  },
+]);
+
+// Dữ liệu: Cộng đồng (khối bên phải)
+const communityTotal = ref(95);
+const communityList = ref([
+  {
+    title: "IFA 2025",
+    image: "https://i.imgur.com/8Q1Z1Zm.jpg",
+    href: "#",
+  },
+  {
+    title: "Vinalink AI Trainer",
+    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
+    href: "#",
+  },
+  {
+    title: "BAC Training",
+    image: "https://i.imgur.com/2nCt3Sbl.jpg",
+    href: "#",
+  },
+  {
+    title: "Tinh tế AI",
+    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
+    href: "#",
   },
 ]);
 
@@ -1247,7 +1294,98 @@ const bottomList = computed(() => {
       flex-direction: column;
       align-items: center;
 
-      
+      .apex-mma-community-card {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #eef1f6;
+        border-radius: 12px;
+        padding: 14px;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      }
+
+      .apex-mma-community-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .apex-mma-community-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #222;
+      }
+
+      .apex-mma-community-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .apex-mma-community-item {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+
+      .apex-mma-community-thumb {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f1f2f4;
+        border: 1px solid #eef1f6;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+      }
+
+      .apex-mma-community-thumb img {
+        width: 100%;
+        aspect-ratio: 16/9;
+      }
+
+      .apex-mma-community-name {
+        margin-top: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #222;
+        line-height: 1.25;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-height: 34px;
+      }
+
+      .apex-mma-community-viewall {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: #e9edf3;
+        border: 1px solid #e1e6ee;
+        color: #0f172a;
+        font-weight: 700;
+        text-decoration: none;
+        transition: background 0.2s ease, border-color 0.2s ease;
+
+        &:hover {
+          background: #dde3ec;
+          border-color: #d4dbe7;
+        }
+      }
     }
   }
 }
@@ -1328,6 +1466,14 @@ const bottomList = computed(() => {
 
 /* Tablet */
 @media (min-width: 768px) and (max-width: 991px) {
+  .apex-mma-compact-section {
+    .apex-mma-compact-container {
+      .apex-mma-compact-right {
+        display: flex;
+      }
+    }
+  }
+
   .apex-mma-news-section {
     .apex-mma-news-main {
       .apex-mma-news-main-top-left {
