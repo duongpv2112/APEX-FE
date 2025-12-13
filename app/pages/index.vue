@@ -292,191 +292,21 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useDisplay } from "~/composables/useDisplay";
+import { useFacts } from "~/composables/useFacts";
+import { useNews } from "~/composables/useNews";
+import { useQuickList } from "~/composables/useQuickList";
+import { useFeaturedList } from "~/composables/useFeaturedList";
+import { useCompactList } from "~/composables/useCompactList";
+import { useCommunity } from "~/composables/useCommunity";
 import { NCarousel, NCarouselItem } from "naive-ui";
 
-// Dữ liệu cho fact section (giữ nguyên)
-const factList = ref([
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
-    username: "seal2002",
-    isCreate: true,
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
-    username: "seal2002",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/2nCt3Sbl.jpg",
-    username: "TRUNGKIEN...",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/2nCt3Sbl.jpg",
-    username: "TRUNGKIEN...",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/2nCt3Sbl.jpg",
-    username: "TRUNGKIEN...",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-  {
-    avatar: "https://i.imgur.com/0y8Ftya.png",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    username: "xecata",
-  },
-]);
-
-// Dữ liệu cho news section
-const mainNews = ref({
-  image: "https://i.imgur.com/8Q1Z1Zm.jpg",
-  title:
-    "TinhteDIY : Dạo triển lãm SECC trên tay nhanh bộ ba máy pin ETOP giá hợp lý cho anh em DIY",
-  author: "Bảo Long.",
-});
-
-const subNews = ref([
-  {
-    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
-    title: "Đánh Giá Chi Tiết: Redmi Note 14 Pro+ 5G sau hơn 10 tháng sử dụng",
-    author: "Cáo - Foxtek",
-    desc: "Mình đã có hơn 10 tháng gắn bó cùng chiếc Redmi Note 14 Pro+ 5G và cách đây 6 tháng thì mình đã có bài Đánh Giá Chi Tiết đầu tiên. Tính đến hiện tại, đã có những khía cạnh thay đổi nhưng cũng có những yếu tố vẫn còn...",
-  },
-  {
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    title:
-      "Johny Srouji, người đứng đầu mảng chip của Apple nói với Tim Cook ông muốn rời Apple.",
-    author: "cuhiep",
-    desc: "",
-  },
-  {
-    image: "https://i.imgur.com/2nCt3Sbl.jpg",
-    title: "iPhone Air mất giá nhanh hơn các mẫu iPhone 17 khác sau 10 tuần",
-    author: "Anh Tú.",
-    desc: "",
-  },
-  {
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    title:
-      "TinhteLookBack: Sự cố Y2K và thế giới ứng phó với tận thế công nghệ như thế nào",
-    author: "Nam Air",
-    desc: "",
-  },
-]);
-
-const quickList = ref([
-  {
-    title:
-      "Razer Joro là một chiếc bàn phím di động ngon, xài kiểu gì cũng được",
-    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
-  },
-  {
-    title: "Project Talon: thiết kế UAV chiến đấu mới của Northrop Grumman",
-    image: "https://i.imgur.com/2nCt3Sbl.jpg",
-  },
-  {
-    title: "Tổng hợp thay đổi đáng chú ý của One UI 8.5 Beta trên Samsung...",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-  },
-  {
-    title: "Cách mà máy khoan hoạt động",
-    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
-  },
-  {
-    title: "Chuyện gì đang xảy ra ở Apple?",
-    image: "https://i.imgur.com/2nCt3Sbl.jpg",
-  },
-  {
-    title: "Thương hiệu RAM yêu thích của mình, anh em thì sao?",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-  },
-]);
-
-const featuredList = ref([
-  {
-    title: "Hàng loạt giám đốc cao cấp rời Apple qua công ty khác",
-    author: "cuhiep",
-  },
-  {
-    title:
-      "TasteAtlas: Phở và Bún Bò VN trong top 100 món ăn ngon nhất thế giới",
-    author: "Nam Air",
-  },
-  {
-    title:
-      "[QC] MINI 3-Cửa và MINI Countryman thuần điện hoàn toàn mới chính thức ra mắt tại Việt Nam",
-    author: "TTKM",
-  },
-  {
-    title: "Mời xem trailer Avatar 3: Fire and Ash - ra rạp 19/12",
-    author: "Nam Air",
-  },
-  {
-    title: "Mời bình chọn kênh nội dung công nghệ yêu thích",
-    author: "cuhiep",
-  },
-  {
-    title: "Máy giặt sấy 2 trong 1 và riêng lẻ cái nào tốt hơn?",
-    author: "Bảo Long.",
-  },
-]);
+const { factList } = useFacts();
+const { mainNews, subNews } = useNews();
+const { quickList } = useQuickList();
+const { featuredList } = useFeaturedList();
+const { compactList } = useCompactList();
+const { communityTotal, communityList } = useCommunity();
+const { _, isMobile, isTablet, isDesktop } = useDisplay();
 
 // Dữ liệu user
 const userInfo = ref({
@@ -489,71 +319,6 @@ const userInfo = ref({
   likes: 0,
   follows: 0,
 });
-
-// Dữ liệu cho section mới: compact list (mobile-first)
-const compactList = ref([
-  {
-    image: "https://i.imgur.com/8Q1Z1Zm.jpg",
-    title:
-      "Roborock giới thiệu Qrevo Curv 2 Flow: Giẻ lau con lăn, nhận diện hơn 200 vật thể",
-    excerpt:
-      "Roborock vừa công bố những thông tin chi tiết về mẫu robot hút bụi lau nhà flagship sắp ra mắt của mình, mang tên Qrevo Curv 2 Flow. Đây là một sản phẩm đánh dấu hướng đi mới của hãng khi lần đầu tiên trang bị công nghệ giẻ lau dạng con lăn...",
-    author: "Anh Tú.",
-    authorAvatar: "https://i.imgur.com/0y8Ftya.png",
-  },
-  {
-    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
-    title: "Sự thật là uống nước cam ép và canxi ban đêm không gây ra sỏi thận",
-    excerpt:
-      "Nếu anh em hoặc người thân thích uống nước cam (nước ép cam tươi) và đang uống viên bổ sung canxi thì 2 loại này đều an toàn cho sức khỏe*, miễn là uống đúng liều lượng**, thậm chí là uống canxi hoặc uống nước cam...",
-    author: "Nam Air",
-    authorAvatar: "https://i.imgur.com/0y8Ftya.png",
-  },
-  {
-    image: "https://i.imgur.com/2nCt3Sbl.jpg",
-    title:
-      "Global 8000: máy bay tư nhân nhanh nhất thế giới của Canada, giá hơn 2 ngàn tỷ đồng",
-    excerpt:
-      "Từ khi các máy bay Concorde lui vào dĩ vãng thì trong thế giới máy bay dân dụng, mà đặc biệt là máy bay tư nhân thì hiếm có chiếc nào đạt tới tốc độ âm thanh (Mach 1, hay 1234 km/giờ) nữa. Một số chiếc nổi bật như Falcon 7X hay Gulfstream G650 đều...",
-    author: "Frozen Cat",
-    authorAvatar: "https://i.imgur.com/3Q1Z1Zm.jpg",
-  },
-  {
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    title: "SpaceX có thể IPO trong năm 2026 và thành cty 1.000 tỷ đô",
-    excerpt:
-      "Tỷ phú Elon Musk hé lộ trên X rằng SpaceX có thể sẽ được IPO trong năm 2026, bằng cách bình luận câu “cơ bản thì Eric thường nói đúng” về bài báo của Eric Berger đăng trên Ars Technica rằng SpaceX sẽ sớm được cổ phần hóa.",
-    author: "Nam Air",
-    authorAvatar: "https://i.imgur.com/0y8Ftya.png",
-  },
-]);
-
-// Dữ liệu: Cộng đồng (khối bên phải)
-const communityTotal = ref(95);
-const communityList = ref([
-  {
-    title: "IFA 2025",
-    image: "https://i.imgur.com/8Q1Z1Zm.jpg",
-    href: "#",
-  },
-  {
-    title: "Vinalink AI Trainer",
-    image: "https://i.imgur.com/1Q9Z1Zm.jpg",
-    href: "#",
-  },
-  {
-    title: "BAC Training",
-    image: "https://i.imgur.com/2nCt3Sbl.jpg",
-    href: "#",
-  },
-  {
-    title: "Tinh tế AI",
-    image: "https://i.imgur.com/3Q1Z1Zm.jpg",
-    href: "#",
-  },
-]);
-
-const { _, isMobile, isTablet, isDesktop } = useDisplay();
 
 const styleCarouselItem = computed(() => {
   let widthCarousel = "30%";
@@ -571,8 +336,6 @@ const styleCarouselItem = computed(() => {
     default:
       break;
   }
-  console.log(widthCarousel);
-
   return {
     width: widthCarousel,
   };
@@ -611,6 +374,7 @@ const bottomList = computed(() => {
 
   .apex-mma-fact-carousel {
     width: 100%;
+    user-select: none;
 
     .apex-mma-fact-item {
       height: 180px;
@@ -674,37 +438,37 @@ const bottomList = computed(() => {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-    }
 
-    .apex-mma-fact-create {
-      background: linear-gradient(135deg, #1ec8c8 0%, #1e90e8 100%);
-      justify-content: center;
-
-      .apex-mma-fact-create-icon {
-        margin-top: 28px;
-        margin-bottom: 12px;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: #fff;
-        display: flex;
-        align-items: center;
+      &.apex-mma-fact-create {
+        background: linear-gradient(135deg, #1ec8c8 0%, #1e90e8 100%);
         justify-content: center;
-      }
 
-      .apex-mma-fact-create-icon img {
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 1/1;
-        border-radius: 50%;
-      }
+        .apex-mma-fact-create-icon {
+          margin-top: 28px;
+          margin-bottom: 12px;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
 
-      .apex-mma-fact-create-label {
-        color: #fff;
-        font-size: 16px;
-        font-weight: 600;
-        text-align: center;
-        margin-top: 8px;
+        .apex-mma-fact-create-icon img {
+          width: 100%;
+          height: 100%;
+          aspect-ratio: 1/1;
+          border-radius: 50%;
+        }
+
+        .apex-mma-fact-create-label {
+          color: #fff;
+          font-size: 16px;
+          font-weight: 600;
+          text-align: center;
+          margin-top: 8px;
+        }
       }
     }
   }
@@ -1609,6 +1373,14 @@ const bottomList = computed(() => {
 
 /* Tablet lớn -> Desktop */
 @media (min-width: 992px) {
+  .apex-mma-fact-section {
+    .apex-mma-fact-carousel {
+      .apex-mma-fact-item {
+        height: 230px;
+      }
+    }
+  }
+
   .apex-mma-news-section {
     .apex-mma-news-quick {
       display: flex;
