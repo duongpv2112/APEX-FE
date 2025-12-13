@@ -1,60 +1,62 @@
-import { computed } from 'vue'
+import { computed } from "vue";
+import { mockNewsList } from "../../shared/newsMock";
 
 export interface ApexMainNews {
-  image: string
-  title: string
-  author: string
+  image: string;
+  title: string;
+  author: string;
+  slug: string;
 }
 
 export interface ApexSubNewsItem {
-  image: string
-  title: string
-  author: string
-  desc?: string
+  image: string;
+  title: string;
+  author: string;
+  desc?: string;
+  slug: string;
 }
 
 interface ApexNewsPayload {
-  mainNews: ApexMainNews
-  subNews: ApexSubNewsItem[]
+  mainNews: ApexMainNews;
+  subNews: ApexSubNewsItem[];
 }
 
 function getMockNews(): ApexNewsPayload {
-  return {
-    mainNews: {
-      image: 'https://i.imgur.com/8Q1Z1Zm.jpg',
-      title:
-        'TinhteDIY : Dạo triển lãm SECC trên tay nhanh bộ ba máy pin ETOP giá hợp lý cho anh em DIY',
-      author: 'Bảo Long.',
-    },
-    subNews: [
-      {
-        image: 'https://i.imgur.com/1Q9Z1Zm.jpg',
-        title: 'Đánh Giá Chi Tiết: Redmi Note 14 Pro+ 5G sau hơn 10 tháng sử dụng',
-        author: 'Cáo - Foxtek',
-        desc: 'Mình đã có hơn 10 tháng gắn bó cùng chiếc Redmi Note 14 Pro+ 5G và cách đây 6 tháng thì mình đã có bài Đánh Giá Chi Tiết đầu tiên. Tính đến hiện tại, đã có những khía cạnh thay đổi nhưng cũng có những yếu tố vẫn còn...',
+  const first = mockNewsList[0];
+
+  if (!first) {
+    return {
+      mainNews: {
+        image: "",
+        title: "",
+        author: "",
+        slug: "",
       },
-      {
-        image: 'https://i.imgur.com/3Q1Z1Zm.jpg',
-        title:
-          'Johny Srouji, người đứng đầu mảng chip của Apple nói với Tim Cook ông muốn rời Apple.',
-        author: 'cuhiep',
-        desc: '',
-      },
-      {
-        image: 'https://i.imgur.com/2nCt3Sbl.jpg',
-        title: 'iPhone Air mất giá nhanh hơn các mẫu iPhone 17 khác sau 10 tuần',
-        author: 'Anh Tú.',
-        desc: '',
-      },
-      {
-        image: 'https://i.imgur.com/3Q1Z1Zm.jpg',
-        title:
-          'TinhteLookBack: Sự cố Y2K và thế giới ứng phó với tận thế công nghệ như thế nào',
-        author: 'Nam Air',
-        desc: '',
-      },
-    ],
+      subNews: [],
+    };
   }
+
+  const rest = mockNewsList.slice(1);
+
+  const mainNews: ApexMainNews = {
+    image: first.image,
+    title: first.title,
+    author: first.author,
+    slug: first.slug,
+  };
+
+  const subNews: ApexSubNewsItem[] = rest.map((item) => ({
+    image: item.image,
+    title: item.title,
+    author: item.author,
+    desc: item.desc,
+    slug: item.slug,
+  }));
+
+  return {
+    mainNews,
+    subNews,
+  };
 }
 
 /**
@@ -64,27 +66,28 @@ function getMockNews(): ApexNewsPayload {
  */
 export const useNews = () => {
   const { data, pending, error, refresh } = useAsyncData<ApexNewsPayload>(
-    'apex-news',
+    "apex-news",
     async () => {
       // Phase 1: mock local
       // Phase 2: thay bằng `$fetch('/api/news')` và map DTO -> UI model
-      return getMockNews()
+      return getMockNews();
     }
-  )
+  );
 
   const mainNews = computed<ApexMainNews>(() => {
     return (
       data.value?.mainNews ?? {
-        image: '',
-        title: '',
-        author: '',
+        image: "",
+        title: "",
+        author: "",
+        slug: "",
       }
-    )
-  })
+    );
+  });
 
   const subNews = computed<ApexSubNewsItem[]>(() => {
-    return data.value?.subNews ?? []
-  })
+    return data.value?.subNews ?? [];
+  });
 
   return {
     mainNews,
@@ -92,5 +95,5 @@ export const useNews = () => {
     pending,
     error,
     refresh,
-  }
-}
+  };
+};

@@ -46,14 +46,31 @@
         <div class="apex-mma-news-main">
           <div class="apex-mma-news-main-top">
             <!-- Khối trái: Tin chính -->
-            <div class="apex-mma-news-main-top-left">
-              <img
-                class="apex-mma-news-main-img"
-                :src="mainNews.image"
-                alt=""
-              />
+            <div
+              class="apex-mma-news-main-top-left"
+              v-if="mainNews && mainNews.slug"
+            >
+              <NuxtLink
+                class="apex-mma-news-main-img-link"
+                :to="{ name: 'news-slug', params: { slug: mainNews.slug } }"
+              >
+                <img
+                  class="apex-mma-news-main-img"
+                  :src="mainNews.image"
+                  alt=""
+                />
+              </NuxtLink>
+
               <div class="apex-mma-news-main-content">
-                <div class="apex-mma-news-main-title">{{ mainNews.title }}</div>
+                <NuxtLink
+                  class="apex-mma-news-main-title-link"
+                  :to="{ name: 'news-slug', params: { slug: mainNews.slug } }"
+                >
+                  <div class="apex-mma-news-main-title">
+                    {{ mainNews.title }}
+                  </div>
+                </NuxtLink>
+
                 <div class="apex-mma-news-main-author">
                   {{ mainNews.author }}
                 </div>
@@ -64,15 +81,26 @@
               class="apex-mma-news-main-top-right"
               v-if="!isMobile && subNews.length > 0"
             >
-              <img
-                class="apex-mma-news-main-top-right-img"
-                :src="subNews[0].image"
-                alt=""
-              />
+              <NuxtLink
+                class="apex-mma-news-main-top-right-img-link"
+                :to="{ name: 'news-slug', params: { slug: subNews[0].slug } }"
+              >
+                <img
+                  class="apex-mma-news-main-top-right-img"
+                  :src="subNews[0].image"
+                  alt=""
+                />
+              </NuxtLink>
               <div class="apex-mma-news-main-top-right-content">
-                <div class="apex-mma-news-main-top-right-title">
-                  <b>{{ subNews[0].title }}</b>
-                </div>
+                <NuxtLink
+                  class="apex-mma-news-main-top-right-title-link"
+                  :to="{ name: 'news-slug', params: { slug: subNews[0].slug } }"
+                >
+                  <div class="apex-mma-news-main-top-right-title">
+                    <b>{{ subNews[0].title }}</b>
+                  </div>
+                </NuxtLink>
+
                 <div class="apex-mma-news-main-top-right-author">
                   {{ subNews[0].author }}
                 </div>
@@ -82,15 +110,31 @@
               </div>
             </div>
           </div>
-          <div class="apex-mma-news-main-bottom">
+          <div
+            class="apex-mma-news-main-bottom"
+            v-if="bottomList && bottomList.length > 0"
+          >
             <div
               v-for="(item, idx) in bottomList"
               :key="idx"
               class="apex-mma-news-sub-item"
             >
-              <img class="apex-mma-news-sub-img" :src="item.image" alt="" />
+              <NuxtLink
+                class="apex-mma-news-sub-img-link"
+                :to="{ name: 'news-slug', params: { slug: item.slug } }"
+              >
+                <img class="apex-mma-news-sub-img" :src="item.image" alt="" />
+              </NuxtLink>
               <div class="apex-mma-news-sub-content">
-                <div class="apex-mma-news-sub-title">{{ item.title }}</div>
+                <NuxtLink
+                  class="apex-mma-news-sub-title-link"
+                  :to="{ name: 'news-slug', params: { slug: item.slug } }"
+                >
+                  <div class="apex-mma-news-sub-title">
+                    {{ item.title }}
+                  </div>
+                </NuxtLink>
+
                 <div class="apex-mma-news-sub-author">{{ item.author }}</div>
               </div>
             </div>
@@ -449,6 +493,7 @@ const bottomList = computed(() => {
           width: 100%;
           height: 100%;
           aspect-ratio: 1/1;
+          object-fit: cover;
           border-radius: 50%;
         }
 
@@ -500,6 +545,7 @@ const bottomList = computed(() => {
     .apex-mma-news-main-img {
       width: 100%;
       aspect-ratio: 18/9;
+      object-fit: cover;
       border-radius: 8px;
       cursor: pointer;
     }
@@ -541,9 +587,14 @@ const bottomList = computed(() => {
     overflow: hidden;
     border-radius: 8px 8px 0 0;
 
+    .apex-mma-news-main-top-right-img-link {
+      width: 100%;
+    }
+
     .apex-mma-news-main-top-right-img {
       width: 100%;
       aspect-ratio: 16/9;
+      object-fit: cover;
       margin-bottom: 8px;
       cursor: pointer;
     }
@@ -604,6 +655,7 @@ const bottomList = computed(() => {
       .apex-mma-news-sub-img {
         width: 100%;
         aspect-ratio: 16/9;
+        object-fit: cover;
         border-radius: 5px;
         cursor: pointer;
       }
@@ -726,6 +778,7 @@ const bottomList = computed(() => {
           .apex-mma-news-quick-thumb img {
             width: 100%;
             aspect-ratio: 16/9;
+            object-fit: cover;
             border-radius: 5px;
           }
         }
@@ -1055,7 +1108,8 @@ const bottomList = computed(() => {
           padding: 12px 0;
 
           .apex-mma-compact-thumb {
-            width: 240px;
+            width: 100%;
+            max-width: 240px;
             aspect-ratio: 16/9;
             border-radius: 8px;
             overflow: hidden;
@@ -1065,6 +1119,7 @@ const bottomList = computed(() => {
             img {
               width: 100%;
               aspect-ratio: 16/9;
+              object-fit: cover;
             }
           }
 
@@ -1110,6 +1165,7 @@ const bottomList = computed(() => {
                 img {
                   width: 100%;
                   aspect-ratio: 1/1;
+                  object-fit: cover;
                 }
               }
 
@@ -1186,11 +1242,12 @@ const bottomList = computed(() => {
         background: #f1f2f4;
         border: 1px solid #eef1f6;
         box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
-      }
 
-      .apex-mma-community-thumb img {
-        width: 100%;
-        aspect-ratio: 16/9;
+        img {
+          width: 100%;
+          aspect-ratio: 16/9;
+          object-fit: cover;
+        }
       }
 
       .apex-mma-community-name {
@@ -1307,14 +1364,6 @@ const bottomList = computed(() => {
 
 /* Tablet */
 @media (min-width: 768px) and (max-width: 991px) {
-  .apex-mma-compact-section {
-    .apex-mma-compact-container {
-      .apex-mma-compact-right {
-        display: flex;
-      }
-    }
-  }
-
   .apex-mma-news-section {
     .apex-mma-news-main {
       .apex-mma-news-main-top-left {
