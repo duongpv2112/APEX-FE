@@ -22,15 +22,15 @@
               >
                 <template v-if="item.isCreate">
                   <div class="apex-mma-fact-create-icon">
-                    <NuxtImg src="https://i.imgur.com/0y8Ftya.png" alt="Tạo Fact" />
+                    <NuxtImg src="https://i.imgur.com/0y8Ftya.png" alt="Tạo Fact" format="webp" loading="lazy" />
                   </div>
                   <div class="apex-mma-fact-create-label">Tạo Fact mới</div>
                 </template>
                 <template v-else>
                   <div class="apex-mma-fact-avatar-wrap">
-                    <NuxtImg class="apex-mma-fact-avatar" :src="item.avatar" alt="" />
+                    <NuxtImg class="apex-mma-fact-avatar" :src="item.avatar" :alt="item.alt" format="webp" fit="cover" loading="lazy" />
                   </div>
-                  <NuxtImg class="apex-mma-fact-img" :src="item.image" alt="" />
+                  <NuxtImg class="apex-mma-fact-img" :src="item.image" :alt="item.alt" format="webp" fit="cover" loading="lazy" />
                   <div class="apex-mma-fact-username">{{ item.username }}</div>
                 </template>
               </div>
@@ -97,7 +97,7 @@
                   :to="{ name: 'news-slug', params: { slug: subNews[0].slug } }"
                 >
                   <div class="apex-mma-news-main-top-right-title">
-                    <b>{{ subNews[0].title }}</b>
+                    <p>{{ subNews[0].title }}</p>
                   </div>
                 </NuxtLink>
 
@@ -356,17 +356,17 @@ const { userInfo } = useUserInfo();
 const { _, isMobile, isTablet, isDesktop } = useDisplay();
 
 const styleCarouselItem = computed(() => {
-  let widthCarousel = "30%";
+  let widthCarousel = "108px";
 
   switch (true) {
     case isDesktop.value:
-      widthCarousel = "15%";
+      widthCarousel = "108px";
       break;
     case isTablet.value:
-      widthCarousel = "20%";
+      widthCarousel = "118px";
       break;
     case isMobile.value:
-      widthCarousel = "30%";
+      widthCarousel = "120px";
       break;
     default:
       break;
@@ -489,8 +489,7 @@ useSeoMeta({
         justify-content: center;
 
         .apex-mma-fact-create-icon {
-          margin-top: 28px;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
           width: 48px;
           height: 48px;
           border-radius: 50%;
@@ -510,10 +509,9 @@ useSeoMeta({
 
         .apex-mma-fact-create-label {
           color: #fff;
-          font-size: 16px;
+          font-size: 13px;
           font-weight: 600;
           text-align: center;
-          margin-top: 8px;
         }
       }
     }
@@ -619,7 +617,7 @@ useSeoMeta({
 
       .apex-mma-news-main-top-right-title {
         font-size: 16px;
-        font-weight: 700;
+        font-weight: 600;
         color: #222;
         margin-bottom: 4px;
         line-height: 1.3;
@@ -761,7 +759,7 @@ useSeoMeta({
           .apex-mma-news-quick-title2 {
             font-size: 15px;
             color: #222;
-            font-weight: 500;
+            font-weight: 600;
             line-height: 1.3;
             flex: 1;
             overflow: hidden;
@@ -1426,7 +1424,7 @@ useSeoMeta({
   .apex-mma-fact-section {
     .apex-mma-fact-carousel {
       .apex-mma-fact-item {
-        height: 230px;
+        // height: 230px;
       }
     }
   }

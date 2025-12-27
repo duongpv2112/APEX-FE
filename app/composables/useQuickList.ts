@@ -1,37 +1,19 @@
-import { computed } from 'vue'
+import { computed } from "vue";
+import { mockQuickList } from "~~/shared/quickMock";
 
 export interface ApexQuickItem {
-  title: string
-  image?: string
+  title: string;
+  image?: string;
 }
 
 function getMockQuickList(): ApexQuickItem[] {
-  return [
-    {
-      title: 'Razer Joro là một chiếc bàn phím di động ngon, xài kiểu gì cũng được',
-      image: 'https://i.imgur.com/1Q9Z1Zm.jpg',
-    },
-    {
-      title: 'Project Talon: thiết kế UAV chiến đấu mới của Northrop Grumman',
-      image: 'https://i.imgur.com/2nCt3Sbl.jpg',
-    },
-    {
-      title: 'Tổng hợp thay đổi đáng chú ý của One UI 8.5 Beta trên Samsung...',
-      image: 'https://i.imgur.com/3Q1Z1Zm.jpg',
-    },
-    {
-      title: 'Cách mà máy khoan hoạt động',
-      image: 'https://i.imgur.com/1Q9Z1Zm.jpg',
-    },
-    {
-      title: 'Chuyện gì đang xảy ra ở Apple?',
-      image: 'https://i.imgur.com/2nCt3Sbl.jpg',
-    },
-    {
-      title: 'Thương hiệu RAM yêu thích của mình, anh em thì sao?',
-      image: 'https://i.imgur.com/3Q1Z1Zm.jpg',
-    },
-  ]
+  if (!mockQuickList?.length) return [];
+
+  // Map (để sau này thay DTO -> UI model vẫn giữ pattern)
+  return mockQuickList.map((item) => ({
+    title: item.title,
+    image: item.image,
+  }));
 }
 
 /**
@@ -41,15 +23,15 @@ function getMockQuickList(): ApexQuickItem[] {
  */
 export const useQuickList = () => {
   const { data, pending, error, refresh } = useAsyncData<ApexQuickItem[]>(
-    'apex-quick-list',
+    "apex-quick-list",
     async () => {
       // Phase 1: mock local
       // Phase 2: thay bằng `$fetch('/api/quick')`
-      return getMockQuickList()
+      return getMockQuickList();
     }
-  )
+  );
 
-  const quickList = computed<ApexQuickItem[]>(() => data.value ?? [])
+  const quickList = computed<ApexQuickItem[]>(() => data.value ?? []);
 
-  return { quickList, pending, error, refresh }
-}
+  return { quickList, pending, error, refresh };
+};
