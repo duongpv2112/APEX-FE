@@ -28,7 +28,7 @@
           }}</span>
           <span class="apex-mma-news-detail-dot">•</span>
           <span class="apex-mma-news-detail-date">
-            {{ newsDetail.publishedAt }}
+            {{ publishedAtText }}
           </span>
           <template v-if="newsDetail.readingTime">
             <span class="apex-mma-news-detail-dot">•</span>
@@ -68,6 +68,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { formatDateTime } from "@/utils";
 // import { NuxtImg } from "#components";
 // import ApexMmaImagePreview from "@/components/common/ApexMmaImagePreview.vue";
 
@@ -75,6 +76,13 @@ const route = useRoute();
 
 const slug = computed(() => route.params.slug as string);
 const { newsDetail, pending, error } = usePostsDetail(slug);
+
+const publishedAtText = computed(() => {
+  const raw = newsDetail.value?.publishedAt;
+  if (!raw) return "";
+  // DTO hiện trả về dạng ISO/yyyy-mm-dd => format hiển thị theo locale vi-VN
+  return formatDateTime(raw);
+});
 
 const paragraphs = computed(() => {
   if (!newsDetail.value?.content) return [];
