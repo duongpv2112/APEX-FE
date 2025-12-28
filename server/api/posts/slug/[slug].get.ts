@@ -1,0 +1,51 @@
+import { createError, defineEventHandler, getRouterParam } from "h3";
+import { $fetch } from "ofetch";
+
+/**
+ * Nitro proxy (BFF) cho backend detail:
+ * GET https://localhost:44389/api/client/posts/slug/{slug}
+ */
+export default defineEventHandler(async (event) => {
+  const slug = getRouterParam(event, "slug");
+  if (!slug) {
+    throw createError({ statusCode: 400, statusMessage: "Missing slug" });
+  }
+
+  const config = useRuntimeConfig();
+  const apiBaseUrl = (config.apiBaseUrl as string) || "";
+  const url = `${apiBaseUrl}/api/public/posts/${encodeURIComponent(slug)}`;
+
+  const isDev = process.env.NODE_ENV !== "production";
+  const shouldBypassTls = isDev && /^https:\/\/localhost(?::\d+)?/i.test(apiBaseUrl);
+
+  const prevTls = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+  if (shouldBypassTls) process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+  const res = await (async () => {
+    try {
+      return await $fetch.raw(url, {
+        method: "GET",
+        ignoreResponseError: true,
+      });
+    } finally {
+      if (shouldBypassTls) {
+        if (prevTls === undefined) delete process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+        else process.env.NODE_TLS_REJECT_UNAUTHORIZED = prevTls;
+      }
+    }
+  })();
+
+  const statusCode = res.status ?? 500;
+  const json: any = (res as any)._data ?? null;
+
+  if (statusCode >= 400) {
+    throw createError({
+      statusCode,
+      statusMessage:
+        (json && (json.message || json.title)) || `Backend error ${statusCode}`,
+      data: json,
+    });
+  }
+
+  return json;
+});

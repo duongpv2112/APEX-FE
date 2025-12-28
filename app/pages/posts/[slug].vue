@@ -6,7 +6,7 @@
           Trang chủ
         </NuxtLink>
         <span class="apex-mma-news-detail-breadcrumb-sep">/</span>
-        <span class="apex-mma-news-detail-breadcrumb-current">Tin tức</span>
+        <span class="apex-mma-news-detail-breadcrumb-current">Bài viết</span>
       </div>
 
       <div v-if="pending" class="apex-mma-news-detail-loading">
@@ -23,7 +23,9 @@
         </h1>
 
         <div class="apex-mma-news-detail-meta">
-          <span class="apex-mma-news-detail-author">{{ newsDetail.author }}</span>
+          <span class="apex-mma-news-detail-author">{{
+            newsDetail.author
+          }}</span>
           <span class="apex-mma-news-detail-dot">•</span>
           <span class="apex-mma-news-detail-date">
             {{ newsDetail.publishedAt }}
@@ -36,7 +38,7 @@
           </template>
         </div>
 
-        <div
+        <!-- <div
           v-if="newsDetail.image"
           class="apex-mma-news-detail-cover-wrap"
           @click="openCoverPreview"
@@ -46,24 +48,19 @@
             :alt="newsDetail.title"
             class="apex-mma-news-detail-cover"
           />
-        </div>
+        </div> -->
 
         <article class="apex-mma-news-detail-content">
-          <p
-            v-for="(para, idx) in paragraphs"
-            :key="idx"
-            class="apex-mma-news-detail-paragraph"
-          >
-            {{ para }}
+          <p class="apex-mma-news-detail-paragraph" v-html="paragraphs">
           </p>
         </article>
 
-        <ApexMmaImagePreview
-          v-if="newsDetail?.image"
+        <!-- <ApexMmaImagePreview
+          v-if="newsDetail?."
           v-model:visible="isCoverPreviewVisible"
           :image-src="newsDetail.image"
           :image-alt="newsDetail.title"
-        />
+        /> -->
       </template>
     </div>
   </section>
@@ -71,26 +68,25 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { NuxtImg } from "#components";
-import ApexMmaImagePreview from "@/components/common/ApexMmaImagePreview.vue";
+// import { NuxtImg } from "#components";
+// import ApexMmaImagePreview from "@/components/common/ApexMmaImagePreview.vue";
 
 const route = useRoute();
 
 const slug = computed(() => route.params.slug as string);
-
-const { newsDetail, pending, error } = useNewsDetail(slug);
+const { newsDetail, pending, error } = usePostsDetail(slug);
 
 const paragraphs = computed(() => {
   if (!newsDetail.value?.content) return [];
-  return newsDetail.value.content.split("\n\n").filter(Boolean);
+  return newsDetail.value.content;
 });
 
 const isCoverPreviewVisible = ref(false);
 
 const openCoverPreview = () => {
-  if (newsDetail.value?.image) {
-    isCoverPreviewVisible.value = true;
-  }
+  // if (newsDetail.value?.image) {
+  //   isCoverPreviewVisible.value = true;
+  // }
 };
 
 useSeoMeta({
@@ -102,7 +98,7 @@ useSeoMeta({
   ),
   description: computed(() => newsDetail.value?.desc ?? ""),
   ogDescription: computed(() => newsDetail.value?.desc ?? ""),
-  ogImage: computed(() => newsDetail.value?.image ?? ""),
+  // ogImage: computed(() => newsDetail.value?.image ?? ""),
 });
 </script>
 

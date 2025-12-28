@@ -41,7 +41,28 @@
     </section>
     <!-- BẮT ĐẦU: apex-mma-news-section -->
     <section class="apex-mma-news-section">
-      <div class="apex-mma-news-container">
+      <div v-if="newsPending" class="apex-mma-news-state apex-mma-news-loading">
+        Đang tải tin tức...
+      </div>
+
+      <div
+        v-else-if="newsError"
+        class="apex-mma-news-state apex-mma-news-error"
+      >
+        <span class="apex-mma-news-error-text">Không tải được tin tức.</span>
+        <button class="apex-mma-news-error-retry" @click="refreshNews">
+          Thử lại
+        </button>
+      </div>
+
+      <div
+        v-else-if="!mainNews || !mainNews.slug"
+        class="apex-mma-news-state apex-mma-news-empty"
+      >
+        Chưa có bài viết.
+      </div>
+
+      <div v-else class="apex-mma-news-container">
         <!-- Cột trái: Tin chính -->
         <div class="apex-mma-news-main">
           <div class="apex-mma-news-main-top">
@@ -52,19 +73,21 @@
             >
               <NuxtLink
                 class="apex-mma-news-main-img-link"
-                :to="{ name: 'news-slug', params: { slug: mainNews.slug } }"
+                :to="{ name: 'posts-slug', params: { slug: mainNews.slug } }"
               >
                 <NuxtImg
+                  v-if="mainNews.image"
                   class="apex-mma-news-main-img"
                   :src="mainNews.image"
-                  alt=""
+                  :alt="mainNews.title"
                 />
+                <div v-else class="apex-mma-news-img-placeholder" />
               </NuxtLink>
 
               <div class="apex-mma-news-main-content">
                 <NuxtLink
                   class="apex-mma-news-main-title-link"
-                  :to="{ name: 'news-slug', params: { slug: mainNews.slug } }"
+                  :to="{ name: 'posts-slug', params: { slug: mainNews.slug } }"
                 >
                   <div class="apex-mma-news-main-title">
                     {{ mainNews.title }}
@@ -83,18 +106,20 @@
             >
               <NuxtLink
                 class="apex-mma-news-main-top-right-img-link"
-                :to="{ name: 'news-slug', params: { slug: subNews[0].slug } }"
+                :to="{ name: 'posts-slug', params: { slug: subNews[0].slug } }"
               >
                 <NuxtImg
+                  v-if="subNews[0].image"
                   class="apex-mma-news-main-top-right-img"
                   :src="subNews[0].image"
-                  alt=""
+                  :alt="subNews[0].title"
                 />
+                <div v-else class="apex-mma-news-img-placeholder" />
               </NuxtLink>
               <div class="apex-mma-news-main-top-right-content">
                 <NuxtLink
                   class="apex-mma-news-main-top-right-title-link"
-                  :to="{ name: 'news-slug', params: { slug: subNews[0].slug } }"
+                  :to="{ name: 'posts-slug', params: { slug: subNews[0].slug } }"
                 >
                   <div class="apex-mma-news-main-top-right-title">
                     <p>{{ subNews[0].title }}</p>
@@ -121,14 +146,20 @@
             >
               <NuxtLink
                 class="apex-mma-news-sub-img-link"
-                :to="{ name: 'news-slug', params: { slug: item.slug } }"
+                :to="{ name: 'posts-slug', params: { slug: item.slug } }"
               >
-                <NuxtImg class="apex-mma-news-sub-img" :src="item.image" alt="" />
+                <NuxtImg
+                  v-if="item.image"
+                  class="apex-mma-news-sub-img"
+                  :src="item.image"
+                  :alt="item.title"
+                />
+                <div v-else class="apex-mma-news-img-placeholder" />
               </NuxtLink>
               <div class="apex-mma-news-sub-content">
                 <NuxtLink
                   class="apex-mma-news-sub-title-link"
-                  :to="{ name: 'news-slug', params: { slug: item.slug } }"
+                  :to="{ name: 'posts-slug', params: { slug: item.slug } }"
                 >
                   <div class="apex-mma-news-sub-title">
                     {{ item.title }}
@@ -155,7 +186,7 @@
               <div class="apex-mma-news-quick-info">
                 <div class="apex-mma-news-quick-title2">{{ item.title }}</div>
                 <div v-if="item.image" class="apex-mma-news-quick-thumb">
-                  <NuxtImg :src="item.image" alt="" />
+                  <NuxtImg :src="item.image" :alt="item.title" />
                 </div>
               </div>
             </div>
@@ -337,7 +368,7 @@
 import { ref, computed } from "vue";
 import { useDisplay } from "~/composables/useDisplay";
 import { useFacts } from "~/composables/useFacts";
-import { useNews } from "~/composables/useNews";
+import { usePosts } from "~/composables/usePosts";
 import { useQuickList } from "~/composables/useQuickList";
 import { useFeaturedList } from "~/composables/useFeaturedList";
 import { useCompactList } from "~/composables/useCompactList";
@@ -347,7 +378,13 @@ import { NCarousel, NCarouselItem } from "naive-ui";
 import { NuxtImg } from "#components";
 
 const { factList } = useFacts();
-const { mainNews, subNews } = useNews();
+const {
+  mainNews,
+  subNews,
+  pending: newsPending,
+  error: newsError,
+  refresh: refreshNews,
+} = usePosts();
 const { quickList } = useQuickList();
 const { featuredList } = useFeaturedList();
 const { compactList } = useCompactList();
@@ -523,11 +560,60 @@ useSeoMeta({
   padding: 0 12px;
   width: 100%;
 
+  .apex-mma-news-state {
+    width: 100%;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .apex-mma-news-loading {
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
+
+  .apex-mma-news-empty {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .apex-mma-news-error {
+    background: #fef2f2;
+    color: #b91c1c;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .apex-mma-news-error-retry {
+    appearance: none;
+    border: 1px solid #fecaca;
+    background: #fff;
+    color: #b91c1c;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+
+    &:hover {
+      background: #fff5f5;
+    }
+  }
+
   .apex-mma-news-container {
     display: flex;
     gap: 24px;
     width: 100%;
     align-items: flex-start;
+  }
+
+  .apex-mma-news-img-placeholder {
+    width: 100%;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
+    aspect-ratio: 16/9;
   }
 
   .apex-mma-news-main {

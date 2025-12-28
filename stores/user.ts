@@ -47,7 +47,7 @@ export const useUserStore = defineStore('user', () => {
     error.value = null
 
     try {
-      const data = await $fetch<UserInfo>('/api/user')
+      const data = await $fetch<UserInfo>('/api/users/user')
       profile.value = data
     } catch (e) {
       error.value = e

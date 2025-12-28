@@ -382,6 +382,7 @@ const actionButtons = [
 
   .apex-mma-header__avatar-wrap {
     position: relative;
+    user-select: none;
 
     .apex-mma-header__avatar {
       width: 40px;
