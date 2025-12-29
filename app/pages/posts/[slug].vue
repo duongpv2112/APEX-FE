@@ -1,86 +1,72 @@
 <template>
-  <section class="apex-mma-news-detail-section">
-    <div class="apex-mma-news-detail-container">
-      <div class="apex-mma-news-detail-breadcrumb">
-        <NuxtLink class="apex-mma-news-detail-breadcrumb-link" to="/">
+  <section class="apex-mma-posts-detail-page">
+    <div class="apex-mma-posts-detail-page__container">
+      <div class="apex-mma-posts-detail-page__breadcrumb">
+        <NuxtLink class="apex-mma-posts-detail-page__breadcrumb-link" to="/">
           Trang chủ
         </NuxtLink>
-        <span class="apex-mma-news-detail-breadcrumb-sep">/</span>
-        <span class="apex-mma-news-detail-breadcrumb-current">Bài viết</span>
+        <template v-if="detailCategory">
+          <span class="apex-mma-posts-detail-page__breadcrumb-sep">/</span>
+          <NuxtLink
+            class="apex-mma-posts-detail-page__breadcrumb-link"
+            :to="`/posts/categories/${detailCategory.slug}`"
+          >
+            {{ detailCategory.label }}
+          </NuxtLink>
+        </template>
       </div>
 
-      <div v-if="pending" class="apex-mma-news-detail-loading">
+      <div v-if="pending" class="apex-mma-posts-detail-loading">
         Đang tải bài viết...
       </div>
 
-      <div v-else-if="error || !newsDetail" class="apex-mma-news-detail-error">
+      <div v-else-if="error || !newsDetail" class="apex-mma-posts-detail-error">
         Bài viết không tồn tại hoặc đã bị xoá.
       </div>
 
       <template v-else>
-        <h1 class="apex-mma-news-detail-title">
+        <h1 class="apex-mma-posts-detail-title">
           {{ newsDetail.title }}
         </h1>
 
-        <div class="apex-mma-news-detail-meta">
-          <span class="apex-mma-news-detail-author">{{
-            newsDetail.author
-          }}</span>
-          <span class="apex-mma-news-detail-dot">•</span>
-          <span class="apex-mma-news-detail-date">
+        <div class="apex-mma-posts-detail-meta">
+          <span class="apex-mma-posts-detail-author">{{ newsDetail.author }}</span>
+          <span class="apex-mma-posts-detail-dot">•</span>
+          <span class="apex-mma-posts-detail-date">
             {{ publishedAtText }}
           </span>
           <template v-if="newsDetail.readingTime">
-            <span class="apex-mma-news-detail-dot">•</span>
-            <span class="apex-mma-news-detail-reading">
+            <span class="apex-mma-posts-detail-dot">•</span>
+            <span class="apex-mma-posts-detail-reading">
               {{ newsDetail.readingTime }}
             </span>
           </template>
         </div>
 
-        <!-- <div
-          v-if="newsDetail.image"
-          class="apex-mma-news-detail-cover-wrap"
-          @click="openCoverPreview"
-        >
-          <NuxtImg
-            :src="newsDetail.image"
-            :alt="newsDetail.title"
-            class="apex-mma-news-detail-cover"
-          />
-        </div> -->
-
-        <article class="apex-mma-news-detail-content">
-          <p class="apex-mma-news-detail-paragraph" v-html="paragraphs">
-          </p>
+        <article class="apex-mma-posts-detail-content">
+          <p class="apex-mma-posts-detail-paragraph" v-html="paragraphs" />
         </article>
-
-        <!-- <ApexMmaImagePreview
-          v-if="newsDetail?."
-          v-model:visible="isCoverPreviewVisible"
-          :image-src="newsDetail.image"
-          :image-alt="newsDetail.title"
-        /> -->
       </template>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { formatDateTime } from "@/utils";
-// import { NuxtImg } from "#components";
-// import ApexMmaImagePreview from "@/components/common/ApexMmaImagePreview.vue";
 
 const route = useRoute();
-
 const slug = computed(() => route.params.slug as string);
+
+const { getBySlug } = usePostCategories();
+
 const { newsDetail, pending, error } = usePostsDetail(slug);
+
+const detailCategory = computed(() => getBySlug(newsDetail.value?.categorySlug));
 
 const publishedAtText = computed(() => {
   const raw = newsDetail.value?.publishedAt;
   if (!raw) return "";
-  // DTO hiện trả về dạng ISO/yyyy-mm-dd => format hiển thị theo locale vi-VN
   return formatDateTime(raw);
 });
 
@@ -89,75 +75,58 @@ const paragraphs = computed(() => {
   return newsDetail.value.content;
 });
 
-const isCoverPreviewVisible = ref(false);
-
-const openCoverPreview = () => {
-  // if (newsDetail.value?.image) {
-  //   isCoverPreviewVisible.value = true;
-  // }
-};
-
 useSeoMeta({
-  title: computed(
-    () => newsDetail.value?.title ?? "Chi tiết bài viết | APEX MMA"
-  ),
-  ogTitle: computed(
-    () => newsDetail.value?.title ?? "Chi tiết bài viết | APEX MMA"
-  ),
+  title: computed(() => newsDetail.value?.title ?? "Chi tiết bài viết | APEX MMA"),
+  ogTitle: computed(() => newsDetail.value?.title ?? "Chi tiết bài viết | APEX MMA"),
   description: computed(() => newsDetail.value?.desc ?? ""),
   ogDescription: computed(() => newsDetail.value?.desc ?? ""),
-  // ogImage: computed(() => newsDetail.value?.image ?? ""),
 });
 </script>
 
 <style scoped lang="scss">
-.apex-mma-news-detail-section {
+.apex-mma-posts-detail-page {
   padding: 16px 12px 40px;
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-.apex-mma-news-detail-container {
+.apex-mma-posts-detail-page__container {
   width: 100%;
   max-width: 860px;
 }
 
-.apex-mma-news-detail-breadcrumb {
+.apex-mma-posts-detail-page__breadcrumb {
   font-size: 13px;
   color: #6b7280;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
-.apex-mma-news-detail-breadcrumb-link {
+.apex-mma-posts-detail-page__breadcrumb-link {
   color: #2563eb;
   text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
-.apex-mma-news-detail-breadcrumb-sep {
+.apex-mma-posts-detail-page__breadcrumb-sep {
   color: #9ca3af;
 }
 
-.apex-mma-news-detail-breadcrumb-current {
-  color: #4b5563;
-}
+/* (breadcrumb category link render qua breadcrumb) */
 
-.apex-mma-news-detail-title {
+/* Detail styles (copy từ page cũ, đổi prefix) */
+.apex-mma-posts-detail-title {
   font-size: 26px;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.3;
   color: #111827;
   margin-bottom: 12px;
 }
 
-.apex-mma-news-detail-meta {
+.apex-mma-posts-detail-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -167,70 +136,55 @@ useSeoMeta({
   margin-bottom: 16px;
 }
 
-.apex-mma-news-detail-author {
+.apex-mma-posts-detail-author {
   font-weight: 600;
 }
 
-.apex-mma-news-detail-dot {
+.apex-mma-posts-detail-dot {
   color: #d1d5db;
 }
 
-.apex-mma-news-detail-reading {
+.apex-mma-posts-detail-reading {
   font-style: italic;
 }
 
-.apex-mma-news-detail-cover-wrap {
-  width: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 20px;
-  cursor: zoom-in;
-}
-
-.apex-mma-news-detail-cover {
-  width: 100%;
-  display: block;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-}
-
-.apex-mma-news-detail-content {
+.apex-mma-posts-detail-content {
   font-size: 15px;
   line-height: 1.7;
   color: #111827;
 }
 
-.apex-mma-news-detail-paragraph {
+.apex-mma-posts-detail-paragraph {
   margin-bottom: 14px;
 }
 
-.apex-mma-news-detail-loading,
-.apex-mma-news-detail-error {
+.apex-mma-posts-detail-loading,
+.apex-mma-posts-detail-error {
   padding: 12px 14px;
   border-radius: 8px;
   font-size: 14px;
 }
 
-.apex-mma-news-detail-loading {
+.apex-mma-posts-detail-loading {
   background: #eff6ff;
   color: #1d4ed8;
 }
 
-.apex-mma-news-detail-error {
+.apex-mma-posts-detail-error {
   background: #fef2f2;
   color: #b91c1c;
 }
 
 @media (min-width: 768px) {
-  .apex-mma-news-detail-section {
+  .apex-mma-posts-detail-page {
     padding-top: 24px;
   }
 
-  .apex-mma-news-detail-title {
+  .apex-mma-posts-detail-title {
     font-size: 30px;
   }
 
-  .apex-mma-news-detail-content {
+  .apex-mma-posts-detail-content {
     font-size: 16px;
   }
 }

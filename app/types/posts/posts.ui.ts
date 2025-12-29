@@ -26,4 +26,25 @@ export interface PostsDetail {
   publishedAt: string
   tags?: string[]
   readingTime?: string
+  /**
+   * Category slug của bài viết (để render breadcrumb + list theo loại).
+   * Hiện tại được fake ở FE, về sau backend sẽ trả về thật.
+   */
+  categorySlug?: string
+}
+
+export interface PostsCategory {
+  slug: string
+  label: string
+  description?: string
+}
+
+export interface PostsListItem {
+  slug: string
+  title: string
+  desc?: string
+  author: string | null
+  image?: string
+  publishedAt?: string
+  categorySlug?: string
 }

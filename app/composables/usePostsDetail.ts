@@ -1,9 +1,20 @@
 import { computed, unref, type MaybeRef } from "vue";
 import type { PostsDetailDto } from "~/types/posts/posts.server";
 import type { PostsDetail } from "~/types/posts/posts.ui";
+import { usePostCategories } from "~/composables/usePostCategories";
 
-export const usePostsDetail = (slug: MaybeRef<string>) => {
+type UsePostsDetailOptions = {
+  /**
+   * Cho phép bật/tắt fetch (tránh gọi API khi route `/posts/[slug]` đang là category page).
+   */
+  enabled?: MaybeRef<boolean>;
+};
+
+export const usePostsDetail = (slug: MaybeRef<string>, options: UsePostsDetailOptions = {}) => {
   const slugRef = computed(() => unref(slug));
+  const enabledRef = computed(() => unref(options.enabled) !== false);
+
+  const { getFakeCategorySlugForPostSlug } = usePostCategories();
 
   // Key phải phụ thuộc vào slug để tránh Nuxt cache sai giữa các bài.
   // Nếu dùng key cố định, lần đầu fetch ra `null` có thể bị cache và các lần sau không fetch lại.
@@ -14,6 +25,7 @@ export const usePostsDetail = (slug: MaybeRef<string>) => {
     async () => {
       const s = slugRef.value?.trim();
       if (!s) return null;
+      if (!enabledRef.value) return null;
 
       const dto = await $fetch<PostsDetailDto>(
         `/api/posts/slug/${encodeURIComponent(s)}`
@@ -22,7 +34,7 @@ export const usePostsDetail = (slug: MaybeRef<string>) => {
       return mapClientPostDetailToNewsDetail(dto);
     },
     {
-      watch: [slugRef],
+      watch: [slugRef, enabledRef],
     }
   );
 
@@ -63,6 +75,7 @@ export const usePostsDetail = (slug: MaybeRef<string>) => {
       publishedAt: dto.publishedAt ?? "",
       readingTime: dto.timeToRead ? `${dto.timeToRead} phút đọc` : undefined,
       tags: undefined,
+      categorySlug: getFakeCategorySlugForPostSlug(slugRef.value),
     };
   };
 
