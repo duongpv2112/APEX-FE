@@ -26,4 +26,22 @@ export interface PostsDetailDto {
   likeCount: number
   commentCount: number
   publishedAt: string | null
+  category?: PostsCategoryDto | null
+}
+
+export interface PostsCategoryDto {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  parentId: string | null;
+  sortOrder: number;
+}
+
+export interface PostsByCategoryDto {
+  category: {
+    name: string;
+    slug: string;
+  };
+  items: HomePostsDto[];
 }

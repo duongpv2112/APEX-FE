@@ -25,11 +25,11 @@
       </div>
 
       <template v-else>
-        <h1 class="apex-mma-posts-detail-title">
+        <h1 class="apex-mma-posts-detail-title apex-mma-title">
           {{ newsDetail.title }}
         </h1>
 
-        <div class="apex-mma-posts-detail-meta">
+        <div class="apex-mma-posts-detail-meta apex-mma-text">
           <span class="apex-mma-posts-detail-author">{{ newsDetail.author }}</span>
           <span class="apex-mma-posts-detail-dot">•</span>
           <span class="apex-mma-posts-detail-date">
@@ -43,8 +43,9 @@
           </template>
         </div>
 
-        <article class="apex-mma-posts-detail-content">
-          <p class="apex-mma-posts-detail-paragraph" v-html="paragraphs" />
+        <article class="apex-mma-posts-detail-content apex-mma-text">
+          <!-- contentHtml từ backend có thể là nhiều thẻ <p>, <img>, ... => render thẳng để tránh mismatch SSR/hydration -->
+          <div class="apex-mma-posts-detail-paragraph" v-html="newsDetail.content" />
         </article>
       </template>
     </div>
@@ -68,11 +69,6 @@ const publishedAtText = computed(() => {
   const raw = newsDetail.value?.publishedAt;
   if (!raw) return "";
   return formatDateTime(raw);
-});
-
-const paragraphs = computed(() => {
-  if (!newsDetail.value?.content) return [];
-  return newsDetail.value.content;
 });
 
 useSeoMeta({

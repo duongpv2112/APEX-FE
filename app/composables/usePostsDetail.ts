@@ -1,7 +1,6 @@
 import { computed, unref, type MaybeRef } from "vue";
 import type { PostsDetailDto } from "~/types/posts/posts.server";
 import type { PostsDetail } from "~/types/posts/posts.ui";
-import { usePostCategories } from "~/composables/usePostCategories";
 
 type UsePostsDetailOptions = {
   /**
@@ -13,8 +12,6 @@ type UsePostsDetailOptions = {
 export const usePostsDetail = (slug: MaybeRef<string>, options: UsePostsDetailOptions = {}) => {
   const slugRef = computed(() => unref(slug));
   const enabledRef = computed(() => unref(options.enabled) !== false);
-
-  const { getFakeCategorySlugForPostSlug } = usePostCategories();
 
   // Key phải phụ thuộc vào slug để tránh Nuxt cache sai giữa các bài.
   // Nếu dùng key cố định, lần đầu fetch ra `null` có thể bị cache và các lần sau không fetch lại.
@@ -75,7 +72,7 @@ export const usePostsDetail = (slug: MaybeRef<string>, options: UsePostsDetailOp
       publishedAt: dto.publishedAt ?? "",
       readingTime: dto.timeToRead ? `${dto.timeToRead} phút đọc` : undefined,
       tags: undefined,
-      categorySlug: getFakeCategorySlugForPostSlug(slugRef.value),
+      categorySlug: dto.category?.slug ?? undefined,
     };
   };
 

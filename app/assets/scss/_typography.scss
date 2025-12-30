@@ -1,0 +1,25 @@
+@use "@/assets/scss/_variables.scss" as *;
+
+// =============================
+// Typography utilities (global)
+// Quy ước: luôn prefix `apex-mma-`
+// =============================
+
+// Title (Be Vietnam Pro 700)
+.apex-mma-title {
+  font-family: $apex-mma-font-family-heading;
+  font-weight: $apex-mma-font-weight-heading;
+}
+
+// Text / Body (Inter 400)
+.apex-mma-text {
+  font-family: $apex-mma-font-family-body;
+  font-weight: $apex-mma-font-weight-body;
+}
+
+// Quote / Highlight (Roboto Slab 400)
+.apex-mma-quote-text {
+  font-family: $apex-mma-font-family-quote;
+  font-weight: $apex-mma-font-weight-quote;
+}
+

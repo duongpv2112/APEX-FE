@@ -3,6 +3,28 @@ import { fileURLToPath } from "node:url";
 export default defineNuxtConfig({
   ssr: true,
 
+  app: {
+    head: {
+      link: [
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "",
+        },
+        {
+          rel: "stylesheet",
+          href:
+            "https://fonts.googleapis.com/css2?" +
+            "family=Be+Vietnam+Pro:wght@700&" +
+            "family=Inter:wght@400&" +
+            "family=Roboto+Slab:wght@400&" +
+            "display=swap",
+        },
+      ],
+    },
+  },
+
   alias: {
     "@": fileURLToPath(new URL("./app", import.meta.url)),
   },

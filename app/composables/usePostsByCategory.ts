@@ -1,7 +1,6 @@
 import { computed, unref, type MaybeRef } from "vue";
-import type { HomePostsDto } from "~/types/posts/posts.server";
+import type { HomePostsDto, PostsByCategoryDto } from "~/types/posts/posts.server";
 import type { PostsListItem } from "~/types/posts/posts.ui";
-import { usePostCategories } from "~/composables/usePostCategories";
 
 type UsePostsByCategoryOptions = {
   /**
@@ -13,11 +12,7 @@ type UsePostsByCategoryOptions = {
 
 /**
  * Lấy danh sách bài viết theo loại.
- * Hiện tại CHƯA có API thật => tạm thời dùng endpoint home để có data hiển thị.
- *
- * TODO: Khi backend có API, thay thế fetcher bằng:
- * - GET `${apiBaseUrl}/api/public/posts?categorySlug=${categorySlug}&skip=0&take=...`
- * hoặc endpoint tương đương mà bạn cung cấp.
+ * - Lấy từ backend qua Nitro proxy `/api/posts/category/{slug}`.
  */
 export const usePostsByCategory = (
   categorySlug: MaybeRef<string>,
@@ -25,8 +20,6 @@ export const usePostsByCategory = (
 ) => {
   const categorySlugRef = computed(() => unref(categorySlug));
   const enabledRef = computed(() => unref(options.enabled) !== false);
-
-  const { isCategorySlug, getFakeCategorySlugForPostSlug } = usePostCategories();
 
   const asyncKey = computed(
     () => `apex-posts-category:${categorySlugRef.value || ""}`
@@ -38,19 +31,12 @@ export const usePostsByCategory = (
       const slug = categorySlugRef.value?.trim();
       if (!slug) return [];
       if (!enabledRef.value) return [];
-      if (!isCategorySlug(slug)) return [];
 
-      // Tạm thời reuse endpoint home để có list hiển thị.
-      const res = await $fetch<HomePostsDto[]>("/api/posts/home/posts", {
-        query: { skip: 0, take: 12 },
-      });
+      const res = await $fetch<PostsByCategoryDto>(
+        `/api/posts/category/${encodeURIComponent(slug)}`
+      );
 
-      // Fake categorySlug và lọc theo category page.
-      const items = (res ?? [])
-        .map((dto) => mapHomePostToListItem(dto, getFakeCategorySlugForPostSlug))
-        .filter((x) => x.categorySlug === slug);
-
-      return items;
+      return (res?.items ?? []).map(mapHomePostToListItem);
     },
     {
       watch: [categorySlugRef, enabledRef],
@@ -67,12 +53,7 @@ export const usePostsByCategory = (
   };
 };
 
-const mapHomePostToListItem = (
-  dto: HomePostsDto,
-  getFakeCategorySlugForPostSlug: (postSlug: string | null | undefined) =>
-    | string
-    | undefined
-): PostsListItem => {
+const mapHomePostToListItem = (dto: HomePostsDto): PostsListItem => {
   return {
     slug: dto.slug ?? "",
     title: dto.title ?? "",
@@ -80,6 +61,5 @@ const mapHomePostToListItem = (
     author: dto.author?.fullName ?? null,
     image: dto.thumbnail ?? "",
     publishedAt: dto.publishedAt ?? undefined,
-    categorySlug: getFakeCategorySlugForPostSlug(dto.slug),
   };
 };

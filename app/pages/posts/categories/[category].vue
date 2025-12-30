@@ -1,23 +1,32 @@
 <template>
   <section class="apex-mma-posts-category-page">
     <div class="apex-mma-posts-category-page__container">
+      <div v-if="pendingCategories" class="apex-mma-posts-category-page__loading apex-mma-text">
+        Đang tải danh mục...
+      </div>
+
+      <div v-else-if="errorCategories" class="apex-mma-posts-category-page__error apex-mma-text">
+        Không tải được danh mục.
+      </div>
+
       <ApexMmaPostsNavbar
+        v-else
         :categories="categories"
         :active-slug="categorySlug"
       />
 
-      <h1 class="apex-mma-posts-category-page__title">
+      <h1 class="apex-mma-posts-category-page__title apex-mma-title">
         {{ activeCategory?.label ?? "Bài viết" }}
       </h1>
-      <p v-if="activeCategory?.description" class="apex-mma-posts-category-page__desc">
+      <p v-if="activeCategory?.description" class="apex-mma-posts-category-page__desc apex-mma-text">
         {{ activeCategory.description }}
       </p>
 
-      <div v-if="pendingList" class="apex-mma-posts-category-page__loading">
+      <div v-if="pendingList" class="apex-mma-posts-category-page__loading apex-mma-text">
         Đang tải danh sách bài viết...
       </div>
 
-      <div v-else-if="errorList" class="apex-mma-posts-category-page__error">
+      <div v-else-if="errorList" class="apex-mma-posts-category-page__error apex-mma-text">
         Không tải được danh sách bài viết.
       </div>
 
@@ -29,11 +38,11 @@
           :to="{ name: 'posts-slug', params: { slug: item.slug } }"
         >
           <div class="apex-mma-posts-category-page__card-body">
-            <h3 class="apex-mma-posts-category-page__card-title">{{ item.title }}</h3>
-            <p v-if="item.desc" class="apex-mma-posts-category-page__card-desc">
+            <h3 class="apex-mma-posts-category-page__card-title apex-mma-title">{{ item.title }}</h3>
+            <p v-if="item.desc" class="apex-mma-posts-category-page__card-desc apex-mma-text">
               {{ item.desc }}
             </p>
-            <div class="apex-mma-posts-category-page__card-meta">
+            <div class="apex-mma-posts-category-page__card-meta apex-mma-text">
               <span v-if="item.author" class="apex-mma-posts-category-page__card-author">
                 {{ item.author }}
               </span>
@@ -44,7 +53,7 @@
           </div>
         </NuxtLink>
 
-        <div v-if="!listItems.length" class="apex-mma-posts-category-page__empty">
+        <div v-if="!listItems.length" class="apex-mma-posts-category-page__empty apex-mma-text">
           Chưa có bài viết cho mục này.
         </div>
       </div>
@@ -60,19 +69,28 @@ import ApexMmaPostsNavbar from "~/components/posts/ApexMmaPostsNavbar.vue";
 const route = useRoute();
 const categorySlug = computed(() => route.params.category as string);
 
-const { categories, getBySlug, isCategorySlug } = usePostCategories();
+const {
+  categories,
+  pending: pendingCategories,
+  error: errorCategories,
+  getBySlug,
+} = usePostCategories();
 const activeCategory = computed(() => getBySlug(categorySlug.value));
-
-// Nếu slug không thuộc category fix cứng, trả 404 để tránh url rác.
-if (!isCategorySlug(categorySlug.value)) {
-  throw createError({ statusCode: 404, statusMessage: "Category not found" });
-}
 
 const {
   items: listItems,
   pending: pendingList,
   error: errorList,
 } = usePostsByCategory(categorySlug);
+
+// Nếu backend trả lỗi 404 cho slug không hợp lệ => trả 404 page.
+watchEffect(() => {
+  const err: any = errorList.value;
+  const statusCode = err?.statusCode ?? err?.status ?? err?.response?.status;
+  if (statusCode === 404) {
+    throw createError({ statusCode: 404, statusMessage: "Category not found" });
+  }
+});
 
 useSeoMeta({
   title: computed(
@@ -217,4 +235,3 @@ useSeoMeta({
   }
 }
 </style>
-

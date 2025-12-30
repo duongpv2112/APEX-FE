@@ -2,7 +2,7 @@
   <div>
     <section class="apex-mma-fact-section">
       <div class="apex-mma-fact-header">
-        <span class="apex-mma-fact-title">APEX Fact</span>
+        <span class="apex-mma-fact-title apex-mma-title">APEX Fact</span>
         <a class="apex-mma-fact-viewall" href="#">Xem tất cả</a>
       </div>
       <ClientOnly>
@@ -89,7 +89,7 @@
                   class="apex-mma-news-main-title-link"
                   :to="{ name: 'posts-slug', params: { slug: mainNews.slug } }"
                 >
-                  <div class="apex-mma-news-main-title">
+                  <div class="apex-mma-news-main-title apex-mma-title">
                     {{ mainNews.title }}
                   </div>
                 </NuxtLink>
@@ -174,7 +174,7 @@
         <!-- Cột phải: Xem nhanh -->
         <div class="apex-mma-news-quick">
           <div class="apex-mma-news-quick-header">
-            <span class="apex-mma-news-quick-title">Xem nhanh</span>
+            <span class="apex-mma-news-quick-title apex-mma-title">Xem nhanh</span>
             <a class="apex-mma-news-quick-viewall" href="#">Xem tất cả</a>
           </div>
           <div class="apex-mma-news-quick-list">
@@ -184,7 +184,7 @@
               class="apex-mma-news-quick-item"
             >
               <div class="apex-mma-news-quick-info">
-                <div class="apex-mma-news-quick-title2">{{ item.title }}</div>
+                <div class="apex-mma-news-quick-title2 apex-mma-title">{{ item.title }}</div>
                 <div v-if="item.image" class="apex-mma-news-quick-thumb">
                   <NuxtImg :src="item.image" :alt="item.title" />
                 </div>
@@ -202,7 +202,7 @@
         <!-- Bên trái: Bài nổi bật -->
         <div class="apex-mma-featured-left">
           <div class="apex-mma-featured-header">
-            <span class="apex-mma-featured-title">Bài nổi bật</span>
+            <span class="apex-mma-featured-title apex-mma-title">Bài nổi bật</span>
             <a class="apex-mma-featured-viewall" href="#">Xem tất cả</a>
           </div>
           <div class="apex-mma-featured-list">
@@ -211,9 +211,9 @@
               :key="idx"
               class="apex-mma-featured-item"
             >
-              <div class="apex-mma-featured-rank">#{{ idx + 1 }}</div>
+              <div class="apex-mma-featured-rank apex-mma-title">#{{ idx + 1 }}</div>
               <div class="apex-mma-featured-content">
-                <div class="apex-mma-featured-headline">{{ item.title }}</div>
+                <div class="apex-mma-featured-headline apex-mma-title">{{ item.title }}</div>
                 <div class="apex-mma-featured-author">{{ item.author }}</div>
               </div>
             </div>
@@ -303,7 +303,7 @@
         <!-- Bên phải: Thông tin user -->
         <div class="apex-mma-compact-left">
           <div class="apex-mma-compact-header">
-            <span class="apex-mma-compact-title">Tin mới nhất</span>
+            <span class="apex-mma-compact-title apex-mma-title">Tin mới nhất</span>
             <a class="apex-mma-compact-viewall" href="#">Xem tất cả</a>
           </div>
           <div class="apex-mma-compact-list">
@@ -316,7 +316,7 @@
                 <NuxtImg :src="item.image" alt="" />
               </div>
               <div class="apex-mma-compact-body">
-                <div class="apex-mma-compact-title">{{ item.title }}</div>
+                <div class="apex-mma-compact-title apex-mma-title">{{ item.title }}</div>
                 <div class="apex-mma-compact-excerpt" v-if="!isMobile">
                   {{ item.excerpt }}
                 </div>
@@ -336,7 +336,7 @@
         <div class="apex-mma-compact-right">
           <div class="apex-mma-community-card">
             <div class="apex-mma-community-header">
-              <div class="apex-mma-community-title">Cộng đồng</div>
+              <div class="apex-mma-community-title apex-mma-title">Cộng đồng</div>
             </div>
 
             <div class="apex-mma-community-grid">
@@ -930,12 +930,11 @@ useSeoMeta({
 
           .apex-mma-featured-rank {
             font-size: 38px;
-            font-weight: 800;
+            font-weight: 700;
             color: #8a94a6;
             margin-right: 16px;
             min-width: 56px;
             line-height: 1;
-            font-family: "Montserrat", Arial, sans-serif;
           }
 
           .apex-mma-featured-content {
