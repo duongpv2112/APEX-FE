@@ -21,10 +21,33 @@
     - Bỏ object `userInfo` mock tại page
     - Dùng `const { userInfo } = useUserInfo()` để render card user
 
-### Focus hiện tại
+- Đang triển khai UI revamp theo template Newsy (pixel-perfect) cho **Home** trước (Mobile First).
 - Tiếp tục chuẩn hoá pattern lấy dữ liệu cho các khối nội dung ở trang chủ (facts/news/featured/quicklist/community/...) theo hướng:
   1) server/api (mock hoặc thật) -> 2) store (Pinia) -> 3) composable cấp UI -> 4) page/component.
-- Rà soát lại các composable hiện có (`useFacts`, `useNews`, `useFeaturedList`, `useQuickList`, `useCommunity`, `useDisplay`, v.v.) để đảm bảo chúng phù hợp với SSR và có thể dần hội tụ về cùng pattern với `useUserInfo` (ít nhất là về cách xử lý pending/error và nơi đặt logic fetch).
+- Rà soát lại các composable hiện có (`useFacts`, `usePosts`, `useFeaturedList`, `useQuickList`, `useCommunity`, `useDisplay`, v.v.) để đảm bảo chúng phù hợp với SSR và có thể dần hội tụ về cùng pattern với `useUserInfo` (ít nhất là về cách xử lý pending/error và nơi đặt logic fetch).
+- Đảm bảo các composable/stores **SSR-compatible** (không dùng trực tiếp `window`, dùng `onServerPrefetch` khi phù hợp, hoặc `process.client` khi cần phân nhánh).
+
+### Thay đổi gần nhất (30/12/2025)
+- **Bắt đầu implement “Home Pixel-Perfect” theo template Newsy:**
+  - Refactor `app/layouts/default.vue` để dùng các component layout mới:
+    - `ApexMmaSiteHeader`, `ApexMmaOffCanvasNav`, `ApexMmaSiteFooter`, `ApexMmaBackToTop`
+  - Thêm các component Home mới:
+    - `app/components/home/ApexMmaHomeHeroGrid.vue`
+    - `app/components/home/ApexMmaHomeHeroCard.vue`
+    - `app/components/home/ApexMmaHomeSidebarLatestNews.vue`
+    - `app/components/home/ApexMmaHomeSidebarPostItem.vue`
+  - Cập nhật `app/assets/scss/main.scss`:
+    - `.apex-mma-container` Mobile First
+    - `.apex-mma-layout__grid` + `.apex-mma-layout__sidebar` sticky (desktop)
+  - Refactor `app/pages/index.vue` (Home):
+    - Thêm hero grid phía trên
+    - Bọc layout 2 cột (main + sidebar)
+    - Sidebar widget “Latest News” UI-only (tabs placeholder)
+    - Fix padding: dùng container thay vì padding 12px trong từng section
+    - Đổi `<script setup lang="ts">` để hỗ trợ logic canonical
+  - SEO: bổ sung `ogType`, `ogUrl` (nếu có siteUrl)
+  - Runtime config: thêm `runtimeConfig.public.siteUrl` trong `nuxt.config.ts`
+  - Đã chạy `npm run build` thành công sau khi fix TypeScript trong page.
 - Đảm bảo các composable/stores **SSR-compatible** (không dùng trực tiếp `window`, dùng `onServerPrefetch` khi phù hợp, hoặc `process.client` khi cần phân nhánh).
 
 ### Quyết định & cân nhắc quan trọng

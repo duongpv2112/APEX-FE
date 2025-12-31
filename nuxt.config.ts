@@ -43,6 +43,8 @@ export default defineNuxtConfig({
     // Base URL của backend (chỉ dùng server-side). Client sẽ gọi qua Nitro proxy `/api/...`
     apiBaseUrl: process.env.NUXT_API_BASE_URL || "https://localhost:44389",
     public: {
+      // Dùng để set canonical/og:url cho SEO (ưu tiên set qua env NUXT_PUBLIC_SITE_URL)
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "",
       wixApiBase: "",
     },
     private: {},

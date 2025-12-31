@@ -26,6 +26,53 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* =============================
+   Newsy-like foundation (Mobile First)
+   ============================= */
+.apex-mma-container {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+@media (min-width: 768px) {
+  .apex-mma-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (min-width: 992px) {
+  .apex-mma-container {
+    max-width: 1216px;
+  }
+}
+
+/* 2-column layout helpers (Home/Archive) */
+.apex-mma-layout {
+  width: 100%;
+}
+
+.apex-mma-layout__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+@media (min-width: 992px) {
+  .apex-mma-layout__grid {
+    grid-template-columns: minmax(0, 1fr) 350px;
+    gap: 30px;
+    align-items: start;
+  }
+
+  .apex-mma-layout__sidebar {
+    position: sticky;
+    top: 24px;
+  }
+}
+
 img,
 video {
   max-width: 100%;
@@ -59,13 +106,6 @@ a {
 // =============================
 // Layout helpers
 // =============================
-.apex-mma-container {
-  width: 100%;
-  max-width: 1216px;
-  margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
-}
 
 .apex-mma-flex {
   display: flex;

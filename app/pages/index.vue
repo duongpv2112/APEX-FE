@@ -1,5 +1,12 @@
 <template>
   <div>
+    <ApexMmaHomeHeroGrid :items="heroItems" />
+
+    <section class="apex-mma-home-main">
+      <div class="apex-mma-container">
+        <div class="apex-mma-layout__grid">
+          <div class="apex-mma-layout__main">
+            <section class="apex-mma-home-block">
     <section class="apex-mma-fact-section">
       <div class="apex-mma-fact-header">
         <span class="apex-mma-fact-title apex-mma-title">APEX Fact</span>
@@ -361,11 +368,21 @@
       </div>
     </section>
     <!-- KẾT THÚC: apex-mma-compact-list-section -->
+            </section>
+          </div>
+
+          <aside class="apex-mma-layout__sidebar">
+            <ApexMmaHomeSidebarLatestNews :items="sidebarLatest" />
+          </aside>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
+import { useRuntimeConfig } from "#imports";
 import { useDisplay } from "~/composables/useDisplay";
 import { useFacts } from "~/composables/useFacts";
 import { usePosts } from "~/composables/usePosts";
@@ -376,6 +393,8 @@ import { useCommunity } from "~/composables/useCommunity";
 import { useUserInfo } from "~/composables/useUserInfo";
 import { NCarousel, NCarouselItem } from "naive-ui";
 import { NuxtImg } from "#components";
+import ApexMmaHomeHeroGrid from "~/components/home/ApexMmaHomeHeroGrid.vue";
+import ApexMmaHomeSidebarLatestNews from "~/components/home/ApexMmaHomeSidebarLatestNews.vue";
 
 const { factList } = useFacts();
 const {
@@ -418,6 +437,32 @@ const bottomList = computed(() => {
   return isMobile.value ? subNews.value.slice(0, 4) : subNews.value.slice(1);
 });
 
+// Hero grid lấy 4 bài đầu (main + 3 sub) để mimic Newsy hero.
+const heroItems = computed(() => {
+  const items = [
+    {
+      image: mainNews.value?.image ?? "",
+      title: mainNews.value?.title ?? "",
+      author: mainNews.value?.author ?? null,
+      desc: "",
+      slug: mainNews.value?.slug ?? "",
+    },
+    ...(subNews.value ?? []),
+  ];
+  return items.filter((x) => Boolean(x.slug)).slice(0, 4);
+});
+
+const sidebarLatest = computed(() => {
+  return (subNews.value ?? []).filter((x) => Boolean(x.slug)).slice(0, 6);
+});
+
+const config = useRuntimeConfig();
+const canonicalUrl = computed(() => {
+  const base = (config.public as any)?.siteUrl as string;
+  if (!base) return "";
+  return new URL("/", base).toString();
+});
+
 useSeoMeta({
   title: "Trang chủ | APEX MMA",
   ogTitle: "Trang chủ | APEX MMA",
@@ -426,13 +471,23 @@ useSeoMeta({
   ogDescription:
     "Trang chủ APEX MMA - Cập nhật tin tức, bài viết nổi bật và hoạt động cộng đồng.",
   ogImage: computed(() => mainNews.value?.image || ""),
+  ogType: "website",
+  ogUrl: canonicalUrl,
 });
 </script>
 
 <style lang="scss" scoped>
+.apex-mma-home-main {
+  padding: 20px 0 40px;
+}
+
+.apex-mma-home-block {
+  width: 100%;
+}
+
 .apex-mma-fact-section {
   margin: 16px 0;
-  padding: 0 12px;
+  padding: 0;
 
   .apex-mma-fact-header {
     display: flex;
@@ -557,7 +612,7 @@ useSeoMeta({
 
 .apex-mma-news-section {
   margin: 24px 0 0 0;
-  padding: 0 12px;
+  padding: 0;
   width: 100%;
 
   .apex-mma-news-state {
@@ -884,7 +939,7 @@ useSeoMeta({
 
 .apex-mma-featured-section {
   margin: 16px 0 0 0;
-  padding: 0 12px;
+  padding: 0;
   width: 100%;
 
   .apex-mma-featured-container {
@@ -1157,7 +1212,7 @@ useSeoMeta({
 /* Compact list section - mobile first */
 .apex-mma-compact-section {
   margin: 16px 0 40px;
-  padding: 0 12px;
+  padding: 0;
   width: 100%;
 
   .apex-mma-compact-container {

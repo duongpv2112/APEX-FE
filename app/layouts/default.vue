@@ -1,31 +1,26 @@
 <template>
-  <div>
-    <header>
-      <Header></Header>
-    </header>
-    <main>
+  <div class="apex-mma-page">
+    <ApexMmaSiteHeader />
+    <ApexMmaOffCanvasNav />
+
+    <main class="apex-mma-page__main apex-mma-site-main">
       <NuxtPage />
     </main>
-    <footer>
-      <slot name="footer"></slot>
-    </footer>
+
+    <ApexMmaSiteFooter />
+    <ApexMmaBackToTop />
   </div>
 </template>
 
 <script setup>
-import Header from "@/components/layout/Header.vue";
+import ApexMmaSiteHeader from "~/components/layout/ApexMmaSiteHeader.vue";
+import ApexMmaOffCanvasNav from "~/components/layout/ApexMmaOffCanvasNav.vue";
+import ApexMmaSiteFooter from "~/components/layout/ApexMmaSiteFooter.vue";
+import ApexMmaBackToTop from "~/components/layout/ApexMmaBackToTop.vue";
 </script>
 
 <style scoped lang="scss">
-// header {
-//   position: sticky;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-// }
-
-main {
-  max-width: 1216px;
-  margin: 0 auto;
+.apex-mma-site-main {
+  width: 100%;
 }
 </style>

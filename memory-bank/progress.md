@@ -1,6 +1,6 @@
 # progress.md
 
-## Tiến độ dự án & trạng thái cập nhật (tính đến 13/12/2025 20:28 GMT+7)
+## Tiến độ dự án & trạng thái cập nhật (tính đến 30/12/2025)
 
 - Tổng quan: Dự án Nuxt 4 SSR đang được phát triển theo hướng chuẩn hoá luồng dữ liệu: **Nitro endpoint (server/api) -> Pinia store (stores/) -> composable UI (app/composables) -> page/component**.
 - Trong giai đoạn hiện tại, đã bổ sung luồng **User Profile** (mock) và áp dụng vào `app/pages/index.vue`, đồng thời cập nhật Memory Bank để phản ánh pattern này và các bước tiếp theo.
@@ -26,13 +26,32 @@
   - Cập nhật `activeContext.md` để mô tả rõ pattern dữ liệu User Profile và focus mở rộng pattern này cho các khối nội dung khác.
   - Cập nhật `progress.md` (file hiện tại) để ghi nhận trạng thái mới nhất và các todo liên quan.
 
+### UI Revamp Home (Newsy template) – Phase khởi đầu
+- Refactor layout để dùng các component layout mới:
+  - `app/layouts/default.vue` -> `ApexMmaSiteHeader`, `ApexMmaOffCanvasNav`, `ApexMmaSiteFooter`, `ApexMmaBackToTop`
+- Thêm foundation SCSS Mobile First:
+  - `app/assets/scss/main.scss`: `.apex-mma-container`, `.apex-mma-layout__grid`, sticky sidebar (desktop)
+- Thêm các component Home mới (hero + sidebar widget):
+  - `app/components/home/ApexMmaHomeHeroGrid.vue`
+  - `app/components/home/ApexMmaHomeHeroCard.vue`
+  - `app/components/home/ApexMmaHomeSidebarLatestNews.vue`
+  - `app/components/home/ApexMmaHomeSidebarPostItem.vue`
+- Cập nhật Home page:
+  - `app/pages/index.vue` bọc layout 2 cột + hero grid
+  - Đổi `<script setup lang="ts">` để hỗ trợ SEO canonical logic
+- SEO runtime config:
+  - `nuxt.config.ts` thêm `runtimeConfig.public.siteUrl` (đọc từ `NUXT_PUBLIC_SITE_URL`)
+- Build:
+  - `npm run build` pass.
+
 ## Việc cần làm (todo)
-- [ ] Kiểm thử manual trang chủ (SSR/hydration): hard reload nhiều lần để xác nhận user card hiển thị ổn định, không lỗi console.
-- [ ] Chuẩn hoá import path trong `useUserInfo.ts` (hiện đang import store bằng relative `../../stores/user`) theo convention của project/Nuxt (ví dụ alias `~/stores/user` hoặc auto-import store nếu được bật).
-- [ ] Quyết định strategy dữ liệu: tiếp tục mock endpoints khác hay kết nối backend thật cho User Profile và các khối nội dung trên homepage.
-- [ ] (Nếu có auth) rà soát lại `server/api` và `stores` để đồng bộ tài liệu (Memory Bank trước đó có nhắc auth nhưng hiện chưa thấy trong trạng thái working tree).
-- [ ] Tạo commit/PR cho thay đổi user profile flow (endpoint + store + composable + cập nhật index.vue).
-- [ ] Chuẩn hoá luồng dữ liệu cho các khối homepage khác (`useFacts`, `useNews`, `useFeaturedList`, `useQuickList`, `useCommunity`, ...) theo pattern: server/api -> store -> composable -> UI (nếu phù hợp với yêu cầu sản phẩm).
+- [ ] UI Revamp Home: tiếp tục triển khai các block còn lại theo template (pixel-perfect) và tách dần SCSS/page thành component.
+- [ ] Map dữ liệu cho các block Home mới (hero/sidebar/latest/...) theo pattern server/api -> store -> composable -> UI.
+- [ ] Tối ưu hiệu suất Home: `<NuxtImg>` sizes/width/height, hạn chế `ClientOnly`, kiểm tra Lighthouse.
+- [ ] QA responsive (mobile/tablet/desktop) và chỉnh pixel so với template.
+- [ ] Kiểm thử manual trang chủ (SSR/hydration): hard reload nhiều lần để xác nhận user card + các block Home hiển thị ổn định, không lỗi console.
+- [ ] Chuẩn hoá import path trong `useUserInfo.ts` theo convention Nuxt (alias `~/stores/user` hoặc auto-import store nếu được bật).
+- [ ] Quyết định strategy dữ liệu: tiếp tục mock endpoints khác hay kết nối backend thật.
 
 ## Ghi chú kỹ thuật
 - `git status` (ở lần quét trước) cho thấy working tree có:
