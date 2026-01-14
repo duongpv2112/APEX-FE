@@ -49,6 +49,8 @@ export interface PostsListItem {
   title: string
   desc?: string
   author: string | null
+  authorAvatar?: string | null
+  categories?: Array<{ name: string; slug: string }>
   image?: string
   publishedAt?: string
   categorySlug?: string

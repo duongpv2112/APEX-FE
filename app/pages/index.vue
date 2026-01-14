@@ -6,61 +6,20 @@
       <div class="apex-mma-container">
         <div class="apex-mma-layout__grid">
           <div class="apex-mma-layout__main">
-            <section class="apex-mma-compact-section">
-              <div class="apex-mma-compact-container">
-                <div class="apex-mma-compact-left">
-                  <div class="apex-mma-compact-header">
-                    <span class="apex-mma-compact-title apex-mma-title"
-                      >Bài nổi bật</span
-                    >
-                    <a class="apex-mma-compact-viewall" href="#">Xem tất cả</a>
-                  </div>
-                  <div class="apex-mma-compact-list">
-                    <article
-                      v-for="(item, idx) in compactList"
-                      :key="idx"
-                      class="apex-mma-compact-item"
-                    >
-                      <div class="apex-mma-compact-thumb">
-                        <NuxtImg :src="item.image" :alt="item.title" />
-                      </div>
-                      <div class="apex-mma-compact-body">
-                        <div
-                          class="apex-mma-compact-tags"
-                          aria-label="Chuyên mục"
-                        >
-                          <a
-                            v-for="(tag, tagIdx) in compactTags"
-                            :key="`${idx}-${tagIdx}`"
-                            class="apex-mma-compact-tag"
-                            href="#"
-                          >
-                            {{ tag }}
-                          </a>
-                        </div>
-                        <div class="apex-mma-compact-title apex-mma-title">
-                          {{ item.title }}
-                        </div>
-                        <div class="apex-mma-compact-excerpt">
-                          {{ item.excerpt }}
-                        </div>
-                        <div class="apex-mma-compact-author">
-                          <div class="apex-mma-compact-author-avatar">
-                            <NuxtImg
-                              :src="item.authorAvatar"
-                              :alt="item.author"
-                            />
-                          </div>
-                          <div class="apex-mma-compact-author-name">
-                            {{ item.author }}
-                          </div>
-                        </div>
-                      </div>
-                    </article>
-                  </div>
-                </div>
-              </div>
-            </section>
+            <ApexMmaCompactSection
+              category-slug="ufc"
+              :limit="6"
+            />
+
+            <ApexMmaCompactSection
+              category-slug="lion-championship"
+              :limit="6"
+            />
+
+            <ApexMmaCompactSection
+              category-slug="pfl"
+              :limit="6"
+            />
           </div>
 
           <aside class="apex-mma-layout__sidebar">
@@ -73,37 +32,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useRuntimeConfig } from "#imports";
-import { useDisplay } from "~/composables/useDisplay";
-import { useFacts } from "~/composables/useFacts";
 import { usePosts } from "~/composables/usePosts";
-import { useQuickList } from "~/composables/useQuickList";
-import { useFeaturedList } from "~/composables/useFeaturedList";
-import { useCompactList } from "~/composables/useCompactList";
-import { useCommunity } from "~/composables/useCommunity";
-import { useUserInfo } from "~/composables/useUserInfo";
-import { NuxtImg } from "#components";
+import ApexMmaCompactSection from "~/components/posts/ApexMmaCompactSection.vue";
 import ApexMmaHomeHeroGrid from "~/components/home/ApexMmaHomeHeroGrid.vue";
 import ApexMmaHomeSidebarLatestNews from "~/components/home/ApexMmaHomeSidebarLatestNews.vue";
-
-const { factList } = useFacts();
 const {
   mainNews,
   subNews,
-  pending: newsPending,
-  error: newsError,
-  refresh: refreshNews,
 } = usePosts();
-const { quickList } = useQuickList();
-const { featuredList } = useFeaturedList();
-const { compactList } = useCompactList();
-const { communityTotal, communityList } = useCommunity();
-const { userInfo } = useUserInfo();
-const { isMobile, isTablet, isDesktop } = useDisplay();
-
-// Placeholder tags để mimic layout template (sau này map theo category thật)
-const compactTags = ["Featured", "Amazing", "Funny"];
 
 // Hero grid lấy 4 bài đầu (main + 3 sub) để mimic Newsy hero.
 const heroItems = computed(() => {
@@ -873,265 +811,6 @@ useSeoMeta({
   }
 }
 
-/* Compact list section - mobile first */
-.apex-mma-compact-section {
-  padding: 0;
-  width: 100%;
-
-  .apex-mma-compact-container {
-    display: flex;
-    gap: 24px;
-    width: 100%;
-    align-items: flex-start;
-
-    .apex-mma-compact-left {
-      flex: 2;
-      display: flex;
-      flex-direction: column;
-
-      .apex-mma-compact-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .apex-mma-compact-title {
-          font-size: 20px;
-          font-weight: 700;
-          color: #222;
-        }
-
-        .apex-mma-compact-viewall {
-          color: #1976d2;
-          font-size: 14px;
-          text-decoration: none;
-          font-weight: 500;
-        }
-      }
-
-      .apex-mma-compact-list {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        .apex-mma-compact-item {
-          display: flex;
-          gap: 18px;
-          align-items: stretch;
-
-          background: #fff;
-          border: 1px solid #e5e7eb;
-          border-radius: 4px;
-          padding: 18px;
-
-          .apex-mma-compact-thumb {
-            width: 260px;
-            max-width: 260px;
-            border-radius: 3px;
-            overflow: hidden;
-            flex-shrink: 0;
-            cursor: pointer;
-
-            /* đảm bảo ảnh luôn cùng chiều cao như template */
-            aspect-ratio: 16 / 10;
-
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-            }
-          }
-
-          .apex-mma-compact-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            cursor: pointer;
-
-            .apex-mma-compact-tags {
-              display: flex;
-              align-items: center;
-              gap: 12px;
-              flex-wrap: wrap;
-            }
-
-            .apex-mma-compact-tag {
-              font-size: 12px;
-              font-weight: 700;
-              text-decoration: none;
-              color: #2563eb;
-              line-height: 1;
-
-              &:hover {
-                text-decoration: underline;
-              }
-            }
-
-            .apex-mma-compact-title {
-              font-size: 26px;
-              font-weight: 800;
-              color: #222;
-              line-height: 1.18;
-
-              display: -webkit-box;
-              -webkit-line-clamp: 2;
-              -webkit-box-orient: vertical;
-              overflow: hidden;
-
-              &:hover {
-                color: #3986ee;
-              }
-            }
-
-            .apex-mma-compact-excerpt {
-              font-size: 14px;
-              color: #666;
-              line-height: 1.4;
-              display: -webkit-box;
-              -webkit-line-clamp: 2;
-              -webkit-box-orient: vertical;
-              overflow: hidden;
-            }
-
-            .apex-mma-compact-author {
-              margin-top: auto;
-              display: flex;
-              align-items: center;
-              gap: 8px;
-
-              color: #8b95a6;
-
-              .apex-mma-compact-author-avatar {
-                width: 32px;
-                aspect-ratio: 1/1;
-                border-radius: 50%;
-                overflow: hidden;
-
-                img {
-                  width: 100%;
-                  aspect-ratio: 1/1;
-                  object-fit: cover;
-                }
-              }
-
-              .apex-mma-compact-author-name {
-                font-size: 13px;
-                font-weight: 700;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .apex-mma-compact-right {
-      flex: 1;
-      min-width: 260px;
-      max-width: 340px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-
-      .apex-mma-community-card {
-        width: 100%;
-        background: #fff;
-        border: 1px solid #eef1f6;
-        border-radius: 12px;
-        padding: 14px;
-        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-      }
-
-      .apex-mma-community-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
-      }
-
-      .apex-mma-community-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #222;
-      }
-
-      .apex-mma-community-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-
-      .apex-mma-community-item {
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-        color: inherit;
-        transition:
-          transform 0.18s ease,
-          box-shadow 0.18s ease;
-
-        &:hover {
-          transform: translateY(-2px);
-        }
-
-        &:active {
-          transform: translateY(0);
-        }
-      }
-
-      .apex-mma-community-thumb {
-        width: 100%;
-        aspect-ratio: 16/9;
-        border-radius: 8px;
-        overflow: hidden;
-        background: #f1f2f4;
-        border: 1px solid #eef1f6;
-        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
-
-        img {
-          width: 100%;
-          aspect-ratio: 16/9;
-          object-fit: cover;
-        }
-      }
-
-      .apex-mma-community-name {
-        margin-top: 8px;
-        font-size: 14px;
-        font-weight: 700;
-        color: #222;
-        line-height: 1.25;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        min-height: 34px;
-      }
-
-      .apex-mma-community-viewall {
-        display: block;
-        width: 100%;
-        text-align: center;
-        padding: 8px 10px;
-        border-radius: 8px;
-        background: #e9edf3;
-        border: 1px solid #e1e6ee;
-        color: #0f172a;
-        font-weight: 700;
-        text-decoration: none;
-        transition:
-          background 0.2s ease,
-          border-color 0.2s ease;
-
-        &:hover {
-          background: #dde3ec;
-          border-color: #d4dbe7;
-        }
-      }
-    }
-  }
-}
 
 @media (max-width: 600px) {
   .apex-mma-featured-section {
@@ -1191,37 +870,7 @@ useSeoMeta({
     }
   }
 
-  .apex-mma-compact-section {
-    .apex-mma-compact-container {
-      .apex-mma-compact-left {
-        .apex-mma-compact-list {
-          .apex-mma-compact-item {
-            padding: 14px;
-            gap: 12px;
 
-            .apex-mma-compact-thumb {
-              width: 36%;
-              min-width: 150px;
-              max-width: 180px;
-            }
-
-            .apex-mma-compact-body {
-              gap: 6px;
-
-              .apex-mma-compact-title {
-                font-size: 16px;
-                -webkit-line-clamp: 3;
-              }
-
-              .apex-mma-compact-excerpt {
-                display: none;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 /* Tablet */
@@ -1253,30 +902,7 @@ useSeoMeta({
     }
   }
 
-  .apex-mma-compact-section {
-    .apex-mma-compact-container {
-      .apex-mma-compact-left {
-        .apex-mma-compact-list {
-          .apex-mma-compact-item {
-            .apex-mma-compact-thumb {
-              width: 240px;
-              max-width: 240px;
-            }
 
-            .apex-mma-compact-body {
-              .apex-mma-compact-title {
-                font-size: 22px;
-              }
-
-              .apex-mma-compact-excerpt {
-                -webkit-line-clamp: 2;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 /* Tablet lớn -> Desktop */
@@ -1303,35 +929,6 @@ useSeoMeta({
     }
   }
 
-  .apex-mma-compact-section {
-    .apex-mma-compact-container {
-      .apex-mma-compact-left {
-        .apex-mma-compact-list {
-          .apex-mma-compact-item {
-            gap: 24px;
 
-            .apex-mma-compact-thumb {
-              width: 260px;
-              max-width: 260px;
-            }
-
-            .apex-mma-compact-body {
-              .apex-mma-compact-title {
-                font-size: 26px;
-              }
-
-              .apex-mma-compact-excerpt {
-                font-size: 14px;
-              }
-            }
-          }
-        }
-      }
-
-      .apex-mma-compact-right {
-        display: flex;
-      }
-    }
-  }
 }
 </style>

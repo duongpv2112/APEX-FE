@@ -6,7 +6,13 @@ export interface HomePostsDto {
   excerpt: string | null
   coverImage: string | null
   publishedAt: string | null
+  categories?: PostsCategoryRefDto[]
   author: AuthorPostsDto | null
+}
+
+export interface PostsCategoryRefDto {
+  name: string
+  slug: string
 }
 
 export interface AuthorPostsDto {

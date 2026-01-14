@@ -8,6 +8,12 @@ type UsePostsByCategoryOptions = {
    * (Giữ lại để linh hoạt trong tương lai.)
    */
   enabled?: MaybeRef<boolean>;
+
+  /**
+   * Giới hạn số lượng bài viết (forward xuống backend qua query string).
+   * Nếu không truyền, backend sẽ dùng mặc định của nó.
+   */
+  limit?: MaybeRef<number | undefined>;
 };
 
 /**
@@ -20,33 +26,52 @@ export const usePostsByCategory = (
 ) => {
   const categorySlugRef = computed(() => unref(categorySlug));
   const enabledRef = computed(() => unref(options.enabled) !== false);
+  const limitRef = computed(() => unref(options.limit));
 
-  const asyncKey = computed(
-    () => `apex-posts-category:${categorySlugRef.value || ""}`
-  );
+  const asyncKey = computed(() => {
+    const slug = categorySlugRef.value || "";
+    const limit = limitRef.value;
+    return `apex-posts-category:${slug}:limit=${limit ?? "default"}`;
+  });
 
-  const { data, pending, error, refresh } = useAsyncData<PostsListItem[]>(
+  type UsePostsByCategoryData = {
+    category: { name: string; slug: string } | null;
+    items: PostsListItem[];
+  };
+
+  const { data, pending, error, refresh } = useAsyncData<UsePostsByCategoryData>(
     asyncKey,
     async () => {
       const slug = categorySlugRef.value?.trim();
-      if (!slug) return [];
-      if (!enabledRef.value) return [];
+      if (!slug) return { category: null, items: [] };
+      if (!enabledRef.value) return { category: null, items: [] };
+
+      const limit = limitRef.value;
+      const search = new URLSearchParams();
+      if (typeof limit === "number" && Number.isFinite(limit) && limit > 0) {
+        search.set("limit", String(limit));
+      }
 
       const res = await $fetch<PostsByCategoryDto>(
-        `/api/posts/category/${encodeURIComponent(slug)}`
+        `/api/posts/category/${encodeURIComponent(slug)}${search.toString() ? `?${search.toString()}` : ""}`
       );
 
-      return (res?.items ?? []).map(mapHomePostToListItem);
+      return {
+        category: res?.category ? { name: res.category.name, slug: res.category.slug } : null,
+        items: (res?.items ?? []).map(mapHomePostToListItem),
+      };
     },
     {
-      watch: [categorySlugRef, enabledRef],
+      watch: [categorySlugRef, enabledRef, limitRef],
     }
   );
 
-  const items = computed(() => data.value ?? []);
+  const items = computed(() => data.value?.items ?? []);
+  const category = computed(() => data.value?.category ?? null);
 
   return {
     items,
+    category,
     pending,
     error,
     refresh,
@@ -59,6 +84,11 @@ const mapHomePostToListItem = (dto: HomePostsDto): PostsListItem => {
     title: dto.title ?? "",
     desc: dto.excerpt ?? "",
     author: dto.author?.fullName ?? null,
+    authorAvatar: dto.author?.profilePhoto ?? null,
+    categories: (dto.categories ?? []).map((c) => ({
+      name: c.name,
+      slug: c.slug,
+    })),
     image: dto.thumbnail ?? "",
     publishedAt: dto.publishedAt ?? undefined,
   };

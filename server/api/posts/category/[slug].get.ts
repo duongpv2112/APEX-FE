@@ -1,4 +1,4 @@
-import { createError, defineEventHandler, getRouterParam } from "h3";
+import { createError, defineEventHandler, getQuery, getRouterParam } from "h3";
 import { $fetch } from "ofetch";
 
 /**
@@ -11,9 +11,17 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Missing category slug" });
   }
 
+  const query = getQuery(event);
+  const limit = query.limit;
+
   const config = useRuntimeConfig();
   const apiBaseUrl = (config.apiBaseUrl as string) || "";
-  const url = `${apiBaseUrl}/api/public/posts/category/${encodeURIComponent(slug)}`;
+  const search = new URLSearchParams();
+  if (limit !== undefined && limit !== null && String(limit).trim() !== "") {
+    search.set("limit", String(limit));
+  }
+
+  const url = `${apiBaseUrl}/api/public/posts/category/${encodeURIComponent(slug)}${search.toString() ? `?${search.toString()}` : ""}`;
 
   // Dev-only: backend localhost thường dùng cert self-signed -> Node sẽ fail TLS.
   const isDev = process.env.NODE_ENV !== "production";
@@ -50,4 +58,3 @@ export default defineEventHandler(async (event) => {
 
   return json;
 });
-
