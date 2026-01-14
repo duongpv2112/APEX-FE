@@ -1,6 +1,7 @@
 <template>
   <div class="apex-mma-header-navbar">
     <div class="apex-mma-container apex-mma-header-navbar__inner">
+      <ApexMmaHeaderMidBar />
       <nav class="apex-mma-header-navbar__menu" aria-label="Main navigation">
         <NuxtLink
           v-for="c in categories"
@@ -20,6 +21,7 @@
 
 <script setup lang="ts">
 import { usePostCategories } from "~/composables/usePostCategories";
+import ApexMmaHeaderMidBar from "~/components/layout/header/ApexMmaHeaderMidBar.vue";
 
 const { categories } = usePostCategories();
 </script>
@@ -41,6 +43,7 @@ const { categories } = usePostCategories();
   display: flex;
   align-items: center;
   gap: 18px;
+  margin-left: 12px;
   overflow: hidden;
 }
 

@@ -19,6 +19,9 @@ export interface AuthorPostsDto {
 export interface PostsDetailDto {
   author: AuthorPostsDto | null
   contentHtml: string | null
+  excerpt?: string | null
+  thumbnail?: string | null
+  coverImage?: string | null
   timeToRead: number | null
   id: string
   title: string

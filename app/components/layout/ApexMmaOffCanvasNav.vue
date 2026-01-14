@@ -15,16 +15,17 @@
           @click="close"
         />
 
-        <aside class="apex-mma-off-canvas__panel">
-          <button
-            class="apex-mma-off-canvas__close"
-            type="button"
-            aria-label="Close"
-            @click="close"
-          >
-            ×
-          </button>
+        <!-- Close button nằm ngoài panel để giống layout mẫu (X ở góc phải phía trên) -->
+        <button
+          class="apex-mma-off-canvas__close"
+          type="button"
+          aria-label="Close"
+          @click="close"
+        >
+          ×
+        </button>
 
+        <aside class="apex-mma-off-canvas__panel">
           <div class="apex-mma-off-canvas__header">
             <NuxtLink class="apex-mma-off-canvas__brand" to="/" @click="close">
               <NuxtImg
@@ -45,7 +46,8 @@
               :to="{ name: 'posts-categories-category', params: { category: c.slug } }"
               @click="close"
             >
-              {{ c.label }}
+              <span class="apex-mma-off-canvas__nav-item-label">{{ c.label }}</span>
+              <span class="apex-mma-off-canvas__nav-item-icon" aria-hidden="true">›</span>
             </NuxtLink>
           </nav>
 
@@ -85,7 +87,7 @@ const { categories } = usePostCategories();
   position: absolute;
   inset: 0;
   border: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.55);
 }
 
 .apex-mma-off-canvas__panel {
@@ -94,29 +96,39 @@ const { categories } = usePostCategories();
   left: 0;
   height: 100%;
   width: min(86vw, 360px);
-  background: #111827;
-  color: #fff;
-  padding: 18px 16px 16px;
+  background: #ffffff;
+  color: #111827;
+  padding: 18px 0 16px;
   overflow-y: auto;
+  box-shadow: 18px 0 44px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
 }
 
 .apex-mma-off-canvas__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.06);
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 0;
+  background: rgba(0, 0, 0, 0.28);
   color: #fff;
-  font-size: 22px;
+  font-size: 26px;
   line-height: 1;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.apex-mma-off-canvas__close:hover {
+  background: rgba(0, 0, 0, 0.38);
 }
 
 .apex-mma-off-canvas__header {
-  padding: 12px 0 16px;
+  padding: 4px 22px 18px;
 }
 
 .apex-mma-off-canvas__brand {
@@ -125,55 +137,85 @@ const { categories } = usePostCategories();
 }
 
 .apex-mma-off-canvas__brand-img {
-  width: 150px;
+  width: 50px;
   height: auto;
 }
 
 .apex-mma-off-canvas__nav {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px 0 18px;
+  gap: 0;
+  padding: 0;
 }
 
 .apex-mma-off-canvas__nav-item {
-  padding: 12px 10px;
-  border-radius: 10px;
-  color: rgba(255, 255, 255, 0.92);
+  padding: 14px 22px;
+  color: #111827;
   text-decoration: none;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .apex-mma-off-canvas__nav-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.apex-mma-off-canvas__nav-item-label {
+  line-height: 1.1;
+}
+
+.apex-mma-off-canvas__nav-item-icon {
+  color: rgba(17, 24, 39, 0.55);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1;
 }
 
 .apex-mma-off-canvas__footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  padding-top: 12px;
+  margin-top: auto;
+  padding: 18px 22px 0;
 }
 
 .apex-mma-off-canvas__social {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 6px 0 10px;
+  gap: 14px;
+  padding: 10px 0 18px;
 }
 
 .apex-mma-off-canvas__social-link {
-  color: rgba(255, 255, 255, 0.85);
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  color: rgba(17, 24, 39, 0.9);
   text-decoration: none;
   font-weight: 800;
+  line-height: 1;
 }
 
 .apex-mma-off-canvas__social-link:hover {
-  color: #fff;
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .apex-mma-off-canvas__copyright {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(17, 24, 39, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apex-mma-off-canvas__overlay,
+  .apex-mma-off-canvas__panel,
+  .apex-mma-off-canvas__close {
+    transition: none;
+  }
 }
 </style>
 

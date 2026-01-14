@@ -6,368 +6,60 @@
       <div class="apex-mma-container">
         <div class="apex-mma-layout__grid">
           <div class="apex-mma-layout__main">
-            <section class="apex-mma-home-block">
-    <section class="apex-mma-fact-section">
-      <div class="apex-mma-fact-header">
-        <span class="apex-mma-fact-title apex-mma-title">APEX Fact</span>
-        <a class="apex-mma-fact-viewall" href="#">Xem tất cả</a>
-      </div>
-      <ClientOnly>
-        <n-carousel
-          class="apex-mma-fact-carousel"
-          slides-per-view="auto"
-          :space-between="12"
-          :loop="false"
-          :draggable="true"
-          :show-dots="false"
-        >
-          <template v-for="(item, idx) in factList" :key="idx">
-            <n-carousel-item :style="styleCarouselItem">
-              <div
-                class="apex-mma-fact-item"
-                :class="{ 'apex-mma-fact-create': item.isCreate }"
-              >
-                <template v-if="item.isCreate">
-                  <div class="apex-mma-fact-create-icon">
-                    <NuxtImg src="https://i.imgur.com/0y8Ftya.png" alt="Tạo Fact" format="webp" loading="lazy" />
+            <section class="apex-mma-compact-section">
+              <div class="apex-mma-compact-container">
+                <div class="apex-mma-compact-left">
+                  <div class="apex-mma-compact-header">
+                    <span class="apex-mma-compact-title apex-mma-title"
+                      >Bài nổi bật</span
+                    >
+                    <a class="apex-mma-compact-viewall" href="#">Xem tất cả</a>
                   </div>
-                  <div class="apex-mma-fact-create-label">Tạo Fact mới</div>
-                </template>
-                <template v-else>
-                  <div class="apex-mma-fact-avatar-wrap">
-                    <NuxtImg class="apex-mma-fact-avatar" :src="item.avatar" :alt="item.alt" format="webp" fit="cover" loading="lazy" />
-                  </div>
-                  <NuxtImg class="apex-mma-fact-img" :src="item.image" :alt="item.alt" format="webp" fit="cover" loading="lazy" />
-                  <div class="apex-mma-fact-username">{{ item.username }}</div>
-                </template>
-              </div>
-            </n-carousel-item>
-          </template>
-        </n-carousel>
-      </ClientOnly>
-    </section>
-    <!-- BẮT ĐẦU: apex-mma-news-section -->
-    <section class="apex-mma-news-section">
-      <div v-if="newsPending" class="apex-mma-news-state apex-mma-news-loading">
-        Đang tải tin tức...
-      </div>
-
-      <div
-        v-else-if="newsError"
-        class="apex-mma-news-state apex-mma-news-error"
-      >
-        <span class="apex-mma-news-error-text">Không tải được tin tức.</span>
-        <button class="apex-mma-news-error-retry" @click="refreshNews">
-          Thử lại
-        </button>
-      </div>
-
-      <div
-        v-else-if="!mainNews || !mainNews.slug"
-        class="apex-mma-news-state apex-mma-news-empty"
-      >
-        Chưa có bài viết.
-      </div>
-
-      <div v-else class="apex-mma-news-container">
-        <!-- Cột trái: Tin chính -->
-        <div class="apex-mma-news-main">
-          <div class="apex-mma-news-main-top">
-            <!-- Khối trái: Tin chính -->
-            <div
-              class="apex-mma-news-main-top-left"
-              v-if="mainNews && mainNews.slug"
-            >
-              <NuxtLink
-                class="apex-mma-news-main-img-link"
-                :to="{ name: 'posts-slug', params: { slug: mainNews.slug } }"
-              >
-                <NuxtImg
-                  v-if="mainNews.image"
-                  class="apex-mma-news-main-img"
-                  :src="mainNews.image"
-                  :alt="mainNews.title"
-                />
-                <div v-else class="apex-mma-news-img-placeholder" />
-              </NuxtLink>
-
-              <div class="apex-mma-news-main-content">
-                <NuxtLink
-                  class="apex-mma-news-main-title-link"
-                  :to="{ name: 'posts-slug', params: { slug: mainNews.slug } }"
-                >
-                  <div class="apex-mma-news-main-title apex-mma-title">
-                    {{ mainNews.title }}
-                  </div>
-                </NuxtLink>
-
-                <div class="apex-mma-news-main-author">
-                  {{ mainNews.author }}
-                </div>
-              </div>
-            </div>
-            <!-- Khối phải: Tin phụ đầu tiên -->
-            <div
-              class="apex-mma-news-main-top-right"
-              v-if="!isMobile && subNews.length > 0"
-            >
-              <NuxtLink
-                class="apex-mma-news-main-top-right-img-link"
-                :to="{ name: 'posts-slug', params: { slug: subNews[0].slug } }"
-              >
-                <NuxtImg
-                  v-if="subNews[0].image"
-                  class="apex-mma-news-main-top-right-img"
-                  :src="subNews[0].image"
-                  :alt="subNews[0].title"
-                />
-                <div v-else class="apex-mma-news-img-placeholder" />
-              </NuxtLink>
-              <div class="apex-mma-news-main-top-right-content">
-                <NuxtLink
-                  class="apex-mma-news-main-top-right-title-link"
-                  :to="{ name: 'posts-slug', params: { slug: subNews[0].slug } }"
-                >
-                  <div class="apex-mma-news-main-top-right-title">
-                    <p>{{ subNews[0].title }}</p>
-                  </div>
-                </NuxtLink>
-
-                <div class="apex-mma-news-main-top-right-author">
-                  {{ subNews[0].author }}
-                </div>
-                <div class="apex-mma-news-main-top-right-desc">
-                  {{ subNews[0].desc || "..." }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="apex-mma-news-main-bottom"
-            v-if="bottomList && bottomList.length > 0"
-          >
-            <div
-              v-for="(item, idx) in bottomList"
-              :key="idx"
-              class="apex-mma-news-sub-item"
-            >
-              <NuxtLink
-                class="apex-mma-news-sub-img-link"
-                :to="{ name: 'posts-slug', params: { slug: item.slug } }"
-              >
-                <NuxtImg
-                  v-if="item.image"
-                  class="apex-mma-news-sub-img"
-                  :src="item.image"
-                  :alt="item.title"
-                />
-                <div v-else class="apex-mma-news-img-placeholder" />
-              </NuxtLink>
-              <div class="apex-mma-news-sub-content">
-                <NuxtLink
-                  class="apex-mma-news-sub-title-link"
-                  :to="{ name: 'posts-slug', params: { slug: item.slug } }"
-                >
-                  <div class="apex-mma-news-sub-title">
-                    {{ item.title }}
-                  </div>
-                </NuxtLink>
-
-                <div class="apex-mma-news-sub-author">{{ item.author }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Cột phải: Xem nhanh -->
-        <div class="apex-mma-news-quick">
-          <div class="apex-mma-news-quick-header">
-            <span class="apex-mma-news-quick-title apex-mma-title">Xem nhanh</span>
-            <a class="apex-mma-news-quick-viewall" href="#">Xem tất cả</a>
-          </div>
-          <div class="apex-mma-news-quick-list">
-            <div
-              v-for="(item, idx) in quickList"
-              :key="idx"
-              class="apex-mma-news-quick-item"
-            >
-              <div class="apex-mma-news-quick-info">
-                <div class="apex-mma-news-quick-title2 apex-mma-title">{{ item.title }}</div>
-                <div v-if="item.image" class="apex-mma-news-quick-thumb">
-                  <NuxtImg :src="item.image" :alt="item.title" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- KẾT THÚC: apex-mma-news-section -->
-
-    <!-- BẮT ĐẦU: apex-mma-featured-section -->
-    <section class="apex-mma-featured-section">
-      <div class="apex-mma-featured-container">
-        <!-- Bên trái: Bài nổi bật -->
-        <div class="apex-mma-featured-left">
-          <div class="apex-mma-featured-header">
-            <span class="apex-mma-featured-title apex-mma-title">Bài nổi bật</span>
-            <a class="apex-mma-featured-viewall" href="#">Xem tất cả</a>
-          </div>
-          <div class="apex-mma-featured-list">
-            <div
-              v-for="(item, idx) in featuredList"
-              :key="idx"
-              class="apex-mma-featured-item"
-            >
-              <div class="apex-mma-featured-rank apex-mma-title">#{{ idx + 1 }}</div>
-              <div class="apex-mma-featured-content">
-                <div class="apex-mma-featured-headline apex-mma-title">{{ item.title }}</div>
-                <div class="apex-mma-featured-author">{{ item.author }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Bên phải: Thông tin user (cập nhật giao diện giống mockup) -->
-        <div class="apex-mma-featured-right">
-          <div class="apex-mma-featured-user-card">
-            <div class="apex-mma-featured-user-header">
-              <div class="apex-mma-featured-user-avatar">
-                <NuxtImg :src="userInfo.avatar" alt="avatar" />
-              </div>
-              <div class="apex-mma-featured-user-meta">
-                <div class="apex-mma-featured-user-name">
-                  {{ userInfo.name }}
-                </div>
-                <div class="apex-mma-featured-user-label">Tuổi tinhte</div>
-                <div class="apex-mma-featured-user-age">{{ userInfo.age }}</div>
-              </div>
-            </div>
-
-            <div class="apex-mma-featured-divider" />
-
-            <div class="apex-mma-featured-level-row">
-              <div class="apex-mma-level-icon">
-                <div class="apex-mma-level-icon-inner"></div>
-              </div>
-
-              <div class="apex-mma-level-center">
-                <div class="apex-mma-level-chip">{{ userInfo.point }} điểm</div>
-              </div>
-
-              <div class="apex-mma-level-icon">
-                <div class="apex-mma-level-icon-inner"></div>
-              </div>
-            </div>
-
-            <div
-              class="apex-mma-featured-user-progress-bar apex-mma-featured-progress-large"
-            >
-              <div
-                class="apex-mma-featured-user-progress-bar-inner"
-                :style="{ width: userInfo.progress + '%' }"
-              ></div>
-            </div>
-
-            <div class="apex-mma-featured-level-labels">
-              <span class="apex-mma-level-left">Trứng</span>
-              <span class="apex-mma-level-right">GÀ</span>
-            </div>
-
-            <div class="apex-mma-featured-user-desc">
-              Bạn cần hoạt động nhiều để lên hạng
-            </div>
-
-            <div class="apex-mma-featured-user-stats apex-mma-stats-card">
-              <div class="apex-mma-stats-col">
-                <div class="apex-mma-featured-user-stat-label">Bài đã đăng</div>
-                <div class="apex-mma-featured-user-stat-value">
-                  {{ userInfo.posts }}
-                </div>
-              </div>
-              <div class="apex-mma-stats-col">
-                <div class="apex-mma-featured-user-stat-label">Lượt thích</div>
-                <div class="apex-mma-featured-user-stat-value">
-                  {{ userInfo.likes }}
-                </div>
-              </div>
-              <div class="apex-mma-stats-col">
-                <div class="apex-mma-featured-user-stat-label">
-                  Lượt theo dõi
-                </div>
-                <div class="apex-mma-featured-user-stat-value">
-                  {{ userInfo.follows }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- KẾT THÚC: apex-mma-featured-section -->
-
-    <!-- BẮT ĐẦU: apex-mma-compact-section (mới) -->
-    <section class="apex-mma-compact-section">
-      <div class="apex-mma-compact-container">
-        <!-- Bên phải: Thông tin user -->
-        <div class="apex-mma-compact-left">
-          <div class="apex-mma-compact-header">
-            <span class="apex-mma-compact-title apex-mma-title">Tin mới nhất</span>
-            <a class="apex-mma-compact-viewall" href="#">Xem tất cả</a>
-          </div>
-          <div class="apex-mma-compact-list">
-            <div
-              v-for="(item, idx) in compactList"
-              :key="idx"
-              class="apex-mma-compact-item"
-            >
-              <div class="apex-mma-compact-thumb">
-                <NuxtImg :src="item.image" alt="" />
-              </div>
-              <div class="apex-mma-compact-body">
-                <div class="apex-mma-compact-title apex-mma-title">{{ item.title }}</div>
-                <div class="apex-mma-compact-excerpt" v-if="!isMobile">
-                  {{ item.excerpt }}
-                </div>
-                <div class="apex-mma-compact-author">
-                  <div class="apex-mma-compact-author-avatar">
-                    <NuxtImg :src="item.authorAvatar" alt="" />
-                  </div>
-                  <div class="apex-mma-compact-author-name">
-                    {{ item.author }}
+                  <div class="apex-mma-compact-list">
+                    <article
+                      v-for="(item, idx) in compactList"
+                      :key="idx"
+                      class="apex-mma-compact-item"
+                    >
+                      <div class="apex-mma-compact-thumb">
+                        <NuxtImg :src="item.image" :alt="item.title" />
+                      </div>
+                      <div class="apex-mma-compact-body">
+                        <div
+                          class="apex-mma-compact-tags"
+                          aria-label="Chuyên mục"
+                        >
+                          <a
+                            v-for="(tag, tagIdx) in compactTags"
+                            :key="`${idx}-${tagIdx}`"
+                            class="apex-mma-compact-tag"
+                            href="#"
+                          >
+                            {{ tag }}
+                          </a>
+                        </div>
+                        <div class="apex-mma-compact-title apex-mma-title">
+                          {{ item.title }}
+                        </div>
+                        <div class="apex-mma-compact-excerpt">
+                          {{ item.excerpt }}
+                        </div>
+                        <div class="apex-mma-compact-author">
+                          <div class="apex-mma-compact-author-avatar">
+                            <NuxtImg
+                              :src="item.authorAvatar"
+                              :alt="item.author"
+                            />
+                          </div>
+                          <div class="apex-mma-compact-author-name">
+                            {{ item.author }}
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <!-- Bên phải: Thông tin user -->
-        <div class="apex-mma-compact-right">
-          <div class="apex-mma-community-card">
-            <div class="apex-mma-community-header">
-              <div class="apex-mma-community-title apex-mma-title">Cộng đồng</div>
-            </div>
-
-            <div class="apex-mma-community-grid">
-              <a
-                v-for="(item, idx) in communityList"
-                :key="idx"
-                class="apex-mma-community-item"
-                :href="item.href"
-              >
-                <div class="apex-mma-community-thumb">
-                  <NuxtImg :src="item.image" :alt="item.title" />
-                </div>
-                <div class="apex-mma-community-name">{{ item.title }}</div>
-              </a>
-            </div>
-
-            <a class="apex-mma-community-viewall" href="#">
-              Xem tất cả ({{ communityTotal }})
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- KẾT THÚC: apex-mma-compact-list-section -->
             </section>
           </div>
 
@@ -391,7 +83,6 @@ import { useFeaturedList } from "~/composables/useFeaturedList";
 import { useCompactList } from "~/composables/useCompactList";
 import { useCommunity } from "~/composables/useCommunity";
 import { useUserInfo } from "~/composables/useUserInfo";
-import { NCarousel, NCarouselItem } from "naive-ui";
 import { NuxtImg } from "#components";
 import ApexMmaHomeHeroGrid from "~/components/home/ApexMmaHomeHeroGrid.vue";
 import ApexMmaHomeSidebarLatestNews from "~/components/home/ApexMmaHomeSidebarLatestNews.vue";
@@ -409,33 +100,10 @@ const { featuredList } = useFeaturedList();
 const { compactList } = useCompactList();
 const { communityTotal, communityList } = useCommunity();
 const { userInfo } = useUserInfo();
-const { _, isMobile, isTablet, isDesktop } = useDisplay();
+const { isMobile, isTablet, isDesktop } = useDisplay();
 
-const styleCarouselItem = computed(() => {
-  let widthCarousel = "108px";
-
-  switch (true) {
-    case isDesktop.value:
-      widthCarousel = "108px";
-      break;
-    case isTablet.value:
-      widthCarousel = "118px";
-      break;
-    case isMobile.value:
-      widthCarousel = "120px";
-      break;
-    default:
-      break;
-  }
-  return {
-    width: widthCarousel,
-  };
-});
-
-const bottomList = computed(() => {
-  if (!subNews.value) return [];
-  return isMobile.value ? subNews.value.slice(0, 4) : subNews.value.slice(1);
-});
+// Placeholder tags để mimic layout template (sau này map theo category thật)
+const compactTags = ["Featured", "Amazing", "Funny"];
 
 // Hero grid lấy 4 bài đầu (main + 3 sub) để mimic Newsy hero.
 const heroItems = computed(() => {
@@ -479,10 +147,6 @@ useSeoMeta({
 <style lang="scss" scoped>
 .apex-mma-home-main {
   padding: 20px 0 40px;
-}
-
-.apex-mma-home-block {
-  width: 100%;
 }
 
 .apex-mma-fact-section {
@@ -1211,7 +875,6 @@ useSeoMeta({
 
 /* Compact list section - mobile first */
 .apex-mma-compact-section {
-  margin: 16px 0 40px;
   padding: 0;
   width: 100%;
 
@@ -1248,26 +911,32 @@ useSeoMeta({
       .apex-mma-compact-list {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
 
         .apex-mma-compact-item {
           display: flex;
-          gap: 12px;
-          align-items: flex-start;
-          padding: 12px 0;
+          gap: 18px;
+          align-items: stretch;
+
+          background: #fff;
+          border: 1px solid #e5e7eb;
+          border-radius: 4px;
+          padding: 18px;
 
           .apex-mma-compact-thumb {
-            width: 100%;
-            max-width: 240px;
-            aspect-ratio: 16/9;
-            border-radius: 8px;
+            width: 260px;
+            max-width: 260px;
+            border-radius: 3px;
             overflow: hidden;
             flex-shrink: 0;
             cursor: pointer;
 
+            /* đảm bảo ảnh luôn cùng chiều cao như template */
+            aspect-ratio: 16 / 10;
+
             img {
               width: 100%;
-              aspect-ratio: 16/9;
+              height: 100%;
               object-fit: cover;
             }
           }
@@ -1276,14 +945,38 @@ useSeoMeta({
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
 
-            .apex-mma-compact-title {
-              font-size: 18px;
+            .apex-mma-compact-tags {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              flex-wrap: wrap;
+            }
+
+            .apex-mma-compact-tag {
+              font-size: 12px;
               font-weight: 700;
+              text-decoration: none;
+              color: #2563eb;
+              line-height: 1;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+
+            .apex-mma-compact-title {
+              font-size: 26px;
+              font-weight: 800;
               color: #222;
-              line-height: 1.25;
+              line-height: 1.18;
+
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
 
               &:hover {
                 color: #3986ee;
@@ -1295,15 +988,18 @@ useSeoMeta({
               color: #666;
               line-height: 1.4;
               display: -webkit-box;
-              -webkit-line-clamp: 4;
+              -webkit-line-clamp: 2;
               -webkit-box-orient: vertical;
               overflow: hidden;
             }
 
             .apex-mma-compact-author {
+              margin-top: auto;
               display: flex;
               align-items: center;
               gap: 8px;
+
+              color: #8b95a6;
 
               .apex-mma-compact-author-avatar {
                 width: 32px;
@@ -1319,8 +1015,8 @@ useSeoMeta({
               }
 
               .apex-mma-compact-author-name {
-                font-size: 14px;
-                font-weight: 600;
+                font-size: 13px;
+                font-weight: 700;
               }
             }
           }
@@ -1500,9 +1196,26 @@ useSeoMeta({
       .apex-mma-compact-left {
         .apex-mma-compact-list {
           .apex-mma-compact-item {
+            padding: 14px;
+            gap: 12px;
+
             .apex-mma-compact-thumb {
-              width: 30%;
-              min-width: 140px;
+              width: 36%;
+              min-width: 150px;
+              max-width: 180px;
+            }
+
+            .apex-mma-compact-body {
+              gap: 6px;
+
+              .apex-mma-compact-title {
+                font-size: 16px;
+                -webkit-line-clamp: 3;
+              }
+
+              .apex-mma-compact-excerpt {
+                display: none;
+              }
             }
           }
         }
@@ -1545,12 +1258,19 @@ useSeoMeta({
       .apex-mma-compact-left {
         .apex-mma-compact-list {
           .apex-mma-compact-item {
-            .apex-mma-compact-title {
-              font-size: 20px;
+            .apex-mma-compact-thumb {
+              width: 240px;
+              max-width: 240px;
             }
 
-            .apex-mma-compact-excerpt {
-              -webkit-line-clamp: 3;
+            .apex-mma-compact-body {
+              .apex-mma-compact-title {
+                font-size: 22px;
+              }
+
+              .apex-mma-compact-excerpt {
+                -webkit-line-clamp: 2;
+              }
             }
           }
         }
@@ -1590,16 +1310,19 @@ useSeoMeta({
           .apex-mma-compact-item {
             gap: 24px;
 
-            .apex-mma-compact-title {
-              font-size: 22px;
+            .apex-mma-compact-thumb {
+              width: 260px;
+              max-width: 260px;
             }
 
-            .apex-mma-compact-excerpt {
-              font-size: 15px;
-            }
+            .apex-mma-compact-body {
+              .apex-mma-compact-title {
+                font-size: 26px;
+              }
 
-            .apex-mma-compact-author-name {
-              font-size: 15px;
+              .apex-mma-compact-excerpt {
+                font-size: 14px;
+              }
             }
           }
         }

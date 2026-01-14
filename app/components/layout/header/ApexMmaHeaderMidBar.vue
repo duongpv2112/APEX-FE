@@ -1,6 +1,6 @@
 <template>
   <div class="apex-mma-header-midbar">
-    <div class="apex-mma-container apex-mma-header-midbar__inner">
+    <div class="apex-mma-header-midbar__inner">
       <NuxtLink class="apex-mma-header-midbar__logo" to="/" aria-label="Home">
         <NuxtImg
           class="apex-mma-header-midbar__logo-img"
@@ -18,13 +18,11 @@
 
 <style scoped lang="scss">
 .apex-mma-header-midbar {
-  background: #ffffff;
+  // background: #ffffff;
 }
 
 .apex-mma-header-midbar__inner {
   display: flex;
-  align-items: center;
-  height: 84px;
 }
 
 .apex-mma-header-midbar__logo {
@@ -34,7 +32,7 @@
 
 .apex-mma-header-midbar__logo-img {
   display: block;
-  width: 180px;
+  width: 50px;
   height: auto;
 }
 </style>

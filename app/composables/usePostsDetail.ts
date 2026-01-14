@@ -68,11 +68,17 @@ export const usePostsDetail = (slug: MaybeRef<string>, options: UsePostsDetailOp
     return {
       title: dto.title ?? "",
       author: dto.author?.fullName ?? null,
+      authorAvatar: dto.author?.profilePhoto ?? null,
+      desc: dto.excerpt ?? undefined,
       content,
       publishedAt: dto.publishedAt ?? "",
       readingTime: dto.timeToRead ? `${dto.timeToRead} phút đọc` : undefined,
       tags: undefined,
       categorySlug: dto.category?.slug ?? undefined,
+      coverImage: dto.coverImage ?? dto.thumbnail ?? null,
+      viewCount: dto.viewCount ?? 0,
+      likeCount: dto.likeCount ?? 0,
+      commentCount: dto.commentCount ?? 0,
     };
   };
 

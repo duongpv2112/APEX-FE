@@ -2,7 +2,6 @@
   <header class="apex-mma-site-header" role="banner">
     <div class="apex-mma-site-header__desktop">
       <ApexMmaHeaderTopBar />
-      <ApexMmaHeaderMidBar />
       <ApexMmaHeaderNavBar />
     </div>
 
@@ -14,7 +13,6 @@
 
 <script setup lang="ts">
 import ApexMmaHeaderTopBar from "~/components/layout/header/ApexMmaHeaderTopBar.vue";
-import ApexMmaHeaderMidBar from "~/components/layout/header/ApexMmaHeaderMidBar.vue";
 import ApexMmaHeaderNavBar from "~/components/layout/header/ApexMmaHeaderNavBar.vue";
 import ApexMmaHeaderMobileBar from "~/components/layout/header/ApexMmaHeaderMobileBar.vue";
 import { useOffCanvasNav } from "~/composables/useOffCanvasNav";

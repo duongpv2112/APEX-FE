@@ -43,7 +43,7 @@
 }
 
 .apex-mma-site-footer__logo-img {
-  width: 150px;
+  width: 50px;
   height: auto;
 }
 

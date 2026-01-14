@@ -45,7 +45,7 @@ defineEmits<{ (e: "open-off-canvas"): void }>();
 }
 
 .apex-mma-header-mobilebar__inner {
-  height: 60px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -77,7 +77,7 @@ defineEmits<{ (e: "open-off-canvas"): void }>();
 }
 
 .apex-mma-header-mobilebar__logo-img {
-  width: 140px;
+  width: 50px;
   height: auto;
 }
 

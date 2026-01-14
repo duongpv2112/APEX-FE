@@ -17,8 +17,8 @@
         fit="cover"
         loading="lazy"
       />
-      <div v-else class="apex-mma-hero-card__img apex-mma-hero-card__img--placeholder" />
-      <div class="apex-mma-hero-card__overlay" />
+      <div v-else class="apex-mma-hero-card__img apex-mma-hero-card__img--placeholder"></div>
+      <div class="apex-mma-hero-card__overlay"></div>
     </div>
 
     <div class="apex-mma-hero-card__content">
@@ -60,6 +60,10 @@ defineProps<{
 
 .apex-mma-hero-card__img {
   object-fit: cover;
+
+  transform: scale(1);
+  transition: transform 420ms ease;
+  will-change: transform;
 }
 
 .apex-mma-hero-card__img--placeholder {
@@ -70,6 +74,21 @@ defineProps<{
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 35%, rgba(0, 0, 0, 0.75) 100%);
+
+  /* chuẩn bị lớp tint khi hover giống ảnh mẫu */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 260ms ease;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 92, 141, 0.18) 0%,
+      rgba(255, 92, 141, 0.25) 45%,
+      rgba(255, 60, 120, 0.52) 100%
+    );
+  }
 }
 
 .apex-mma-hero-card__content {
@@ -78,6 +97,8 @@ defineProps<{
   right: 14px;
   bottom: 12px;
   z-index: 2;
+
+  transition: transform 220ms ease;
 }
 
 .apex-mma-hero-card__title {
@@ -97,6 +118,49 @@ defineProps<{
   color: rgba(255, 255, 255, 0.8);
   font-size: 13px;
   font-weight: 600;
+
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+/* Chỉ áp dụng behavior hover khi thiết bị có hover (desktop/laptop). */
+@media (hover: hover) and (pointer: fine) {
+  .apex-mma-hero-card__meta {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .apex-mma-hero-card:hover .apex-mma-hero-card__img,
+  .apex-mma-hero-card:focus-visible .apex-mma-hero-card__img {
+    transform: scale(1.06);
+  }
+
+  .apex-mma-hero-card:hover .apex-mma-hero-card__overlay::after,
+  .apex-mma-hero-card:focus-visible .apex-mma-hero-card__overlay::after {
+    opacity: 1;
+  }
+
+  .apex-mma-hero-card:hover .apex-mma-hero-card__content,
+  .apex-mma-hero-card:focus-visible .apex-mma-hero-card__content {
+    transform: translateY(-2px);
+  }
+
+  .apex-mma-hero-card:hover .apex-mma-hero-card__meta,
+  .apex-mma-hero-card:focus-visible .apex-mma-hero-card__meta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apex-mma-hero-card,
+  .apex-mma-hero-card__img,
+  .apex-mma-hero-card__content,
+  .apex-mma-hero-card__meta,
+  .apex-mma-hero-card__overlay::after {
+    transition: none !important;
+  }
 }
 
 @media (min-width: 992px) {

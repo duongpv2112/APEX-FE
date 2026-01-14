@@ -21,11 +21,16 @@ export interface HomePostsPayload {
 export interface PostsDetail {
   title: string
   author: string | null
+  authorAvatar?: string | null
   desc?: string
   content: string
+  coverImage?: string | null
   publishedAt: string
   tags?: string[]
   readingTime?: string
+  viewCount?: number
+  likeCount?: number
+  commentCount?: number
   /**
    * Category slug của bài viết (để render breadcrumb + list theo loại).
    * Hiện tại được fake ở FE, về sau backend sẽ trả về thật.

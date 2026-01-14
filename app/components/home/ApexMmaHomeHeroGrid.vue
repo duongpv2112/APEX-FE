@@ -56,8 +56,18 @@ defineProps<{
 
 .apex-mma-home-hero__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 15px;
+  /* Mobile/tablet theo layout mẫu:
+    - Big: full width
+    - Wide: full width
+    - 2 Small: 2 cột
+  */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.apex-mma-home-hero__item--big,
+.apex-mma-home-hero__item--wide {
+  grid-column: 1 / -1;
 }
 
 @media (min-width: 768px) {
@@ -69,9 +79,20 @@ defineProps<{
 /* Desktop layout: 2 columns x 2 rows with a big tile */
 @media (min-width: 992px) {
   .apex-mma-home-hero__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* Layout A:
+      - Big: 2 cột x 2 hàng (bên trái)
+      - Right: 2 cột
+        - Wide: span 2 cột (hàng trên)
+        - 2 Small: mỗi cái 1 cột (hàng dưới)
+    */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: repeat(2, 250px);
-    gap: 30px;
+  }
+
+  /* reset span full-width ở mobile/tablet */
+  .apex-mma-home-hero__item--big,
+  .apex-mma-home-hero__item--wide {
+    grid-column: auto;
   }
 
   .apex-mma-home-hero__item--big {
@@ -80,7 +101,7 @@ defineProps<{
   }
 
   .apex-mma-home-hero__item--wide {
-    grid-column: 3;
+    grid-column: 3 / span 2;
     grid-row: 1;
   }
 
@@ -90,7 +111,8 @@ defineProps<{
   }
 
   .apex-mma-home-hero__item--small2 {
-    display: none;
+    grid-column: 4;
+    grid-row: 2;
   }
 }
 </style>
