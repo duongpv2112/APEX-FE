@@ -54,3 +54,10 @@ export interface PostsByCategoryDto {
   };
   items: HomePostsDto[];
 }
+
+/**
+ * Danh sách bài viết liên quan.
+ * Hiện tại giả định backend trả về cùng shape với HomePostsDto[].
+ * Nếu backend thay đổi shape, hãy chuyển sang interface riêng.
+ */
+export type RelatedPostsDto = HomePostsDto[]

@@ -143,6 +143,13 @@
               <div class="apex-mma-posts-detail-content__html" v-html="newsDetail.content" />
             </article>
 
+            <ApexMmaRelatedPosts
+              :items="relatedItems"
+              :pending="relatedPending"
+              :error="relatedError"
+              @retry="refreshRelated"
+            />
+
             <section class="apex-mma-posts-detail-reactions" aria-label="Reactions">
               <h3 class="apex-mma-posts-detail-reactions__title">Reaction</h3>
               <p class="apex-mma-posts-detail-reactions__desc apex-mma-text">
@@ -256,6 +263,7 @@
 import { computed, ref } from "vue";
 import { formatDateTime } from "@/utils";
 import ApexMmaHomeSidebarPostItem from "~/components/home/ApexMmaHomeSidebarPostItem.vue";
+import ApexMmaRelatedPosts from "~/components/posts/ApexMmaRelatedPosts.vue";
 
 const route = useRoute();
 const slug = computed(() => route.params.slug as string);
@@ -263,6 +271,23 @@ const slug = computed(() => route.params.slug as string);
 const { getBySlug } = usePostCategories();
 
 const { newsDetail, pending, error } = usePostsDetail(slug);
+
+const postId = computed(() => newsDetail.value?.id);
+const {
+  items: relatedItemsRaw,
+  pending: relatedPending,
+  error: relatedError,
+  refresh: refreshRelated,
+} = useRelatedPosts(postId, {
+  enabled: computed(() => !!postId.value),
+  limit: 3,
+});
+
+// Tránh hiển thị item trùng với bài hiện tại (phòng khi backend chưa filter).
+const relatedItems = computed(() => {
+  const currentSlug = slug.value;
+  return (relatedItemsRaw.value ?? []).filter((x) => x.slug && x.slug !== currentSlug);
+});
 
 const { subNews } = usePosts();
 

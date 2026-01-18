@@ -19,6 +19,7 @@ export interface HomePostsPayload {
 }
 
 export interface PostsDetail {
+  id: string
   title: string
   author: string | null
   authorAvatar?: string | null

@@ -8,7 +8,11 @@
       </nav>
 
       <div class="apex-mma-header-topbar__right">
-        <form class="apex-mma-header-topbar__search" role="search" @submit.prevent>
+        <form
+          class="apex-mma-header-topbar__search"
+          role="search"
+          @submit.prevent
+        >
           <input
             class="apex-mma-header-topbar__search-input"
             type="search"
@@ -23,10 +27,30 @@
         <span class="apex-mma-header-topbar__divider" aria-hidden="true" />
 
         <div class="apex-mma-header-topbar__social" aria-label="Social links">
-          <a class="apex-mma-header-topbar__social-link" href="#" aria-label="Facebook">f</a>
-          <a class="apex-mma-header-topbar__social-link" href="#" aria-label="Twitter">x</a>
-          <a class="apex-mma-header-topbar__social-link" href="#" aria-label="Youtube">▶</a>
-          <a class="apex-mma-header-topbar__social-link" href="#" aria-label="Instagram">⌁</a>
+          <a
+            class="apex-mma-header-topbar__social-link"
+            href="#"
+            aria-label="Facebook"
+            >f</a
+          >
+          <a
+            class="apex-mma-header-topbar__social-link"
+            href="#"
+            aria-label="Twitter"
+            >x</a
+          >
+          <a
+            class="apex-mma-header-topbar__social-link"
+            href="#"
+            aria-label="Youtube"
+            >▶</a
+          >
+          <a
+            class="apex-mma-header-topbar__social-link"
+            href="#"
+            aria-label="Instagram"
+            >⌁</a
+          >
         </div>
 
         <span class="apex-mma-header-topbar__divider" aria-hidden="true" />
@@ -163,4 +187,3 @@
   opacity: 0.6;
 }
 </style>
-

@@ -66,6 +66,7 @@ export const usePostsDetail = (slug: MaybeRef<string>, options: UsePostsDetailOp
     // const content = htmlToText(rawContent);
     const content = rawContent;
     return {
+      id: dto.id,
       title: dto.title ?? "",
       author: dto.author?.fullName ?? null,
       authorAvatar: dto.author?.profilePhoto ?? null,

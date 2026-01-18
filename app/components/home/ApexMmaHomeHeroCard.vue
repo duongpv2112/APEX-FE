@@ -50,6 +50,11 @@ defineProps<{
   background: #111;
   text-decoration: none;
   height: 220px;
+
+  /* animation tokens (dùng transform/opacity để mượt + tối ưu GPU) */
+  /* mượt hơn: dùng ease-out nhẹ (vừa mượt vừa “đã”) */
+  --apex-mma-hero-card-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --apex-mma-hero-card-dur: 360ms;
 }
 
 .apex-mma-hero-card__media,
@@ -61,9 +66,12 @@ defineProps<{
 .apex-mma-hero-card__img {
   object-fit: cover;
 
-  transform: scale(1);
-  transition: transform 420ms ease;
+  /* translateZ(0) để ép GPU compositing, giảm cảm giác giật khi hover */
+  transform: translateZ(0) scale(1);
+  transition: transform var(--apex-mma-hero-card-dur) var(--apex-mma-hero-card-ease);
   will-change: transform;
+  backface-visibility: hidden;
+  transform-origin: center;
 }
 
 .apex-mma-hero-card__img--placeholder {
@@ -75,13 +83,20 @@ defineProps<{
   inset: 0;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 35%, rgba(0, 0, 0, 0.75) 100%);
 
+  /* Giữ overlay ở 1 composited layer để fade mượt hơn */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+
   /* chuẩn bị lớp tint khi hover giống ảnh mẫu */
   &::after {
     content: "";
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 260ms ease;
+    transition: opacity var(--apex-mma-hero-card-dur) var(--apex-mma-hero-card-ease);
+    will-change: opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
     background: linear-gradient(
       180deg,
       rgba(255, 92, 141, 0.18) 0%,
@@ -98,7 +113,7 @@ defineProps<{
   bottom: 12px;
   z-index: 2;
 
-  transition: transform 220ms ease;
+  /* content đứng yên như template, chỉ title/meta trượt */
 }
 
 .apex-mma-hero-card__title {
@@ -111,6 +126,9 @@ defineProps<{
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+
+  transition: transform var(--apex-mma-hero-card-dur) var(--apex-mma-hero-card-ease);
+  will-change: transform;
 }
 
 .apex-mma-hero-card__meta {
@@ -120,46 +138,50 @@ defineProps<{
   font-weight: 600;
 
   transition:
-    opacity 220ms ease,
-    transform 220ms ease;
+    opacity var(--apex-mma-hero-card-dur) ease,
+    transform var(--apex-mma-hero-card-dur) ease;
+  will-change: opacity, transform;
 }
 
 /* Chỉ áp dụng behavior hover khi thiết bị có hover (desktop/laptop). */
 @media (hover: hover) and (pointer: fine) {
+  /*
+    Yêu cầu:
+    - Không hover: chỉ hiện title
+    - Hover: title trượt lên + author trượt lên và hiện
+    - Unhover: title trượt xuống + author trượt xuống và ẩn
+    - Overlay đổi màu + ảnh scale: đều transition 2 chiều
+  */
+
+  /* state mặc định */
+  .apex-mma-hero-card__title {
+    transform: translate3d(0, 0, 0);
+  }
+
   .apex-mma-hero-card__meta {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translate3d(0, 12px, 0);
   }
 
   .apex-mma-hero-card:hover .apex-mma-hero-card__img,
   .apex-mma-hero-card:focus-visible .apex-mma-hero-card__img {
-    transform: scale(1.06);
+    transform: translateZ(0) scale(1.08);
   }
 
   .apex-mma-hero-card:hover .apex-mma-hero-card__overlay::after,
   .apex-mma-hero-card:focus-visible .apex-mma-hero-card__overlay::after {
-    opacity: 1;
+    opacity: 0.55;
   }
 
-  .apex-mma-hero-card:hover .apex-mma-hero-card__content,
-  .apex-mma-hero-card:focus-visible .apex-mma-hero-card__content {
-    transform: translateY(-2px);
+  .apex-mma-hero-card:hover .apex-mma-hero-card__title,
+  .apex-mma-hero-card:focus-visible .apex-mma-hero-card__title {
+    transform: translate3d(0, -14px, 0);
   }
 
   .apex-mma-hero-card:hover .apex-mma-hero-card__meta,
   .apex-mma-hero-card:focus-visible .apex-mma-hero-card__meta {
     opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .apex-mma-hero-card,
-  .apex-mma-hero-card__img,
-  .apex-mma-hero-card__content,
-  .apex-mma-hero-card__meta,
-  .apex-mma-hero-card__overlay::after {
-    transition: none !important;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -186,4 +208,3 @@ defineProps<{
   }
 }
 </style>
-

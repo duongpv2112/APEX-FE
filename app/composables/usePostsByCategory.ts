@@ -1,6 +1,7 @@
 import { computed, unref, type MaybeRef } from "vue";
-import type { HomePostsDto, PostsByCategoryDto } from "~/types/posts/posts.server";
+import type { PostsByCategoryDto } from "~/types/posts/posts.server";
 import type { PostsListItem } from "~/types/posts/posts.ui";
+import { mapHomePostToListItem } from "~/utils/postsMappers";
 
 type UsePostsByCategoryOptions = {
   /**
@@ -75,21 +76,5 @@ export const usePostsByCategory = (
     pending,
     error,
     refresh,
-  };
-};
-
-const mapHomePostToListItem = (dto: HomePostsDto): PostsListItem => {
-  return {
-    slug: dto.slug ?? "",
-    title: dto.title ?? "",
-    desc: dto.excerpt ?? "",
-    author: dto.author?.fullName ?? null,
-    authorAvatar: dto.author?.profilePhoto ?? null,
-    categories: (dto.categories ?? []).map((c) => ({
-      name: c.name,
-      slug: c.slug,
-    })),
-    image: dto.thumbnail ?? "",
-    publishedAt: dto.publishedAt ?? undefined,
   };
 };
